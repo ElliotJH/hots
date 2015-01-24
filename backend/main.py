@@ -6,6 +6,7 @@ from twisted.internet import reactor
 from autobahn.twisted import websocket
 
 from game import Game
+from player import Player
 
 
 class Protocol(websocket.WebSocketServerProtocol):
@@ -46,11 +47,12 @@ class Server(websocket.WebSocketServerFactory):
         self.ticks += 1
         reactor.callLater(1, self.tick)
 
-    def register(self, client):
-        self.game.add_player(client)
+    def register(self, connection):
+        player = Player(connection)
+        self.game.add_player(player)
 
-    def unregister(self, client):
-        self.game.remove_player(client)
+    def unregister(self, connection):
+        self.game.remove_player(connection)
 
 
 if __name__ == '__main__':

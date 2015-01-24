@@ -1,4 +1,5 @@
 from world import World
+from player import Player
 
 
 class Game(object):
@@ -12,6 +13,7 @@ class Game(object):
     def add_player(self, player):
         if player not in self.players:
             self.players.append(player)
+            player.send_message(self.world.serialise())
 
-    def remove_player(self, player):
-        self.players.remove(player)
+    def remove_player(self, connection):
+        self.players.remove(Player(connection))

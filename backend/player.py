@@ -1,6 +1,11 @@
+import json
+
+
 class Player(object):
 
-    def __init__(self):
+    def __init__(self, connection):
+        self.connection = connection
+
         self.item_1 = None  # Should be 'fist'
         self.item_2 = None
         self.timeout = 0
@@ -9,7 +14,6 @@ class Player(object):
         self.needed_item_2 = None
 
         self.position = (None, None)
-        super(Player, self).__init__()
 
     def decrement_timeout(self, amount):
         if self.timeout > amount:
@@ -19,3 +23,6 @@ class Player(object):
 
     def add_timeout(self, amount):
         self.timeout += amount  # we want some logic to stop this getting huge
+
+    def send_message(self, data):
+        self.connection.send(json.dumps(data))
