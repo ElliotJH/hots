@@ -1,8 +1,9 @@
 import math
 import random
 
+
 from item import Item
-from constant_objects import levels as level_ids, game_objects
+from constant_objects import levels as level_ids, game_objects, weapons as weapon_id
 
 
 class World:
@@ -31,8 +32,6 @@ class World:
                 position = random.choice(free_tile_positions)
                 self.item_locations[item_object] = position
 
-        print(self.item_locations)
-
     def load(self, fname):
         with open(fname, 'r') as f:
             self.tiles = [[int(i) for i in line if i != '\n'] for line in f]
@@ -50,6 +49,19 @@ class World:
         if player in self.player_locations:
             raise ValueError("Player already in world")
         self.set_player_location(player)
+        self.set_player_desired_items(player)
+        self.set_player_starting_items(player)
+        
+    def set_player_world(self, player):
+        player.world_id = random.choice(list(level_ids.keys()))
+
+    def set_player_desired_items(self, player):
+        world_items = game_objects[player.world_id]
+        player.needed_item_1, player.needed_item_2 = random.sample(list(world_items.values()))
+
+    def set_player_starting_items(self, player):
+        fists = game_objects[weapon_id]['start_with_fists']
+        player.item_1 = player.item_2 = fists
 
     def set_player_location(self, player):
         if len(self.start_tile_positions) > 0:

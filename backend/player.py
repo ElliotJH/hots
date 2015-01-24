@@ -16,6 +16,8 @@ class Player:
 
         self.position = (None, None)
 
+        self.world_id = None
+
     def decrement_timeout(self, amount):
         if self.timeout > amount:
             self.timeout -= amount
