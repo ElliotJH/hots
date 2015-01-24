@@ -51,7 +51,8 @@ class World:
 
     def move_player(self, player, direction, distance=5):
         angle = {
-            'up': 180, 'down': 0, 'left': 270, 'right': 90
+            'up': 180, 'down': 0, 'left': 270, 'right': 90,
+            'upleft': 225, 'upright': 135, 'downleft': 315, 'downright': 45,
         }[direction]
 
         x, y = self.player_locations[player]
