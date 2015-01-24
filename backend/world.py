@@ -1,2 +1,5 @@
 class World(object):
-    pass
+    def __init__(self):
+        self.items = []
+        self.tiles = None
+        super(self, World).__init__()
