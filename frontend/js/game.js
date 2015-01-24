@@ -283,6 +283,9 @@ var d = 68;
 var q = 81;
 var e = 69;
 
+var hasPressedQ = false;
+var hasPressedE = false;
+
 function update() {
     var up = keyboard.isDown(w);
     var down = keyboard.isDown(s);
@@ -301,11 +304,18 @@ function update() {
 
     var angle = 0;
 
-    if (keyboard.isDown(q)){
+    if (keyboard.isDown(q) && !hasPressedQ){
         sendMessage({type: "throw_left"});
+        hasPressedQ = true;
+    }else if(!keyboard.isDown(q)){
+        hasPressedQ = false
     }
-    if(keyboard.isDown(e)){
+
+    if(keyboard.isDown(e) && !hasPressedE){
         sendMessage({type: "throw_right"});
+        hasPressedE = true;
+    } else if(!keyboard.isDown(e)){
+        hasPressedE = false
     }
 
     if (myPlayer && Object.keys(players).length) {
