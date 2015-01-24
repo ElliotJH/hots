@@ -81,15 +81,20 @@ function socketMessage(msg) {
 
     if(parsed.type == "world") {
         var world = parsed.world;
+
         for(var i = 0; i < world.length; i++) {
             var row = world[i];
+
             for(var j = 0; j < row.length; j++) {
+
                 game.add.sprite(j*tile_width, i*tile_height, levelDefinitions[row[j]]);
             }
         }
+
         worldInit = true;
         myPlayer = parsed.id;
         game.camera.bounds = null;
+
     } else if(parsed.type == "tick" && worldInit) {
         var playerList = parsed.players;
         var ids = [];
