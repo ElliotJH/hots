@@ -7,6 +7,7 @@ class Game(object):
 
     def __init__(self):
         self.world = World()
+        self.world.load('levels/example.level')
 
     def add_player(self, player):
         if player not in self.players:
