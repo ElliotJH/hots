@@ -76,7 +76,7 @@ function socketMessage(msg){
         for(var i = 0; i < world.length; i++){
             var row = world[i];
             for(var j = 0; j < row.length; j++){
-                game.add.sprite(i*tile_width, j*tile_height, levelDefinitions[row[j]]);
+                game.add.sprite(j*tile_height, i*tile_width, levelDefinitions[row[j]]);
             }
         }
 
