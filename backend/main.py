@@ -13,20 +13,32 @@ TICK_RATE = 0.01
 class Protocol(websocket.WebSocketServerProtocol):
 
     def onOpen(self):
-        self.factory.register(self)
+        try:
+            self.factory.register(self)
+        except:
+            import traceback
+            traceback.print_exc()
 
     def onMessage(self, payload, isBinary):
         if isBinary:
             return
 
-        self.factory.game.receive_message(
-            self,
-            payload.decode('utf8'),
-        )
+        try:
+            self.factory.game.receive_message(
+                self,
+                payload.decode('utf8'),
+            )
+        except:
+            import traceback
+            traceback.print_exc()
 
     def connectionLost(self, reason):
-        super(Protocol, self).connectionLost(reason)
-        self.factory.unregister(self)
+        try:
+            super(Protocol, self).connectionLost(reason)
+            self.factory.unregister(self)
+        except:
+            import traceback
+            traceback.print_exc()
 
 
 class Server(websocket.WebSocketServerFactory):
