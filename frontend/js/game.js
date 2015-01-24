@@ -3,6 +3,7 @@ var wsAddress = "ws://10.7.3.119:9000";
 var floor = 0;
 var wall = 1;
 var exit = 2;
+var start_tile = 3;
 
 var ship = 36;
 var spaceship = 37;
@@ -115,6 +116,7 @@ function preload() {
     levelDefinitions[floor] = "floor";
     levelDefinitions[wall] = "wall";
     levelDefinitions[exit] = "exit";
+    levelDefinitions[start_tile] = "floor";
 
     stateDefinitions[fists] = "fists";
     stateDefinitions[spoon] = "spoon";
