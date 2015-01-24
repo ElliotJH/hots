@@ -9,6 +9,7 @@ class Player:
     def __init__(self):
         super().__init__()
         self.id = random.randint(10000, 99999)
+        self.name = 'Unnamed Player'
 
         self.item_1 = None  # Should be 'fist'
         self.item_2 = None

@@ -227,7 +227,7 @@ class World:
     def serialise_state(self, player):
         return {
             'players': [
-                {'id': x.id, 'location': y}
+                {'id': x.id, 'location': y, 'name': x.name}
                 for x, y in self.player_locations.items()
             ],
             'items': [

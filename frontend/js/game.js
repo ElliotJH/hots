@@ -83,6 +83,7 @@ var cursors;
 var keyboard;
 var worldInit = false;
 var socketReady = false;
+var playerName = window.prompt("Player name");
 
 var state = 'lobby'; // {lobby, game, end}
 
@@ -95,6 +96,8 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
 function socketOpen() {
     $('#status').fadeOut();
     socketReady = true;
+
+    sendMessage({'type': 'join', 'name': playerName});
 }
 
 function socketClose() {
@@ -144,6 +147,7 @@ function socketMessage(msg) {
                 players[playerList[i].id] = levelGroup.create(playerList[i].location[0],
                     playerList[i].location[1], 'player');
                 players[playerList[i].id].pivot = new PIXI.Point(tile_width/2, tile_height/2);
+                players[playerList[i].id].playerName = playerList[i].name;
             }
         }
         var keys = Object.keys(players);
@@ -294,11 +298,21 @@ function update() {
     }
 }
 
-function updateLobby() {
+var lobbyElement = $('#lobby');
 
+function updateLobby() {
+    var playersElement = lobbyElement.find('#players');
+    playersElement.html('');
+
+    keys = Object.keys(players);
+    for (var i = 0; i < keys.length; i++) {
+        playersElement.append('<ul>' + players[keys[i]].playerName + '</ul>');
+    }
 }
 
 function updateGame() {
+    lobbyElement.hide();
+
     var up = keyboard.isDown(w);
     var down = keyboard.isDown(s);
     var left = keyboard.isDown(a);

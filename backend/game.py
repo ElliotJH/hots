@@ -3,7 +3,7 @@ import json
 from world import World
 from player import Player
 
-MIN_PLAYERS = 1
+MIN_PLAYERS = 2
 
 
 class Game:
@@ -69,6 +69,9 @@ class Game:
                 self.world.throw(self.players[connection], 'right')
             except ValueError:
                 pass
+        elif command['type'] == 'join':
+            self.players[connection].name = command['name']
+            print(command['name'], 'joined')
 
     def start(self):
         for connection in self.players.keys():
