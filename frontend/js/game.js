@@ -75,16 +75,18 @@ function socketOpen(){
 var worldInit = false;
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
+    
     if(parsed.type == "world"){
         var world = parsed.world;
-
         for(var i = 0; i < world.length; i++){
             var row = world[i];
             for(var j = 0; j < row.length; j++){
-                game.add.sprite(j*tile_height, i*tile_width, levelDefinitions[row[j]]);
+                game.add.sprite(j*tile_width, i*tile_height, levelDefinitions[row[j]]);
             }
         }
         worldInit = true;
+        myPlayer = parsed.id;
+        game.camera.bounds = null;
     } else if(parsed.type == "tick" && worldInit){
         var playerList = parsed.players;
         var ids = [];
@@ -182,9 +184,25 @@ function update() {
     if (left) { direction += 'left'; }
     if (right) { direction += 'right'; }
 
-    if (direction.length) {
-        sendMessage({type: "movement", direction: direction});
+    var x = game.input.mousePointer.worldX;
+    var y = game.input.mousePointer.worldY;
+
+    if(myPlayer >= 0){
+        var changeX  = x - players[myPlayer].x;
+        var changeY = y - players[myPlayer].y;
+
+        var toTan = changeY / changeX;
+
+        var angle = Math.atan(toTan);
+
+        game.camera.x = players[myPlayer].x - 400;
+        game.camera.y = players[myPlayer].y - 300;
     }
+
+    sendMessage({type: "movement", direction: direction, angle: angle});
+    
+
+
 }
 
 function sendMessage(message) {
