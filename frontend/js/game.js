@@ -77,7 +77,7 @@ function socketOpen(){
 var worldInit = false;
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
-    
+
     if(parsed.type == "world"){
         var world = parsed.world;
         for(var i = 0; i < world.length; i++){
