@@ -87,10 +87,13 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
 });
 
 function socketOpen() {
+    $('#status').fadeOut();
     socketReady = true;
 }
 
 function socketClose() {
+    $('#statustext').text("Lost socket...")
+    $('#status').fadeIn();
     socketReady = false;
 }
 
@@ -175,7 +178,7 @@ function socketMessage(msg) {
 };
 
 function preload() {
-    game.load.image('player','resources/art/human.png', tile_width, tile_height);
+    game.load.image('player','resources/art/human-2.png', tile_width, tile_height);
     game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
     game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
     game.load.image('exit', 'resources/art/tile-exit-40.png', tile_width, tile_height);

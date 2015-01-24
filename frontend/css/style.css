@@ -3,9 +3,35 @@ body {
     background-color: black;
 }
 
-#game {
+#container {
     width: 800px;
-    height: 600px;
+    height:600px;
     margin: 20px auto;
     border: 1px solid #eee;
+    position: relative;
+}
+#game, #status {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#game {
+    z-index:0;
+}
+
+#status {
+    background-color: white;
+    opacity:0.8;
+    z-index:1;
+}
+
+#statustext {
+    margin: 300px auto;
+    width: 600px;
+    height: 50px;
+    font-family: 'Helvetica', sans-serif;
+    text-align: center;
 }
