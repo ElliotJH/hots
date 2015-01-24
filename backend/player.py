@@ -1,7 +1,12 @@
+import random
+
+
 class Player:
 
     def __init__(self):
         super().__init__()
+        self.id = random.randint(10000, 99999)
+
         self.item_1 = None  # Should be 'fist'
         self.item_2 = None
         self.timeout = 0
