@@ -7,7 +7,7 @@ var tile_width = 40;
 var item_height = 100;
 var item_width = 100;
 
-var itemOneX = 200;
+var itemOneX = 100;
 var itemOneY = 400;
 
 var itemTwoX = 600;
