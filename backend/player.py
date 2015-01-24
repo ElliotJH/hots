@@ -8,6 +8,7 @@ class Player(object):
         self.needed_item_2 = None 
     
         self.position = (None, None)
+        super(Player, self).__init__()
 
     def decrement_timeout(self, amount):
         if self.timeout > amount:
