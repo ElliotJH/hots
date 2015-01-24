@@ -4,7 +4,7 @@ from world import World
 from player import Player
 
 
-class Game(object):
+class Game:
 
     players = {}
 

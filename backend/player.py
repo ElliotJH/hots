@@ -1,4 +1,4 @@
-class Player(object):
+class Player:
 
     def __init__(self):
         self.item_1 = None  # Should be 'fist'

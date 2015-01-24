@@ -1,4 +1,4 @@
-class World(object):
+class World:
 
     def __init__(self):
         super(World, self).__init__()
