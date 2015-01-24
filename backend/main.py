@@ -30,7 +30,7 @@ class MyServerProtocol(WebSocketServerProtocol):
 if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
-    factory = WebSocketServerFactory("ws://localhost:9000", debug=True)
+    factory = WebSocketServerFactory("ws://0.0.0.0:9000", debug=True)
     factory.protocol = MyServerProtocol
 
     reactor.listenTCP(9000, factory)
