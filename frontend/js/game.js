@@ -2,6 +2,7 @@ var wsAddress = "ws://10.7.3.119:9000";
 
 var floor = 0;
 var wall = 1;
+var exit = 2;
 
 var ship = 36;
 var spaceship = 37;
@@ -111,6 +112,7 @@ function socketMessage(msg){
 function preload() {
     levelDefinitions[floor] = "floor";
     levelDefinitions[wall] = "wall";
+    levelDefinitions[exit] = "exit";
 
     stateDefinitions[fists] = "fists";
     stateDefinitions[spoon] = "spoon";
