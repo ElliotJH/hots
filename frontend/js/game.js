@@ -83,6 +83,8 @@ var keyboard;
 var worldInit = false;
 var socketReady = false;
 
+var state = 'lobby'; // {lobby, game, end}
+
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
     preload: preload,
     create: create,
@@ -99,8 +101,6 @@ function socketClose() {
     $('#status').fadeIn();
     socketReady = false;
 }
-
-
 
 function socketMessage(msg) {
     var parsed = JSON.parse(msg.data);
@@ -144,9 +144,6 @@ function socketMessage(msg) {
                     playerList[i].location[1], 'player');
                 players[playerList[i].id].pivot = new PIXI.Point(tile_width/2, tile_height/2);
             }
-
-
-
         }
         var keys = Object.keys(players);
         for(var i = 0; i < keys.length; i++) {
@@ -180,6 +177,8 @@ function socketMessage(msg) {
                 held[i] = UIGroup.create(itemArrayX[i], itemArrayY[i], stateDefinitions[parsed.player_items[i]]);
             }
         }
+    } else if (parsed.type == 'state') {
+        state = parsed.state;
     }
 };
 
@@ -285,6 +284,20 @@ var hasPressedQ = false;
 var hasPressedE = false;
 
 function update() {
+    if (state == 'lobby') {
+        updateLobby();
+    } else if (state == 'game') {
+        updateGame();
+    } else if (state == 'end') {
+        updateEnd();
+    }
+}
+
+function updateLobby() {
+
+}
+
+function updateGame() {
     var up = keyboard.isDown(w);
     var down = keyboard.isDown(s);
     var left = keyboard.isDown(a);
@@ -340,6 +353,10 @@ function update() {
     }
 
     sendMessage({type: "movement", direction: direction, angle: angle});
+
+}
+
+function updateEnd() {
 
 }
 
