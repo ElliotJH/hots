@@ -72,7 +72,7 @@ var cursors;
 function socketOpen(){
     socketReady = true;
 }
-
+var worldInit = false;
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
     if(parsed.type == "world"){
@@ -84,8 +84,8 @@ function socketMessage(msg){
                 game.add.sprite(j*tile_height, i*tile_width, levelDefinitions[row[j]]);
             }
         }
-
-    } else if(parsed.type == "tick"){
+        worldInit = true;
+    } else if(parsed.type == "tick" && worldInit){
         var playerList = parsed.players;
         var ids = [];
         for(var i = 0; i < playerList.length; i++){
@@ -100,7 +100,7 @@ function socketMessage(msg){
             }
         }
         var keys = Object.keys(players);
-        for(var i = 0;i < keys.length; i++){
+        for(var i = 0; i < keys.length; i++){
             if(ids.indexOf(keys[i]) == -1){
                 players[keys[i]].kill();
             }
