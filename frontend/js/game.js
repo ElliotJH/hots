@@ -103,6 +103,7 @@ function socketMessage(msg){
             } else {
                 players[playerList[i].id] = game.add.sprite(playerList[i].location[0],
                     playerList[i].location[1], 'player');
+                players[playerList[i].id].pivot = new PIXI.Point(tile_width/2, tile_height/2);
             }
         }
         var keys = Object.keys(players);
@@ -133,8 +134,6 @@ function socketMessage(msg){
 };
 
 function preload() {
-    game.time.advancedTiming = true;
-
     game.load.image('player','resources/art/human.png', tile_width, tile_height);
     game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
     game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
@@ -193,7 +192,7 @@ function update() {
     var x = game.input.mousePointer.worldX;
     var y = game.input.mousePointer.worldY;
 
-    var angle = 1;
+    var angle = 0;
 
     if(myPlayer && Object.keys(players).length){
         var changeX  = x - players[myPlayer].x;
@@ -202,6 +201,11 @@ function update() {
         var toTan = changeY / changeX;
 
         angle = Math.atan(toTan);
+        angle += Math.PI/2;
+
+        if(changeX < 0){
+            angle -= Math.PI;
+        }
 
         game.camera.x = players[myPlayer].x - 400;
         game.camera.y = players[myPlayer].y - 300;
@@ -209,11 +213,12 @@ function update() {
         UIGroup.x = game.camera.x;
         UIGroup.y = game.camera.y;
 
+        players[myPlayer].rotation = angle;
+
     }
 
     sendMessage({type: "movement", direction: direction, angle: angle});
 
-    console.log(game.time.fps);
 }
 
 function sendMessage(message) {
