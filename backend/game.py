@@ -3,6 +3,8 @@ import json
 from world import World
 from player import Player
 
+MIN_PLAYERS = 1
+
 
 class Game:
 
@@ -28,6 +30,9 @@ class Game:
 
         self.send(connection, data, 'world')
         print("Players connected", len(self.players))
+
+        if len(self.players) == MIN_PLAYERS:
+            self.start()
 
     def remove_player(self, connection):
         if connection in self.players:
