@@ -38,6 +38,7 @@ class Server(websocket.WebSocketServerFactory):
             debugCodePaths=False,
         )
 
+        self.protocol = Protocol
         self.game = Game()
         self.ticks = 0
         self.tick()
