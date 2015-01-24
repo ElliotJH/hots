@@ -154,6 +154,7 @@ function socketMessage(msg) {
         for(var i = 0; i < keys.length; i++) {
             if (ids.indexOf(keys[i]) == -1) {
                 players[keys[i]].kill();
+                delete players[keys[i]];
             }
         }
         var itemList = parsed.items;
@@ -173,6 +174,7 @@ function socketMessage(msg) {
         for(var i = 0; i < keys.length; i++) {
             if (itemIds.indexOf(keys[i]) == -1) {
                 items[keys[i]].kill();
+                delete items[keys[i]];
             }
         }
 
