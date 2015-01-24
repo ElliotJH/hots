@@ -9,5 +9,5 @@ class World:
         with open(fname, 'r') as f:
             self.tiles = [[int(i) for i in line if i != '\n'] for line in f]
 
-    def serialise(self):
+    def as_dict(self):
         return {'world': self.tiles}

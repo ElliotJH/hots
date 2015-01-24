@@ -19,8 +19,10 @@ class Game:
 
         self.players[connection] = Player()
 
-        data = json.dumps(self.world.serialise())
-        connection.sendMessage(data.encode('utf8'))
+        data = self.world.as_dict()
+        data.update({'type': 'world'})
+
+        connection.sendMessage(json.dumps(data).encode('utf8'))
 
         print("Players connected", len(self.players))
 
