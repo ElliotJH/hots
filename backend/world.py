@@ -1,4 +1,5 @@
 class World(object):
+
     def __init__(self):
         super(World, self).__init__()
         self.items = []
