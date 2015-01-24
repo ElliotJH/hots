@@ -31,3 +31,12 @@ class Game:
             del self.players[connection]
 
         print("Players connected", len(self.players))
+
+    def tick(self):
+        data = {
+            'type': 'tick',
+            'players': [],
+        }
+
+        for connection in self.players.keys():
+            connection.sendMessage(json.dumps(data).encode('utf8'))
