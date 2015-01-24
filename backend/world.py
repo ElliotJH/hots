@@ -49,14 +49,14 @@ class World:
             'up': 0, 'down': 180, 'left': 270, 'right': 90
         }[direction]
 
-        old_position = self.players[player]
-        new_x = distance * math.sin(angle) + old_position[0]
-        new_y = distance * math.cos(angle) + old_position[1]
+        x, y = self.player_locations[player]
+        new_x = distance * math.sin(math.radians(angle)) + x
+        new_y = distance * math.cos(math.radians(angle)) + y
 
         new_position = (new_x, new_y)
 
-        position = self.move(old_position, new_position)
-        self.players[player] = position
+        position = self.attempt_move((x, y), new_position)
+        self.player_locations[player] = position
 
         return position
 
