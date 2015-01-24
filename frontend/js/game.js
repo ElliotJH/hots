@@ -215,7 +215,31 @@ function preload() {
 
     game.load.image('item-ground', 'resources/art/item-ground.png');
 
-    game.load.audio('background', 'resources/audio/ambient/background.mp3');
+    game.load.audio('background',             'resources/audio/ambient/background.mp3');
+    game.load.audio('alert',                  'resources/audio/ambient/alert.mp3');
+    game.load.audio('item_collect',           'resources/audio/ambient/item_collect.mp3');
+    game.load.audio('item_throw',             'resources/audio/ambient/item_throw.mp3');
+
+    game.load.audio('desert_round_start',     'resources/audio/desert/round_start.mp3');
+    game.load.audio('desert_round_end',       'resources/audio/desert/round_end.mp3');
+
+    game.load.audio('island_round_start',     'resources/audio/island/round_start.mp3');
+    game.load.audio('island_round_end',       'resources/audio/island/round_end.mp3');
+
+    game.load.audio('plane_round_start',      'resources/audio/plane/round_start.mp3');
+    game.load.audio('plane_round_end',        'resources/audio/plane/round_end.mp3');
+
+    game.load.audio('ship_sea_round_start',   'resources/audio/ship_sea/round_start.mp3');
+    game.load.audio('ship_sea_round_end',     'resources/audio/ship_sea/round_end.mp3');
+
+    game.load.audio('ship_space_round_start', 'resources/audio/ship_space/round_start.mp3');
+    game.load.audio('ship_space_round_end',   'resources/audio/ship_space/round_end.mp3');
+
+    game.load.audio('attack_bottle',          'resources/audio/weapons/attack_bottle.mp3');
+    game.load.audio('attack_dagger',          'resources/audio/weapons/attack_dagger.mp3');
+    game.load.audio('attack_fists',           'resources/audio/weapons/attack_fists.mp3');
+    game.load.audio('attack_gun',             'resources/audio/weapons/attack_gun.mp3');
+    game.load.audio('attack_tesla',           'resources/audio/weapons/attack_tesla.mp3');
 
     background = game.add.audio('background');
     background.play('');
