@@ -25,7 +25,7 @@ class Game:
             'id': player.id,
         }
 
-        data.update(**self.world.serialise_world())
+        data.update(**self.world.serialise_world(player))
 
         self.send(connection, data, 'world')
         print("Players connected", len(self.players))
@@ -54,6 +54,10 @@ class Game:
                 command['direction'],
                 command['angle'],
             )
+        elif command['type'] == 'throw_left':
+            self.world.throw(self.players[connection], 'left')
+        elif command['type'] == 'throw_right':
+            self.world.throw(self.players[connection], 'right')
 
     # Utility Methods
 
