@@ -51,10 +51,13 @@ class World:
         return horizontal_colliding and vertical_colliding
 
     def move_player(self, player, direction, distance=5):
-        angle = {
-            'up': 180, 'down': 0, 'left': 270, 'right': 90,
-            'upleft': 225, 'upright': 135, 'downleft': 315, 'downright': 45,
-        }[direction]
+        try:
+            angle = {
+                'up': 180, 'down': 0, 'left': 270, 'right': 90,
+                'upleft': 225, 'upright': 135, 'downleft': 315, 'downright': 45,
+            }[direction]
+        except KeyError:
+            return self.player_locations[player]
 
         x, y = self.player_locations[player]
         new_x = distance * math.sin(math.radians(angle)) + x
