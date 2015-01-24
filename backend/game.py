@@ -17,7 +17,9 @@ class Game:
         if connection in self.players:
             raise ValueError("Player already in game")
 
-        self.players[connection] = Player()
+        player = Player()
+        world.add_player(player)
+        self.players[connection] = player
 
         data = self.world.as_dict()
         data.update({'type': 'world'})
