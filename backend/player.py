@@ -1,5 +1,5 @@
 import random
-
+from constant_objects import game_objects, weapons as weapon_id
 
 class Player:
 
@@ -17,6 +17,16 @@ class Player:
         self.position = (None, None)
 
         self.world_id = None
+
+    @property
+    def item_1_empty(self):
+        fists = game_objects[weapon_id]['start_with_fists']
+        return self.item_1 is None or self.item_1 == fists
+
+    @property
+    def item_2_empty(self):
+        fists = game_objects[weapon_id]['start_with_fists']
+        return self.item_2 is None or self.item_2 == fists
 
     def decrement_timeout(self, amount):
         if self.timeout > amount:

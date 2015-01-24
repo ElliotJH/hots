@@ -119,33 +119,33 @@ class World:
 
         new_position = (new_x, new_y)
 
-        position = self.attempt_move((x, y), new_position)
+        position = self.attempt_move(player, (x, y), new_position)
         self.attempt_pickup(position, player)
         self.player_locations[player] = position
 
         return position
 
     def attempt_pickup(self, new_position, player, player_radius=0):
-        if player.item_1 is not None and player.item_2 is not None:
+        if not (player.item_1_empty or player.item_2_empty):
             return
 
         to_delete = []
         for item, position in self.item_locations.items():
             if self.collides(new_position, player_radius, position, 40):
                 # Nasty hardcode
-                if player.item_1 is None:
+                if player.item_1_empty:
                     player.item_1 = item
                     to_delete.append(item)
-                elif player.item_2 is None:
+                elif player.item_2_empty:
                     player.item_2 = item
                     to_delete.append(item)
-            if player.item_1 is not None and player.item_2 is not None:
+            if not (player.item_1_empty or player.item_2_empty):
                 return  # No need to keep on trying.
 
         for item in to_delete:
             del self.item_locations[item]
 
-    def attempt_move(self, old_position, new_position, player_radius=0, player):
+    def attempt_move(self, player, old_position, new_position, player_radius=0):
         # This is massively bugged - if the player tries to move through an
         # object then we're just fine with that.
 
