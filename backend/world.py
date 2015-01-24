@@ -35,12 +35,17 @@ class World:
 
         # Right edge is over the left edge and
         # Left edge is not over the right edge
-        horizontal_colliding = (
+        right_horizontal_colliding = (
             ((x1 + rad1) > (x2 - rad2)) and ((x1 - rad1) < (x2 + rad2))
+        )
+        left_horizontal_colliding = (
+            ((x1 - rad1) < (x2 + rad2)) and ((x1 + rad1) > (x2 - rad2))
         )
         vertical_colliding = (
             ((y1 + rad1) > (y2 - rad2)) and ((y1 - rad1) < (y2 + rad2))
         )
+
+        horizontal_colliding = right_horizontal_colliding or left_horizontal_colliding
 
         return horizontal_colliding and vertical_colliding
 
