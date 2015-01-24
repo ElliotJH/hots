@@ -3,11 +3,15 @@ import sys
 from twisted.python import log
 from twisted.internet import reactor
 
-from autobahn.twisted.websocket import \
-    WebSocketServerProtocol, WebSocketServerFactory
+from autobahn.twisted import websocket
+
+from game import Game
 
 
-class MyServerProtocol(WebSocketServerProtocol):
+GAME = Game()
+
+
+class Protocol(websocket.WebSocketServerProtocol):
 
     def onConnect(self, request):
         print("Client connecting: {0}".format(request.peer))
@@ -27,11 +31,30 @@ class MyServerProtocol(WebSocketServerProtocol):
         print("WebSocket connection closed: {0}".format(reason))
 
 
+class Server(websocket.WebSocketServerFactory):
+
+    def __init__(self, url):
+        super(self, Server).__init__(
+            self,
+            url,
+            debug=False,
+            debugCodePaths=False,
+        )
+
+        self.clients = []
+        self.ticks = 0
+        self.tick()
+
+    def tick(self):
+        self.ticks += 1
+        self.broadcast('tick')
+        reactor.callLater(1, self.tick)
+
+
 if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
-    factory = WebSocketServerFactory("ws://0.0.0.0:9000", debug=True)
-    factory.protocol = MyServerProtocol
+    factory = Server("ws://0.0.0.0:9000")
 
     reactor.listenTCP(9000, factory)
     reactor.run()
