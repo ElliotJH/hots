@@ -72,6 +72,7 @@ var players = {};
 var items = {};
 var held = [];
 var heldIDs = [30,30];
+
 /*
     State
 */
