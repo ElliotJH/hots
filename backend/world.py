@@ -73,7 +73,7 @@ class World:
 
         return position
 
-    def attempt_move(self, old_position, new_position, player_radius=20):
+    def attempt_move(self, old_position, new_position, player_radius=0):
         # This is massively bugged - if the player tries to move through an
         # object then we're just fine with that.
 
