@@ -197,13 +197,15 @@ function update() {
     var x = game.input.mousePointer.worldX;
     var y = game.input.mousePointer.worldY;
 
+    var angle = 0;
+
     if(myPlayer >= 0){
         var changeX  = x - players[myPlayer].x;
         var changeY = y - players[myPlayer].y;
 
         var toTan = changeY / changeX;
 
-        var angle = Math.atan(toTan);
+        angle = Math.atan(toTan);
 
         game.camera.x = players[myPlayer].x - 400;
         game.camera.y = players[myPlayer].y - 300;
