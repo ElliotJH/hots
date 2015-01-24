@@ -3,7 +3,6 @@ class World(object):
         self.items = []
         self.tiles = None
         super(World, self).__init__()
-    def load(fname):
+    def load(self, fname):
         with open(fname, 'r') as f:
-            self.tiles = [[int(i) for i in line] for line in f]
-            
+            self.tiles = [[int(i) for i in line if i != '\n'] for line in f]
