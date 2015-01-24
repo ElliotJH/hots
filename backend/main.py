@@ -8,9 +8,6 @@ from autobahn.twisted import websocket
 from game import Game
 
 
-GAME = Game()
-
-
 class Protocol(websocket.WebSocketServerProtocol):
 
     def onConnect(self, request):
@@ -41,7 +38,7 @@ class Server(websocket.WebSocketServerFactory):
             debugCodePaths=False,
         )
 
-        self.clients = []
+        self.game = Game()
         self.ticks = 0
         self.tick()
 
