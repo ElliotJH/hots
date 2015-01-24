@@ -147,7 +147,7 @@ class World:
                     player.item_2 = item
                     to_delete.append(item)
             if not (player.item_1_empty or player.item_2_empty):
-                return  # No need to keep on trying.
+                break  # No need to keep on trying.
 
         for item in to_delete:
             del self.item_locations[item]
