@@ -123,4 +123,8 @@ class World:
                 {'id': x.id, 'location': y}
                 for x, y in self.player_locations.items()
             ],
+            'items': [
+                {'id': x.id, 'location': y}
+                for x, y in self.item_locations.items()
+            ]
         }
