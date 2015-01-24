@@ -1,5 +1,6 @@
 import random
 
+from item import Item
 from constant_objects import game_objects, weapons as weapon_id
 
 
@@ -29,9 +30,9 @@ class Player:
         return self.item_2 is None or self.item_2.item_id == fists
 
     def reset_item_1(self):
-        self.item_1 = game_objects[weapon_id]['start_with_fists']
+        self.item_1 = Item(game_objects[weapon_id]['start_with_fists'])
     def reset_item_2(self):
-        self.item_2 = game_objects[weapon_id]['start_with_fists']
+        self.item_2 = Item(game_objects[weapon_id]['start_with_fists'])
 
     @property
     def has_succeeded(self):
