@@ -31,20 +31,20 @@ class Protocol(websocket.WebSocketServerProtocol):
 class Server(websocket.WebSocketServerFactory):
 
     def __init__(self, url):
-        super(self, Server).__init__(
+        super(Server, self).__init__(
             self,
             url,
             debug=False,
             debugCodePaths=False,
         )
 
+        self.protocol = Protocol
         self.game = Game()
         self.ticks = 0
         self.tick()
 
     def tick(self):
         self.ticks += 1
-        self.broadcast('tick')
         reactor.callLater(1, self.tick)
 
     def register(self, client):
