@@ -180,6 +180,7 @@ function socketMessage(msg) {
             if(heldIDs[i]  != parsed.player_items[i]){
                 held[i].kill();
                 held[i] = UIGroup.create(itemArrayX[i], itemArrayY[i], stateDefinitions[parsed.player_items[i]]);
+                heldIDs[i] = parsed.player_items[i];
             }
         }
     } else if (parsed.type == 'state') {
