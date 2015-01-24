@@ -195,7 +195,7 @@ function preload() {
     game.load.image('rope', 'resources/art/ship/octopus.png', item_width, item_height);
     game.load.image('sextant', 'resources/art/ship/sad-crab.png', item_width, item_height);
 
-    game.load.image('passport', 'resources/art/plane/folded-paper.png', item_width, item_height);
+    game.load.image('passport', 'resources/art/plane/passport.png', item_width, item_height);
     game.load.image('breathingMask', 'resources/art/plane/gas-mask.png', item_width, item_height);
     game.load.image('parachute', 'resources/art/plane/parachute.png', item_width, item_height);
     game.load.image('landingGear', 'resources/art/plane/parachute_alt.png', item_width, item_height);
