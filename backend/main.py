@@ -47,6 +47,12 @@ class Server(websocket.WebSocketServerFactory):
         self.broadcast('tick')
         reactor.callLater(1, self.tick)
 
+    def register(self, client):
+        self.game.add_player(client)
+
+    def unregister(self, client):
+        self.game.remove_player(client)
+
 
 if __name__ == '__main__':
     log.startLogging(sys.stdout)

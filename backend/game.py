@@ -8,5 +8,9 @@ class Game(object):
     def __init__(self):
         self.world = World()
 
-    def add_player(self, player, connection):
-        self.players[player] = connection
+    def add_player(self, player):
+        if player not in self.players:
+            self.players.append(player)
+
+    def remove_player(self, player):
+        self.players.remove(player)
