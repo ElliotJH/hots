@@ -39,7 +39,12 @@ class Game:
         print("Players connected", len(self.players))
 
     def tick(self):
-        self.broadcast(self.world.serialise_state(), 'tick')
+        for connection, player in self.players.items():
+            self.send(
+                connection,
+                self.world.serialise_state(player),
+                'tick',
+            )
 
     def receive_message(self, connection, message):
         command = json.loads(message)
@@ -51,10 +56,6 @@ class Game:
             )
 
     # Utility Methods
-
-    def broadcast(self, data, message_type):
-        for connection in self.players.keys():
-            self.send(connection, data, message_type)
 
     def send(self, connection, data, message_type):
         data.update(type=message_type)

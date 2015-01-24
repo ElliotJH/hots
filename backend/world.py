@@ -147,7 +147,7 @@ class World:
                     player.item_2 = item
                     to_delete.append(item)
             if not (player.item_1_empty or player.item_2_empty):
-                return  # No need to keep on trying.
+                break  # No need to keep on trying.
 
         for item in to_delete:
             del self.item_locations[item]
@@ -185,21 +185,18 @@ class World:
             ],
         }
 
-    def serialise_state(self):
+    def serialise_state(self, player):
         return {
             'players': [
-                {
-                    'id': x.id,
-                    'location': y,
-                    'items': [
-                        x.item_1.item_id if x.item_1 else None,
-                        x.item_2.item_id if x.item_2 else None,
-                    ],
-                }
+                {'id': x.id, 'location': y}
                 for x, y in self.player_locations.items()
             ],
             'items': [
                 {'id': x.item_id, 'location': y}
                 for x, y in self.item_locations.items()
-            ]
+            ],
+            'player_items': [
+                player.item_1.item_id if player.item_1 else None,
+                player.item_2.item_id if player.item_2 else None,
+            ],
         }
