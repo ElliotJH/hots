@@ -5,6 +5,8 @@ from item import Item
 from constant_objects import levels as level_ids, weapons as weapon_id, \
     game_objects
 
+DEFAULT_LOOK_ANGLE = 0
+
 
 class World:
 
@@ -14,13 +16,16 @@ class World:
         self.tile_size = tile_size
         self.player_locations = {}
         self.item_locations = {}
-        self.start_position = (100, 100)
 
     def initialize_objects(self):
         # Filter by players in the game? maybe just assign a number of worlds
         # or something
         free_tile_positions = [
-            (colnum * self.tile_size, rownum * self.tile_size)
+            (
+                colnum * self.tile_size,
+                rownum * self.tile_size,
+                DEFAULT_LOOK_ANGLE,
+            )
             for rownum, row in enumerate(self.tiles)
             for colnum, tile in enumerate(row)
             if tile == 0
@@ -49,8 +54,8 @@ class World:
         if player in self.player_locations:
             raise ValueError("Player already in world")
         self.set_player_location(player)
-        self.set_player_desired_items(player)
-        self.set_player_starting_items(player)
+        # self.set_player_desired_items(player)
+        # self.set_player_starting_items(player)
 
     def set_player_world(self, player):
         player.world_id = random.choice(list(level_ids.keys()))
@@ -66,10 +71,10 @@ class World:
 
     def set_player_location(self, player):
         if len(self.start_tile_positions) > 0:
-            self.player_locations[player] = \
-                random.choice(self.start_tile_positions)
+            x, y = random.choice(self.start_tile_positions)
+            self.player_locations[player] = (x, y, DEFAULT_LOOK_ANGLE)
         else:
-            self.player_locations[player] = (100, 100)
+            self.player_locations[player] = (100, 100, DEFAULT_LOOK_ANGLE)
 
     def remove_player(self, player):
         if player in self.player_locations:
@@ -101,7 +106,7 @@ class World:
 
         return horizontal_colliding and vertical_colliding
 
-    def move_player(self, player, direction, distance=5):
+    def move_player(self, player, direction, look_angle, distance=5):
         try:
             angle = {
                 'up': 180, 'down': 0, 'left': 270, 'right': 90,
@@ -113,13 +118,13 @@ class World:
         except KeyError:
             return self.player_locations[player]
 
-        x, y = self.player_locations[player]
+        x, y, l = self.player_locations[player]
         new_x = distance * math.sin(math.radians(angle)) + x
         new_y = distance * math.cos(math.radians(angle)) + y
 
-        new_position = (new_x, new_y)
+        new_position = (new_x, new_y, look_angle)
 
-        position = self.attempt_move((x, y), new_position)
+        position = self.attempt_move((x, y, l), new_position)
         self.attempt_pickup(position, player)
         self.player_locations[player] = position
 

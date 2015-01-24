@@ -47,6 +47,7 @@ class Game:
             self.world.move_player(
                 self.players[connection],
                 command['direction'],
+                command['angle'],
             )
 
     # Utility Methods

@@ -60,7 +60,7 @@ var tile_width = 40;
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
-var myPlayer = -1;
+var myPlayer;
 var players = {};
 var items = {};
 var levelDefinitions={};
@@ -81,7 +81,7 @@ function socketClose(){
 
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
-
+    console.log(parsed);
     if(parsed.type == "world"){
         var world = parsed.world;
         for(var i = 0; i < world.length; i++){
@@ -197,9 +197,9 @@ function update() {
     var x = game.input.mousePointer.worldX;
     var y = game.input.mousePointer.worldY;
 
-    var angle = 0;
+    var angle = 1;
 
-    if(myPlayer >= 0){
+    if(myPlayer && Object.keys(players).length){
         var changeX  = x - players[myPlayer].x;
         var changeY = y - players[myPlayer].y;
 
