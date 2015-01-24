@@ -53,17 +53,18 @@ class World:
     def add_player(self, player):
         if player in self.player_locations:
             raise ValueError("Player already in world")
+        self.set_player_world(player)
         self.set_player_location(player)
-        # self.set_player_desired_items(player)
-        # self.set_player_starting_items(player)
+        self.set_player_desired_items(player)
+        self.set_player_starting_items(player)
 
     def set_player_world(self, player):
-        player.world_id = random.choice(list(level_ids.keys()))
+        player.world_id = random.choice(list(level_ids.values()))
 
     def set_player_desired_items(self, player):
         world_items = game_objects[player.world_id]
         player.needed_item_1, player.needed_item_2 = \
-            random.sample(list(world_items.values()))
+            random.sample(list(world_items.values()), 2)
 
     def set_player_starting_items(self, player):
         fists = game_objects[weapon_id]['start_with_fists']
