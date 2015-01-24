@@ -51,39 +51,96 @@ var knife = 33;
 var nailBoard = 34;
 var taser = 35;
 
-var tile_height = 1;
-var tile_width = 1;
+var tile_height = 20;
+var tile_width = 20;
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 var myPlayer = -1;
 var players = {};
 var items = {};
-var definitions={};
+var levelDefinitions={};
+var stateDefinitions = {};
 
 var socket;
+
+var cursors;
 
 function socketOpen(){};
 
 function socketMessage(msg){
+    console.log(msg.data);
     var parsed = JSON.parse(msg.data);
-  //  if(parsed.message == "world"){
+    if(parsed.type == "world"){
         var world = parsed.world;
 
         for(var i = 0; i < world.length; i++){
             var row = world[i];
             for(var j = 0; j < row.length; j++){
-                game.add.sprite(i*tile_width, j*tile_height, definitions[row[j]]);
+                game.add.sprite(i*tile_width, j*tile_height, levelDefinitions[row[j]]);
             }
         }
 
-   // }
+    } else if(parsed.type == "tick"){
+        var playerList = parsed.players;
+        for(var i = 0; i < playerList.length; i++){
+            var player = players[playerList[i].id];
+            if(player){
+                player.x = playerList[i].location[0];
+                player.y = playerList[i].location[1];
+            } else {
+                players[playerList[i].id] = game.add.sprite(playerList[i].location[0],
+                    playerList[i].location[1], 'player');
+            }
+        }
+    }
 };
 
 function preload() {
-    definitions[floor] = "floor";
-    definitions[wall] = "wall";
+    levelDefinitions[floor] = "floor";
+    levelDefinitions[wall] = "wall";
 
+    stateDefinitions[fists] = "fists";
+    stateDefinitions[spoon] = "spoon";
+    stateDefinitions[gun] = "gun";
+    stateDefinitions[knife] = "knife";
+    stateDefinitions[nailBoard] = "nailBoard";
+
+    stateDefinitions[penguin] = "penguin";
+    stateDefinitions[snowman] = "snowman";
+    stateDefinitions[pole] = "pole";
+    stateDefinitions[santa] = "santa";
+    stateDefinitions[scarf] = "scarf";
+
+    stateDefinitions[palmTree] = "palmTree";
+    stateDefinitions[camel] = "camel";
+    stateDefinitions[waterBottle] = "waterBottle";
+    stateDefinitions[bucket] = "bucket";
+    stateDefinitions[duneBuggy] = "duneBuggy";
+
+    stateDefinitions[cocktail] = "cocktail";
+    stateDefinitions[beachball] = "beachball";
+    stateDefinitions[trunks] = "trunks";
+    stateDefinitions[desertIslandDisc] = "desertIslandDisc";
+    stateDefinitions[pineapple] = "pineapple";
+
+    stateDefinitions[taser] = "parachute";
+    stateDefinitions[taser] = "landingGear";
+    stateDefinitions[taser] = "breathingMask";
+    stateDefinitions[taser] = "suitcase";
+    stateDefinitions[taser] = "passport";
+
+    stateDefinitions[spacehelmet] = "spacehelmet";
+    stateDefinitions[oxygen] = "oxygen";
+    stateDefinitions[jetpack] = "jetpack";
+    stateDefinitions[alien] = "alien";
+    stateDefinitions[phaser] = "phaser";
+
+    stateDefinitions[lifeRing] = "lifeRing";
+    stateDefinitions[rope] = "rope";
+    stateDefinitions[raincoat] = "raincoat";
+    stateDefinitions[sextant] = "sextant";
+    stateDefinitions[anchor] = "anchor";
 
 
     game.load.image('player','resources/art/human.png', tile_width, tile_height);
@@ -94,11 +151,29 @@ function preload() {
 }
 
 function create() {
-    socket = new WebSocket("ws://10.7.3.103:9000");
+    socket = new WebSocket("ws://10.7.3.119:9000");
     socket.onopen = socketOpen;
     socket.onmessage = socketMessage;
+    cursors = game.input.keyboard.createCursorKeys();
 }
 
 function update() {
+
+    if (cursors.left.isDown){
+        //  Move to the left
+        var jsonText = JSON.stringify({type: "movement", direction: "left"});
+        socket.send(jsonText);
+    }else if (cursors.right.isDown){
+        //  Move to the right
+        var jsonText = JSON.stringify({type: "movement", direction: "right"});
+        socket.send(jsonText);
+    } else if(cursors.up.isDown){
+        var jsonText = JSON.stringify({type: "movement", direction: "up"});
+        socket.send(jsonText);
+    } else if(cursors.down.isDown){
+        var jsonText = JSON.stringify({type: "movement", direction: "down"});
+        socket.send(jsonText);
+    }
+
     
 }
