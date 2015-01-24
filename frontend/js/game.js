@@ -1,4 +1,4 @@
-var wsAddress = "ws://10.7.3.119:9000";
+var wsAddress = "ws://10.7.3.103:9000";
 
 var floor = 0;
 var wall = 1;
@@ -109,6 +109,19 @@ function socketMessage(msg){
                 players[keys[i]].kill();
             }
         }
+        var itemList = parsed.items;
+        var itemIds = [];
+        for(var i = 0; i < itemList.length; i++){
+            var item = items[itemList[i].id];
+            itemIds.push(itemList[i].id.toString();
+            if(item){
+                item.x = itemList[i].location[0];
+                item.y = itemList[i].location[1];
+            } else {
+                items[itemList[i].id] = game.add.sprite(itemList[i].location[0], itemList[i].location[1], 'item-ground');
+            }
+            
+        }
     }
 };
 
@@ -165,6 +178,7 @@ function preload() {
     game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
     game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
     game.load.image('exit', 'resources/art/tile-exit-40.png', tile_width, tile_height);
+    game.load.image('item-ground', 'resources/art/item-ground.png');
 }
 
 function create() {
