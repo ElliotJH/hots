@@ -17,26 +17,28 @@ class Game:
         if connection in self.players:
             raise ValueError("Player already in game")
 
-        self.players[connection] = Player()
+        player = Player()
+        self.players[connection] = player
+        self.world.add_player(player)
 
-        data = self.world.as_dict()
-        data.update({'type': 'world'})
-
-        connection.sendMessage(json.dumps(data).encode('utf8'))
-
+        self.send(connection, self.world.serialise_tiles(), 'world')
         print("Players connected", len(self.players))
 
     def remove_player(self, connection):
         if connection in self.players:
+            player = self.players[connection]
             del self.players[connection]
+            self.world.remove_player(player)
 
         print("Players connected", len(self.players))
 
     def tick(self):
-        data = {
-            'type': 'tick',
-            'players': [],
-        }
+        self.broadcast(self.world.serialise_state(), 'tick')
 
+    def broadcast(self, data, message_type):
         for connection in self.players.keys():
-            connection.sendMessage(json.dumps(data).encode('utf8'))
+            self.send(connection, data, message_type)
+
+    def send(self, connection, data, message_type):
+        data.update(type=message_type)
+        connection.sendMessage(json.dumps(data).encode('utf8'))
