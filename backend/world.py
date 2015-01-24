@@ -71,7 +71,7 @@ class World:
                     new_position,
                     player_radius,
                     (col_num, row_num),
-                    self.tile_width,
+                    self.tile_size,
                 ):
                     return old_position
         return new_position
