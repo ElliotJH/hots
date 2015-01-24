@@ -176,12 +176,16 @@ class World:
 
     # Serialisation to structures that can be JSON'd
 
-    def serialise_world(self):
+    def serialise_world(self, player):
         return {
             'world': self.tiles,
             'items': [
                 {'id': x.item_id, 'location': y}
                 for x, y in self.item_locations.items()
+            ],
+            'player_wanted': [
+                player.needed_item_1.item_id if player.needed_item_1 else None,
+                player.needed_item_1.item_id if player.needed_item_1 else None,
             ],
         }
 
