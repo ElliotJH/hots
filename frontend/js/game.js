@@ -1,3 +1,5 @@
+var wsAddress = "ws://10.7.3.119:9000";
+
 var floor = 0;
 var wall = 1;
 
@@ -150,7 +152,7 @@ function preload() {
 }
 var keyboard;
 function create() {
-    socket = new WebSocket("ws://10.7.3.119:9000");
+    socket = new WebSocket(wsAddress);
     socket.onopen = socketOpen;
     socket.onmessage = socketMessage;
     cursors = game.input.keyboard.createCursorKeys();
