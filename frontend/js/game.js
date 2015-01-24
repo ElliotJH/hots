@@ -154,6 +154,7 @@ function socketMessage(msg){
             if(player){
                 player.x = playerList[i].location[0];
                 player.y = playerList[i].location[1];
+                player.rotation = playerList[i].location[2];
             } else {
                 players[playerList[i].id] = game.add.sprite(playerList[i].location[0],
                     playerList[i].location[1], 'player');
