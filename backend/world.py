@@ -5,6 +5,8 @@ from item import Item
 from constant_objects import levels as level_ids, weapons as weapon_id, \
     game_objects
 
+ITEM_SPEED = 15
+SPEED = 5
 DEFAULT_LOOK_ANGLE = 0
 
 
@@ -107,7 +109,7 @@ class World:
 
         return horizontal_colliding and vertical_colliding
 
-    def move_player(self, player, direction, look_angle, distance=5):
+    def move_player(self, player, direction, look_angle, distance=SPEED):
         try:
             angle = {
                 'up': 180, 'down': 0, 'left': 270, 'right': 90,
@@ -131,6 +133,9 @@ class World:
         self.player_locations[player] = position
 
         return position
+
+    def throw(self, player, hand):
+        pass
 
     def attempt_pickup(self, new_position, player, player_radius=0):
         if not (player.item_1_empty or player.item_2_empty):

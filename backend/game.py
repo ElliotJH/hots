@@ -54,6 +54,10 @@ class Game:
                 command['direction'],
                 command['angle'],
             )
+        elif command['type'] == 'throw_left':
+            self.world.throw(self.players[connection], 'left')
+        elif command['type'] == 'throw_right':
+            self.world.throw(self.players[connection], 'right')
 
     # Utility Methods
 
