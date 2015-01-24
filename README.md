@@ -8,46 +8,39 @@
 ## Places
 
 ### Ship
-- Life ring
-- Rope
+- Fishing Hook
+- Crab
 - Raincoat
-- Sextant
+- Octopus
 - Anchor
 
 ### Spaceship
-- Space helmet
+- Space suit
 - O2 tank
 - Jetpack
 - Alien
-- Phaser (with empty battery)
+- Phaser (ray gun)
+- Chem Tank
+- Rocket
+- Satellite
 
 ### Plane
 - Parachute
-- Landing gear
-- Breathing mask
+- Breathing mask (gas mask)
 - Suitcase
-- Passport
+- Passport (folded paper?)
 
 ### Tropical island
 - Cocktail
-- Beachball
-- Trunks
-- Desert island disc
-- Pineapple
-
-### Arctic
-- Penguin
-- Snowman
-- Pole
-- Santa
-- Scarf
+- Beachball (generic ball)
+- Palm Tree
+- Grapes
 
 ### Desert
-- Palm tree
+- Cactus
 - Camel
-- Water bottle
+- Water drop
 - Bucket + spade
-- Dune buggy
 
 ## Weapons
 - Start with fists
