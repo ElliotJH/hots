@@ -51,7 +51,7 @@ class World:
         self.set_player_location(player)
         self.set_player_desired_items(player)
         self.set_player_starting_items(player)
-        
+
     def set_player_world(self, player):
         player.world_id = random.choice(list(level_ids.keys()))
 
