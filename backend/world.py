@@ -125,46 +125,52 @@ class World:
 
         new_position = (new_x, new_y, look_angle)
 
-        position = self.attempt_move((x, y, l), new_position)
+        position = self.attempt_move(player, (x, y, l), new_position)
         self.attempt_pickup(position, player)
         self.player_locations[player] = position
 
         return position
 
     def attempt_pickup(self, new_position, player, player_radius=0):
-        if player.item_1 is not None and player.item_2 is not None:
+        if not (player.item_1_empty or player.item_2_empty):
             return
 
         to_delete = []
         for item, position in self.item_locations.items():
             if self.collides(new_position, player_radius, position, 40):
                 # Nasty hardcode
-                if player.item_1 is None:
+                if player.item_1_empty:
                     player.item_1 = item
                     to_delete.append(item)
-                elif player.item_2 is None:
+                elif player.item_2_empty:
                     player.item_2 = item
                     to_delete.append(item)
-            if player.item_1 is not None and player.item_2 is not None:
+            if not (player.item_1_empty or player.item_2_empty):
                 return  # No need to keep on trying.
 
         for item in to_delete:
             del self.item_locations[item]
 
-    def attempt_move(self, old_position, new_position, player_radius=0):
+    def attempt_move(self, player, old_position, new_position, player_radius=0):
         # This is massively bugged - if the player tries to move through an
         # object then we're just fine with that.
+
+        block_exit = not player.has_succeeded()
 
         # Massively inefficient, we don't need to check many of these at all
         for (row_num, columns) in enumerate(self.tiles):
             for (col_num, cell) in enumerate(columns):
-                if cell == 1 and self.collides(
-                        new_position,
-                        player_radius,
-                        (col_num * self.tile_size, row_num * self.tile_size),
-                        self.tile_size,
-                ):
-                    return old_position
+                if ((cell == 1) or (cell == 2 and block_exit)):
+                    if self.collides(
+                            new_position,
+                            player_radius,
+                            (
+                                col_num * self.tile_size,
+                                row_num * self.tile_size,
+                            ),
+                            self.tile_size,
+                    ):
+                        return old_position
         return new_position
 
     # Serialisation to structures that can be JSON'd
