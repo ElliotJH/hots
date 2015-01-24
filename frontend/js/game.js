@@ -61,12 +61,12 @@ var players = {};
 var items = {};
 var definitions={};
 
-var socket = new WebSocket("ws://10.7.3.103:9000");
+var socket;
 
-socket.onopen = function(){};
+function socketOpen(){};
 
-socket.onmessage = function(msg){
-    var parsed = JSON.parse(msg);
+function socketMessage(msg){
+    var parsed = JSON.parse(msg.data);
   //  if(parsed.message == "world"){
         var world = parsed.world;
 
@@ -86,13 +86,17 @@ function preload() {
 
 
 
-    game.load.image("player","resources/art/human.png", tile_width, tile_height);
-    game.load.image("wall", "resources/art/wall.png", tile_width, tile_height);
-    game.load.image("floor", "resources/art/wall-black.png", tile_width, tile_height);
+    game.load.image('player','resources/art/human.png', tile_width, tile_height);
+    game.load.image('wall', 'resources/art/wall.png', tile_width, tile_height);
+    game.load.image('floor', 'resources/art/wall-black.png', tile_width, tile_height);
+
+    
 }
 
 function create() {
-    
+    socket = new WebSocket("ws://10.7.3.103:9000");
+    socket.onopen = socketOpen;
+    socket.onmessage = socketMessage;
 }
 
 function update() {
