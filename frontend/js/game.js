@@ -253,9 +253,6 @@ function preload() {
     game.load.audio('attack_gun',             'resources/audio/weapons/attack_gun.mp3');
     game.load.audio('attack_tesla',           'resources/audio/weapons/attack_tesla.mp3');
 
-    background = game.add.audio('background');
-    background.play('');
-
     game.stage.disableVisibilityChange = true;
 
 }
@@ -271,7 +268,8 @@ function create() {
     keyboard = game.input.keyboard;
     keyboard.addKeyCapture([87, 65, 83, 68]);
 
-
+    background = game.add.audio('background');
+    background.play('');
 
 }
 
