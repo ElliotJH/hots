@@ -1,7 +1,6 @@
 import math
 import random
 
-
 from item import Item
 from constant_objects import levels as level_ids, weapons as weapon_id, \
     game_objects
