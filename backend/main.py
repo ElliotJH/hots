@@ -44,7 +44,6 @@ class Server(websocket.WebSocketServerFactory):
 
     def tick(self):
         self.ticks += 1
-        self.broadcast('tick')
         reactor.callLater(1, self.tick)
 
     def register(self, client):
