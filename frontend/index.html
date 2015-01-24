@@ -1,9 +1,8 @@
-<!doctype html> 
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
     <title>High Octane Trading Scenarios</title>
-    <script type="text/javascript" src="js/phaser.min.js"></script>
+    <script type="text/javascript" src="js/phaser.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -14,7 +13,7 @@
 
 <script type="text/javascript">
 var floor = 0;
-var wall = 0;
+var wall = 1;
 
 var ship = 36;
 var spaceship = 37;
@@ -74,7 +73,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 var myPlayer = -1;
 var players = {};
 var items = {};
-var definitions{};
+var definitions={};
 
 var socket = new WebSocket("ws://10.7.3.103:9000");
 
@@ -82,7 +81,7 @@ socket.onopen = function(){}
 
 socket.onmessage = function(msg){
     var parsed = JSON.parse(msg);
-    if(parsed.message == "world"){
+  //  if(parsed.message == "world"){
         var world = parsed.world;
 
         for(i = 0; i < world.length; i++){
@@ -92,18 +91,18 @@ socket.onmessage = function(msg){
             }
         }
 
-    }
+   // }
 }
 
 function preload() {
     definitions[floor] = "floor";
     definitions[wall] = "wall";
 
-    
+
 
     game.load.image("player","resources/art/human.png", tile_width, tile_height);
     game.load.image("wall", "resources/art/wall.png", tile_width, tile_height);
-    game.load.image("floor", "resources/art/human.png", tile_width, tile_height);
+    game.load.image("floor", "resources/art/wall-black.png", tile_width, tile_height);
 }
 
 function create() {
