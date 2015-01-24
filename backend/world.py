@@ -49,7 +49,7 @@ class World:
 
         return horizontal_colliding and vertical_colliding
 
-    def move_player(self, player, direction, distance=10):
+    def move_player(self, player, direction, distance=5):
         angle = {
             'up': 180, 'down': 0, 'left': 270, 'right': 90
         }[direction]
