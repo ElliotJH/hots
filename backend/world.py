@@ -54,7 +54,10 @@ class World:
         try:
             angle = {
                 'up': 180, 'down': 0, 'left': 270, 'right': 90,
-                'upleft': 225, 'upright': 135, 'downleft': 315, 'downright': 45,
+                'upleft': 225, 'upright': 135,
+                'downleft': 315, 'downright': 45,
+                'upleftright': 180,
+                'downleftright': 0,
             }[direction]
         except KeyError:
             return self.player_locations[player]
@@ -70,7 +73,7 @@ class World:
 
         return position
 
-    def attempt_move(self, old_position, new_position, player_radius=20):
+    def attempt_move(self, old_position, new_position, player_radius=0):
         # This is massively bugged - if the player tries to move through an
         # object then we're just fine with that.
 

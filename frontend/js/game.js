@@ -90,7 +90,7 @@ function socketMessage(msg){
         var ids = [];
         for(var i = 0; i < playerList.length; i++){
             var player = players[playerList[i].id];
-            ids.push(playerList[i].id);
+            ids.push(playerList[i].id.toString());
             if(player){
                 player.x = playerList[i].location[0];
                 player.y = playerList[i].location[1];
