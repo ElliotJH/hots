@@ -117,7 +117,8 @@ class World:
                 'downleftright': 0,
             }[direction]
         except KeyError:
-            return self.player_locations[player]
+            angle = 0
+            distance = 0
 
         x, y, l = self.player_locations[player]
         new_x = distance * math.sin(math.radians(angle)) + x
