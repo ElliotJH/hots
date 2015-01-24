@@ -136,6 +136,7 @@ class World:
         return position
 
     def throw(self, player, hand):
+        print("throw")
         player_location = self.player_locations[player]
         if hand == 'left':
             if player.item_1_empty:
@@ -144,15 +145,21 @@ class World:
             player.reset_item_1()
             self.item_locations[item] = (player_location[0], player_location[1])
             self.items_moving[item] = (player_location[2], 15.0)
-            
-        # find the object to throw
-        # find the direction to attempt to throw it in
-        # set momentum and direction
-        pass
+
+        if hand == 'right':
+            if player.item_2_empty:
+                raise ValueError("Hand is empty")
+            item = player.item_2
+            player.reset_item_2()
+            self.item_locations[item] = (player_location[0], player_location[1])
+            self.items_moving[item] = (player_location[2], 15.0)
+
 
     def tick(self):
+        return
         coefficient_of_friction = 0.4
         for item, (direction, speed) in self.items_moving.items():
+            print(item)
             self.items_moving[item] = (direction, coefficient_of_friction * speed)
             x, y = self.item_locations[item]
             new_x = speed * math.sin(math.radians(direction)) + x
@@ -213,7 +220,7 @@ class World:
             ],
             'player_wanted': [
                 player.needed_item_1.item_id if player.needed_item_1 else None,
-                player.needed_item_1.item_id if player.needed_item_1 else None,
+                player.needed_item_2.item_id if player.needed_item_2 else None,
             ],
         }
 
