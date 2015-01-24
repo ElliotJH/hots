@@ -4,6 +4,7 @@ import random
 import item
 from constant_objects import levels as level_ids, game_objects
 
+
 class World:
 
     def __init__(self, tile_size=40):
@@ -12,10 +13,17 @@ class World:
         self.tile_size = tile_size
         self.player_locations = {}
         self.item_locations = {}
-        
+
     def initialize_objects(self):
-        #filter by players in the game? maybe just assign a number of worlds or something
-        free_tile_positions = [(colnum * self.tile_size, rownum * self.tile_size) for rownum, row in enumerate(self.tiles) for colnum, tile in enumerate(row) if tile == 1]
+        # Filter by players in the game? maybe just assign a number of worlds
+        # or something
+        free_tile_positions = [
+            (colnum * self.tile_size, rownum * self.tile_size)
+            for rownum, row in enumerate(self.tiles)
+            for colnum, tile in enumerate(row)
+            if tile == 1
+        ]
+
         for level_id in level_ids.values():
             for item_id in game_objects[level_id].values():
                 item_object = item.Item(item_id)
