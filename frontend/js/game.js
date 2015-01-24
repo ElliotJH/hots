@@ -1,8 +1,9 @@
-var wsAddress = "ws://10.7.3.119:9000";
+var wsAddress = "ws://10.7.3.103:9000";
 
 var floor = 0;
 var wall = 1;
 var exit = 2;
+var start_tile = 3;
 
 var ship = 36;
 var spaceship = 37;
@@ -67,19 +68,23 @@ var players = {};
 var items = {};
 var levelDefinitions={};
 var stateDefinitions = {};
-
+var keyboard;
 var socket;
 var socketReady = false;
+<<<<<<< HEAD
 var UIGroup;
+=======
+var worldInit = false;
+>>>>>>> fefb312763afbb4e63a46fe1ae378b87fbbc2ee7
 var cursors;
 
 function socketOpen(){
     socketReady = true;
 }
-var worldInit = false;
+
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
-    
+
     if(parsed.type == "world"){
         var world = parsed.world;
         for(var i = 0; i < world.length; i++){
@@ -111,6 +116,19 @@ function socketMessage(msg){
                 players[keys[i]].kill();
             }
         }
+        var itemList = parsed.items;
+        var itemIds = [];
+        for(var i = 0; i < itemList.length; i++){
+            var item = items[itemList[i].id];
+            itemIds.push(itemList[i].id.toString();
+            if(item){
+                item.x = itemList[i].location[0];
+                item.y = itemList[i].location[1];
+            } else {
+                items[itemList[i].id] = game.add.sprite(itemList[i].location[0], itemList[i].location[1], 'item-ground');
+            }
+            
+        }
     }
 };
 
@@ -120,6 +138,7 @@ function preload() {
     levelDefinitions[floor] = "floor";
     levelDefinitions[wall] = "wall";
     levelDefinitions[exit] = "exit";
+    levelDefinitions[start_tile] = "floor";
 
     stateDefinitions[fists] = "fists";
     stateDefinitions[spoon] = "spoon";
@@ -190,9 +209,11 @@ function preload() {
     game.load.image('taser', 'resources/art/weapons/tesla-coil.png', item_width, item_height);
     game.load.image('knife', 'resources/art/weapons/plain-dagger.png', item_width, item_height);
     game.load.image('spoon', 'resources/art/weapons/broken-bottle.png', item_width, item_height);
-        
+       
+    game.load.image('item-ground', 'resources/art/item-ground.png');
+
 }
-var keyboard;
+
 function create() {
     UIGroup = game.add.group();
     socket = new WebSocket(wsAddress);
@@ -239,9 +260,12 @@ function update() {
     }
 
     sendMessage({type: "movement", direction: direction, angle: angle});
+<<<<<<< HEAD
     
 
     console.log(game.time.fps);
+=======
+>>>>>>> fefb312763afbb4e63a46fe1ae378b87fbbc2ee7
 }
 
 function sendMessage(message) {

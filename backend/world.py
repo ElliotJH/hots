@@ -1,8 +1,9 @@
 import math
 import random
 
-import item
-from constant_objects import levels as level_ids, game_objects
+from item import Item
+from constant_objects import levels as level_ids, weapons as weapon_id, \
+    game_objects
 
 
 class World:
@@ -13,6 +14,7 @@ class World:
         self.tile_size = tile_size
         self.player_locations = {}
         self.item_locations = {}
+        self.start_position = (100, 100)
 
     def initialize_objects(self):
         # Filter by players in the game? maybe just assign a number of worlds
@@ -26,22 +28,48 @@ class World:
 
         for level_id in level_ids.values():
             for item_id in game_objects[level_id].values():
-                item_object = item.Item(item_id)
+                item_object = Item(item_id)
                 position = random.choice(free_tile_positions)
                 self.item_locations[item_object] = position
-
-        print(self.item_locations)
 
     def load(self, fname):
         with open(fname, 'r') as f:
             self.tiles = [[int(i) for i in line if i != '\n'] for line in f]
+
+        self.start_tile_positions = [
+            (colnum * self.tile_size, rownum * self.tile_size)
+            for rownum, row in enumerate(self.tiles)
+            for colnum, tile in enumerate(row)
+            if tile == 3
+        ]
+
         self.initialize_objects()
 
     def add_player(self, player):
         if player in self.player_locations:
             raise ValueError("Player already in world")
+        self.set_player_location(player)
+        self.set_player_desired_items(player)
+        self.set_player_starting_items(player)
 
-        self.player_locations[player] = (100, 100)
+    def set_player_world(self, player):
+        player.world_id = random.choice(list(level_ids.keys()))
+
+    def set_player_desired_items(self, player):
+        world_items = game_objects[player.world_id]
+        player.needed_item_1, player.needed_item_2 = \
+            random.sample(list(world_items.values()))
+
+    def set_player_starting_items(self, player):
+        fists = game_objects[weapon_id]['start_with_fists']
+        player.item_1 = player.item_2 = fists
+
+    def set_player_location(self, player):
+        if len(self.start_tile_positions) > 0:
+            self.player_locations[player] = \
+                random.choice(self.start_tile_positions)
+        else:
+            self.player_locations[player] = (100, 100)
 
     def remove_player(self, player):
         if player in self.player_locations:
@@ -91,41 +119,49 @@ class World:
 
         new_position = (new_x, new_y)
 
-        position = self.attempt_move((x, y), new_position)
+        position = self.attempt_move(player, (x, y), new_position)
         self.attempt_pickup(position, player)
         self.player_locations[player] = position
 
         return position
 
-
     def attempt_pickup(self, new_position, player, player_radius=0):
-        if player.item_1 is not None and player.item_2 is not None:
+        if not (player.item_1_empty or player.item_2_empty):
             return
-        for item, position in self.item_locations.items():
-            if collides(new_position, player_radius, position, 40):#Nasty hardcode
-                if player.item_1 is None:
-                    player.item_1 = item
-                    del self.item_locations[item]
-                elif player.item_2 is None:
-                    player.item_2 = item
-                    del self.item_locations[item]
-            if player.item_1 is not None and player.item_2 is not None:
-                return#No need to keep on trying.
 
-    def attempt_move(self, old_position, new_position, player_radius=0):
+        to_delete = []
+        for item, position in self.item_locations.items():
+            if self.collides(new_position, player_radius, position, 40):
+                # Nasty hardcode
+                if player.item_1_empty:
+                    player.item_1 = item
+                    to_delete.append(item)
+                elif player.item_2_empty:
+                    player.item_2 = item
+                    to_delete.append(item)
+            if not (player.item_1_empty or player.item_2_empty):
+                return  # No need to keep on trying.
+
+        for item in to_delete:
+            del self.item_locations[item]
+
+    def attempt_move(self, player, old_position, new_position, player_radius=0):
         # This is massively bugged - if the player tries to move through an
         # object then we're just fine with that.
+
+        block_exit = not player.has_succeeded()
 
         # Massively inefficient, we don't need to check many of these at all
         for (row_num, columns) in enumerate(self.tiles):
             for (col_num, cell) in enumerate(columns):
-                if cell == 1 and self.collides(
-                        new_position,
-                        player_radius,
-                        (col_num * self.tile_size, row_num * self.tile_size),
-                        self.tile_size,
-                ):
-                    return old_position
+                if ((cell == 1) or (cell == 2 and block_exit)):
+                    if self.collides(
+                            new_position,
+                            player_radius,
+                            (col_num * self.tile_size, row_num * self.tile_size),
+                            self.tile_size,
+                    ):
+                        return old_position
         return new_position
 
     # Serialisation to structures that can be JSON'd
