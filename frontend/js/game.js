@@ -169,7 +169,7 @@ function socketMessage(msg){
         var itemIds = [];
         for(var i = 0; i < itemList.length; i++){
             var item = items[itemList[i].id];
-            itemIds.push(itemList[i].id.toString();
+            itemIds.push(itemList[i].id.toString());
             if(item){
                 item.x = itemList[i].location[0];
                 item.y = itemList[i].location[1];
