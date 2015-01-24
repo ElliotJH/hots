@@ -133,7 +133,7 @@ function socketClose(){
 
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
-    console.log(parsed);
+
     if(parsed.type == "world"){
         var world = parsed.world;
         for(var i = 0; i < world.length; i++){
