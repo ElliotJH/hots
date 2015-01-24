@@ -1,7 +1,7 @@
 /*
     Constants
 */
-var wsAddress = "ws://127.0.0.1:9000";
+var wsAddress = "ws://10.7.3.119:9000";
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
@@ -175,7 +175,7 @@ function socketMessage(msg) {
 };
 
 function preload() {
-    game.load.image('player','resources/art/human.png', tile_width, tile_height);
+    game.load.image('player','resources/art/human-2.png', tile_width, tile_height);
     game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
     game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
     game.load.image('exit', 'resources/art/tile-exit-40.png', tile_width, tile_height);
