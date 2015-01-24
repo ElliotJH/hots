@@ -13,6 +13,9 @@ var itemOneY = 400;
 var itemTwoX = 600;
 var itemTwoY = 400;
 
+var wantedOne = [100, 100];
+var wantedTwo = [600, 100];
+
 var itemArrayX = [itemOneX, itemTwoX];
 var itemArrayY = [itemOneY, itemTwoY];
 
@@ -115,6 +118,9 @@ function socketMessage(msg) {
 
             }
         }
+
+        UIGroup.create(wantedOne[0], wantedOne[1], parsed.player_wanted[0]);
+        UIGroup.create(wantedTwo[0], wantedTwo[1], parsed.player_wanted[1]);
 
         worldInit = true;
         myPlayer = parsed.id;
