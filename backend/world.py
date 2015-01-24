@@ -145,20 +145,23 @@ class World:
         for item in to_delete:
             del self.item_locations[item]
 
-    def attempt_move(self, old_position, new_position, player_radius=0):
+    def attempt_move(self, old_position, new_position, player_radius=0, player):
         # This is massively bugged - if the player tries to move through an
         # object then we're just fine with that.
+
+        block_exit = not player.has_succeeded()
 
         # Massively inefficient, we don't need to check many of these at all
         for (row_num, columns) in enumerate(self.tiles):
             for (col_num, cell) in enumerate(columns):
-                if cell == 1 and self.collides(
-                        new_position,
-                        player_radius,
-                        (col_num * self.tile_size, row_num * self.tile_size),
-                        self.tile_size,
-                ):
-                    return old_position
+                if ((cell == 1) or (cell == 2 and block_exit)):
+                    if self.collides(
+                            new_position,
+                            player_radius,
+                            (col_num * self.tile_size, row_num * self.tile_size),
+                            self.tile_size,
+                    ):
+                        return old_position
         return new_position
 
     # Serialisation to structures that can be JSON'd
