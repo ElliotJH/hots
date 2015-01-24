@@ -42,6 +42,7 @@ class Server(websocket.WebSocketServerFactory):
 
     def tick(self):
         self.ticks += 1
+        self.game.tick()
         reactor.callLater(TICK_RATE, self.tick)
 
     def register(self, connection):
