@@ -49,7 +49,9 @@ class World:
     def add_player(self, player):
         if player in self.player_locations:
             raise ValueError("Player already in world")
+        self.set_player_location(player)
 
+    def set_player_location(self, player):
         if len(self.start_tile_positions) > 0:
             self.player_locations[player] = \
                 random.choice(self.start_tile_positions)
