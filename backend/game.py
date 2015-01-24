@@ -15,5 +15,9 @@ class Game(object):
             self.players.append(player)
             player.send_message(self.world.serialise())
 
+        print("Players connected", len(self.players))
+
     def remove_player(self, connection):
         self.players.remove(Player(connection))
+
+        print("Players connected", len(self.players))

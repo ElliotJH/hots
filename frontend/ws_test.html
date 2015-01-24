@@ -11,6 +11,7 @@
 
             socket.onopen = function() {
                isopen = true;
+               console.log("Connected");
             }
 
             socket.onmessage = function(e) {

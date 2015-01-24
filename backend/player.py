@@ -25,4 +25,10 @@ class Player(object):
         self.timeout += amount  # we want some logic to stop this getting huge
 
     def send_message(self, data):
-        self.connection.send(json.dumps(data))
+        self.connection.sendMessage(json.dumps(data).encode('utf8'))
+
+    def __eq__(self, other):
+        if not isinstance(other, Player):
+            return False
+
+        return self.connection == other.connection
