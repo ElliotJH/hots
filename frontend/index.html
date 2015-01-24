@@ -16,6 +16,16 @@
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
+var socket = new WebSocket("ws://");
+
+socket.onopen = function(){
+    alert("Socket Open");
+}
+
+socket.onmessage = function(msg){
+    alert("message");
+}
+
 function preload() {
 
    
