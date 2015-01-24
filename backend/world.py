@@ -92,9 +92,25 @@ class World:
         new_position = (new_x, new_y)
 
         position = self.attempt_move((x, y), new_position)
+        self.attempt_pickup(position, player)
         self.player_locations[player] = position
 
         return position
+
+
+    def attempt_pickup(self, new_position, player, player_radius=0):
+        if player.item_1 is not None and player.item_2 is not None:
+            return
+        for item, position in self.item_locations.items():
+            if collides(new_position, player_radius, position, 40):#Nasty hardcode
+                if player.item_1 is None:
+                    player.item_1 = item
+                    del self.item_locations[item]
+                elif player.item_2 is None:
+                    player.item_2 = item
+                    del self.item_locations[item]
+            if player.item_1 is not None and player.item_2 is not None:
+                return#No need to keep on trying.
 
     def attempt_move(self, old_position, new_position, player_radius=0):
         # This is massively bugged - if the player tries to move through an
