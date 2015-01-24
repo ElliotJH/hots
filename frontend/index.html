@@ -13,24 +13,42 @@
 <body>
 
 <script type="text/javascript">
+var floor = 0;
+var wall = 0;
+var tile_height = 1;
+var tile_width = 1;
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
+var myPlayer = -1;
 var players = {};
 var items = {};
 var definitions{};
 
-//var socket = new WebSocket("ws://10.7.3.103:9000");
+var socket = new WebSocket("ws://10.7.3.103:9000");
 
-//socket.onopen = function(){}
+socket.onopen = function(){}
 
-//socket.onmessage = function(msg){}
+socket.onmessage = function(msg){
+    var parsed = JSON.parse(msg);
+    if(parsed.message == "world"){
+        var world = parsed.world;
+
+        for(i = 0; i < world.length; i++){
+            var row = world[i];
+            for(j = 0; j < row.length; j++){
+                game.add.sprite(i*50, j*50, definitions[row[j]]);
+            }
+        }
+
+    }
+}
 
 function preload() {
-    definitions[0] = "floor";
-    definitions[1] = "wall";
-    game.load.image("player","../resources/images/playerTemp.png");
-       
+    definitions[floor] = "floor";
+    definitions[wall] = "wall";
+    game.load.image("player","../resources/art/human.png", 50, 50);
+    game.load.image("wall", "../resources/art/wall.png", 50, 50);
 
 }
 
