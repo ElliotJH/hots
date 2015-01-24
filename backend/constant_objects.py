@@ -36,7 +36,7 @@ game_objects = {
         'trunks' : 17,
         'desert_island_disc' : 18,
         'pineapple' : 19
-    }
+    },
     levels['arctic'] : {
         'penguin' : 20,
         'snowman' : 21,
