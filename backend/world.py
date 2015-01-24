@@ -1,7 +1,7 @@
 import math
 import random
 
-import item
+from item import Item
 from constant_objects import levels as level_ids, game_objects
 
 
@@ -27,7 +27,7 @@ class World:
 
         for level_id in level_ids.values():
             for item_id in game_objects[level_id].values():
-                item_object = item.Item(item_id)
+                item_object = Item(item_id)
                 position = random.choice(free_tile_positions)
                 self.item_locations[item_object] = position
 
@@ -43,18 +43,20 @@ class World:
             for colnum, tile in enumerate(row)
             if tile == 3
         ]
-        
-            
+
         self.initialize_objects()
 
     def add_player(self, player):
         if player in self.player_locations:
             raise ValueError("Player already in world")
+        self.set_player_location(player)
 
+    def set_player_location(self, player):
         if len(self.start_tile_positions) > 0:
-            self.player_locations[player] = random.choice(self.start_tile_positions) 
-        else: 
-            self.player_locations[player = (100, 100)
+            self.player_locations[player] = \
+                random.choice(self.start_tile_positions)
+        else:
+            self.player_locations[player] = (100, 100)
 
     def remove_player(self, player):
         if player in self.player_locations:
@@ -110,12 +112,13 @@ class World:
 
         return position
 
-
     def attempt_pickup(self, new_position, player, player_radius=0):
         if player.item_1 is not None and player.item_2 is not None:
             return
+
         for item, position in self.item_locations.items():
-            if collides(new_position, player_radius, position, 40):#Nasty hardcode
+            if self.collides(new_position, player_radius, position, 40):
+                # Nasty hardcode
                 if player.item_1 is None:
                     player.item_1 = item
                     del self.item_locations[item]
@@ -123,7 +126,7 @@ class World:
                     player.item_2 = item
                     del self.item_locations[item]
             if player.item_1 is not None and player.item_2 is not None:
-                return#No need to keep on trying.
+                return  # No need to keep on trying.
 
     def attempt_move(self, old_position, new_position, player_radius=0):
         # This is massively bugged - if the player tries to move through an
