@@ -1,16 +1,11 @@
+/*
+    Constants
+*/
 var wsAddress = "ws://10.7.3.119:9000";
-
 var tile_height = 40;
 var tile_width = 40;
-
 var item_height = 100;
 var item_width = 100;
-
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
-
-var myPlayer;
-var players = {};
-var items = {};
 var levelDefinitions = {
     0: "floor",
     1: "wall",
@@ -56,12 +51,22 @@ var stateDefinitions = {
     35: "taser"
 };
 
-var keyboard;
+/*
+    Game
+*/
+var myPlayer;
+var players = {};
+var items = {};
+
+/*
+    State
+*/
 var socket;
-var socketReady = false;
 var UIGroup;
-var worldInit = false;
 var cursors;
+var keyboard;
+var worldInit = false;
+var socketReady = false;
 
 function socketOpen(){
     socketReady = true;
