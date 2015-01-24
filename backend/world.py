@@ -128,17 +128,21 @@ class World:
         if player.item_1 is not None and player.item_2 is not None:
             return
 
+        to_delete = []
         for item, position in self.item_locations.items():
             if self.collides(new_position, player_radius, position, 40):
                 # Nasty hardcode
                 if player.item_1 is None:
                     player.item_1 = item
-                    del self.item_locations[item]
+                    to_delete.append(item)
                 elif player.item_2 is None:
                     player.item_2 = item
-                    del self.item_locations[item]
+                    to_delete.append(item)
             if player.item_1 is not None and player.item_2 is not None:
                 return  # No need to keep on trying.
+
+        for item in to_delete:
+            del self.item_locations[item]
 
     def attempt_move(self, old_position, new_position, player_radius=0):
         # This is massively bugged - if the player tries to move through an
