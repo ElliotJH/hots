@@ -7,7 +7,7 @@ var tile_width = 40;
 var item_height = 100;
 var item_width = 100;
 
-var itemOneX = 200;
+var itemOneX = 100;
 var itemOneY = 400;
 
 var itemTwoX = 600;
@@ -202,10 +202,16 @@ function preload() {
     game.load.image('oxygen', 'resources/art/space/chemical-tank.png', item_width, item_height);
 
     game.load.image('cocktail', 'resources/art/island/cocktail.png', item_width, item_height);
-    game.load.image('palmTree', 'resources/art/island/palm-tree.png', item_width, item_height);
+    game.load.image('beachball', 'resources/art/island/palm-tree.png', item_width, item_height);
     game.load.image('pineapple', 'resources/art/island/grapes.png', item_width, item_height);
     game.load.image('trunks', 'resources/art/island/tennis-ball.png', item_width, item_height);
     game.load.image('desertIslandDisc', 'resources/art/island/turtle.png', item_width, item_height);
+        
+    game.load.image('camel', 'resources/art/desert/camel.png', item_width, item_height);
+    game.load.image('palmTree', 'resources/art/desert/cactus.png', item_width, item_height);
+    game.load.image('bucket', 'resources/art/desert/bucket.png', item_width, item_height);
+    game.load.image('waterBottle', 'resources/art/desert/water-drop.png', item_width, item_height);
+    game.load.image('duneBuggy', 'resources/art/desert/scorpion.png', item_width, item_height);
 
     game.load.image('fists', 'resources/art/weapons/punch.png', item_width, item_height);
     game.load.image('gun', 'resources/art/weapons/revolver.png', item_width, item_height);
