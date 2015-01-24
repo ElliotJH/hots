@@ -56,7 +56,7 @@ class Server(websocket.WebSocketServerFactory):
 if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
-    factory = Server("ws://0.0.0.0:9000")
+    factory = Server('ws://0.0.0.0:9000')
 
     reactor.listenTCP(9000, factory)
     reactor.run()
