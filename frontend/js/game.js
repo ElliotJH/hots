@@ -158,6 +158,7 @@ function preload() {
     game.load.image('player','resources/art/human.png', tile_width, tile_height);
     game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
     game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
+    game.load.image('exit', 'resources/art/tile-exit-40.png', tile_width, tile_height);
 }
 var keyboard;
 function create() {
