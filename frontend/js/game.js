@@ -6,6 +6,13 @@ var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
 var item_width = 100;
+
+var itemOneX = 100;
+var itemOneY = 400;
+
+var itemTwoX = 700;
+var itemTwoY = 400;
+
 var levelDefinitions = {
     0: "floor",
     1: "wall",
@@ -57,10 +64,12 @@ var stateDefinitions = {
 var myPlayer;
 var players = {};
 var items = {};
-
+var held = [];
+var heldIDs = [30,30];
 /*
     State
 */
+var levelGroup;
 var socket;
 var UIGroup;
 var cursors;
@@ -82,6 +91,8 @@ function socketClose() {
     socketReady = false;
 }
 
+
+
 function socketMessage(msg) {
     var parsed = JSON.parse(msg.data);
 
@@ -93,7 +104,7 @@ function socketMessage(msg) {
 
             for(var j = 0; j < row.length; j++) {
 
-                var ob = game.add.sprite(j*tile_width, i*tile_height, levelDefinitions[row[j]]);
+                var ob = levelGroup.create(j*tile_width, i*tile_height, levelDefinitions[row[j]]);
                 ob.pivot = new PIXI.Point(tile_width / 2, tile_height / 2);
 
             }
@@ -102,6 +113,9 @@ function socketMessage(msg) {
         worldInit = true;
         myPlayer = parsed.id;
         game.camera.bounds = null;
+
+        held[0] = UIGroup.create(itemOneX, itemOneY, 'fists');
+        held[1] = UIGroup.create(itemTwoX, itemTwoY, 'fists');
 
     } else if (parsed.type == "tick" && worldInit) {
         var playerList = parsed.players;
@@ -114,10 +128,13 @@ function socketMessage(msg) {
                 player.y = playerList[i].location[1];
                 player.rotation = playerList[i].location[2];
             } else {
-                players[playerList[i].id] = game.add.sprite(playerList[i].location[0],
+                players[playerList[i].id] = levelGroup.create(playerList[i].location[0],
                     playerList[i].location[1], 'player');
                 players[playerList[i].id].pivot = new PIXI.Point(tile_width/2, tile_height/2);
             }
+
+
+
         }
         var keys = Object.keys(players);
         for(var i = 0; i < keys.length; i++) {
@@ -134,7 +151,7 @@ function socketMessage(msg) {
                 item.x = itemList[i].location[0];
                 item.y = itemList[i].location[1];
             } else {
-                items[itemList[i].id] = game.add.sprite(itemList[i].location[0], itemList[i].location[1], 'item-ground');
+                items[itemList[i].id] = levelGroup.create(itemList[i].location[0], itemList[i].location[1], 'item-ground');
                 items[itemList[i].id].pivot = new PIXI.Point(16, 16);
             }
         }
@@ -143,6 +160,13 @@ function socketMessage(msg) {
             if (itemIds.indexOf(keys[i]) == -1) {
                 items[keys[i]].kill();
             }
+        }
+
+        for(var i = 0; i < 2; i++){
+            if(heldIDs[i]  != parsed.player_items[i]){
+                held[i].kill();
+                held[i] = UIGroup.create(itemOneX, itemOneY, stateDefinitions[parsed.player_items[i]]);
+            }  
         }
     }
 };
@@ -180,6 +204,7 @@ function preload() {
 }
 
 function create() {
+    levelGroup = game.add.group();
     UIGroup = game.add.group();
     socket = new WebSocket(wsAddress);
     socket.onopen = socketOpen;
@@ -188,6 +213,9 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
     keyboard = game.input.keyboard;
     keyboard.addKeyCapture([87, 65, 83, 68]);
+
+
+
 }
 
 function update() {
