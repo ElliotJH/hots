@@ -1,127 +1,72 @@
+/*
+    Constants
+*/
 var wsAddress = "ws://10.7.3.119:9000";
-
-var floor = 0;
-var wall = 1;
-var exit = 2;
-var start_tile = 3;
-
-var ship = 36;
-var spaceship = 37;
-var plane = 38;
-var tropicalIsland = 39;
-var arctic = 40;
-var desert = 41;
-
-var lifeRing = 0;
-var rope = 1;
-var raincoat = 2;
-var sextant = 3;
-var anchor = 4;
-
-var spacehelmet = 5;
-var oxygen = 6;
-var jetpack = 7;
-var alien = 8;
-var phaser = 9;
-
-var parachute = 10;
-var landingGear = 11;
-var breathingMask = 12;
-var suitcase = 13;
-var passport = 14;
-
-var cocktail = 15;
-var beachball = 16;
-var trunks = 17;
-var desertIslandDisc = 18;
-var pineapple = 19;
-
-var penguin = 20;
-var snowman = 21;
-var pole = 22;
-var santa = 23;
-var scarf = 24;
-
-var palmTree = 25;
-var camel = 26;
-var waterBottle = 27;
-var bucket = 28;
-var duneBuggy = 29;
-
-var fists = 30;
-var spoon = 31;
-var gun = 32;
-var knife = 33;
-var nailBoard = 34;
-var taser = 35;
-
 var tile_height = 40;
 var tile_width = 40;
-
 var item_height = 100;
 var item_width = 100;
+var levelDefinitions = {
+    0: "floor",
+    1: "wall",
+    2: "exit",
+    3: "floor"
+};
+var stateDefinitions = {
+    0: "lifeRing",
+    1: "rope",
+    2: "raincoat",
+    3: "sextant",
+    4: "anchor",
+    5: "spacehelmet",
+    6: "oxygen",
+    7: "jetpack",
+    8: "alien",
+    9: "phaser",
+    10: "parachute",
+    11: "landingGear",
+    12: "breathingMask",
+    13: "suitcase",
+    14: "passport",
+    15: "cocktail",
+    16: "beachball",
+    17: "trunks",
+    18: "desertIslandDisc",
+    19: "pineapple",
+    20: "penguin",
+    21: "snowman",
+    22: "pole",
+    23: "santa",
+    24: "scarf",
+    25: "palmTree",
+    26: "camel",
+    27: "waterBottle",
+    28: "bucket",
+    29: "duneBuggy",
+    30: "fists",
+    31: "spoon",
+    32: "gun",
+    33: "knife",
+    34: "nailBoard",
+    35: "taser"
+};
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
-
+/*
+    Game
+*/
 var myPlayer;
 var players = {};
 var items = {};
-var levelDefinitions={};
-var stateDefinitions = {};
 
-levelDefinitions[floor] = "floor";
-levelDefinitions[wall] = "wall";
-levelDefinitions[exit] = "exit";
-levelDefinitions[start_tile] = "floor";
-
-stateDefinitions[fists] = "fists";
-stateDefinitions[spoon] = "spoon";
-stateDefinitions[gun] = "gun";
-stateDefinitions[knife] = "knife";
-stateDefinitions[nailBoard] = "nailBoard";
-
-stateDefinitions[penguin] = "penguin";
-stateDefinitions[snowman] = "snowman";
-stateDefinitions[pole] = "pole";
-stateDefinitions[santa] = "santa";
-stateDefinitions[scarf] = "scarf";
-
-stateDefinitions[palmTree] = "palmTree";
-stateDefinitions[camel] = "camel";
-stateDefinitions[waterBottle] = "waterBottle";
-stateDefinitions[bucket] = "bucket";
-stateDefinitions[duneBuggy] = "duneBuggy";
-
-stateDefinitions[cocktail] = "cocktail";
-stateDefinitions[beachball] = "beachball";
-stateDefinitions[trunks] = "trunks";
-stateDefinitions[desertIslandDisc] = "desertIslandDisc";
-stateDefinitions[pineapple] = "pineapple";
-
-stateDefinitions[taser] = "parachute";
-stateDefinitions[taser] = "landingGear";
-stateDefinitions[taser] = "breathingMask";
-stateDefinitions[taser] = "suitcase";
-stateDefinitions[taser] = "passport";
-
-stateDefinitions[spacehelmet] = "spacehelmet";
-stateDefinitions[oxygen] = "oxygen";
-stateDefinitions[jetpack] = "jetpack";
-stateDefinitions[alien] = "alien";
-stateDefinitions[phaser] = "phaser";
-
-stateDefinitions[lifeRing] = "lifeRing";
-stateDefinitions[rope] = "rope";
-stateDefinitions[raincoat] = "raincoat";
-stateDefinitions[sextant] = "sextant";
-stateDefinitions[anchor] = "anchor";
-
-var keyboard;
+/*
+    State
+*/
 var socket;
-var socketReady = false;
 var UIGroup;
-var worldInit = false;
 var cursors;
+var keyboard;
+var worldInit = false;
+var socketReady = false;
 
 function socketOpen(){
     socketReady = true;
@@ -133,7 +78,7 @@ function socketClose(){
 
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
-    console.log(parsed);
+
     if(parsed.type == "world"){
         var world = parsed.world;
         for(var i = 0; i < world.length; i++){
