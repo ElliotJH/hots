@@ -57,7 +57,8 @@ class World:
 
     def set_player_desired_items(self, player):
         world_items = game_objects[player.world_id]
-        player.needed_item_1, player.needed_item_2 = random.sample(list(world_items.values()))
+        player.needed_item_1, player.needed_item_2 = \
+            random.sample(list(world_items.values()))
 
     def set_player_starting_items(self, player):
         fists = game_objects[weapon_id]['start_with_fists']
