@@ -6,12 +6,11 @@ from player import Player
 
 class Game:
 
-    players = {}
-
     def __init__(self):
         super().__init__()
         self.world = World()
         self.world.load('levels/example.level')
+        self.players = {}
 
     def add_player(self, connection):
         if connection in self.players:
