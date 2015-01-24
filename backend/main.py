@@ -19,7 +19,10 @@ class Protocol(websocket.WebSocketServerProtocol):
         if isBinary:
             return
 
-        print(payload.decode('utf8'))
+        self.factory.game.receive_message(
+            self,
+            payload.decode('utf8'),
+        )
 
     def connectionLost(self, reason):
         super(Protocol, self).connectionLost(reason)

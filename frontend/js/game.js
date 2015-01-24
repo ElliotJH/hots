@@ -144,8 +144,8 @@ function preload() {
 
 
     game.load.image('player','resources/art/human.png', tile_width, tile_height);
-    game.load.image('wall', 'resources/art/wall.png', tile_width, tile_height);
-    game.load.image('floor', 'resources/art/wall-black.png', tile_width, tile_height);
+    game.load.image('wall', 'resources/art/tile-wall.png', tile_width, tile_height);
+    game.load.image('floor', 'resources/art/tile-metal.png', tile_width, tile_height);
 
     
 }

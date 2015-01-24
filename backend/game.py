@@ -21,7 +21,13 @@ class Game:
         self.players[connection] = player
         self.world.add_player(player)
 
-        self.send(connection, self.world.serialise_tiles(), 'world')
+        data = {
+            'id': player.id,
+        }
+
+        data.update(**self.world.serialise_tiles())
+
+        self.send(connection, data, 'world')
         print("Players connected", len(self.players))
 
     def remove_player(self, connection):
@@ -34,6 +40,16 @@ class Game:
 
     def tick(self):
         self.broadcast(self.world.serialise_state(), 'tick')
+
+    def receive_message(self, connection, message):
+        command = json.loads(message)
+        if command['type'] == 'movement':
+            self.world.move_player(
+                self.players[connection],
+                command['direction'],
+            )
+
+    # Utility Methods
 
     def broadcast(self, data, message_type):
         for connection in self.players.keys():
