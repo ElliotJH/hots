@@ -2,6 +2,7 @@ var wsAddress = "ws://10.7.3.119:9000";
 
 var floor = 0;
 var wall = 1;
+var exit = 2;
 
 var ship = 36;
 var spaceship = 37;
@@ -72,7 +73,7 @@ var cursors;
 function socketOpen(){
     socketReady = true;
 }
-
+var worldInit = false;
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
     if(parsed.type == "world"){
@@ -84,8 +85,8 @@ function socketMessage(msg){
                 game.add.sprite(j*tile_height, i*tile_width, levelDefinitions[row[j]]);
             }
         }
-
-    } else if(parsed.type == "tick"){
+        worldInit = true;
+    } else if(parsed.type == "tick" && worldInit){
         var playerList = parsed.players;
         var ids = [];
         for(var i = 0; i < playerList.length; i++){
@@ -100,7 +101,7 @@ function socketMessage(msg){
             }
         }
         var keys = Object.keys(players);
-        for(var i = 0;i < keys.length; i++){
+        for(var i = 0; i < keys.length; i++){
             if(ids.indexOf(keys[i]) == -1){
                 players[keys[i]].kill();
             }
@@ -111,6 +112,7 @@ function socketMessage(msg){
 function preload() {
     levelDefinitions[floor] = "floor";
     levelDefinitions[wall] = "wall";
+    levelDefinitions[exit] = "exit";
 
     stateDefinitions[fists] = "fists";
     stateDefinitions[spoon] = "spoon";
@@ -158,6 +160,7 @@ function preload() {
     game.load.image('player','resources/art/human.png', tile_width, tile_height);
     game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
     game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
+    game.load.image('exit', 'resources/art/tile-exit-40.png', tile_width, tile_height);
 }
 var keyboard;
 function create() {
