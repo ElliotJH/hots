@@ -37,23 +37,24 @@ class World:
         with open(fname, 'r') as f:
             self.tiles = [[int(i) for i in line if i != '\n'] for line in f]
 
-        start_tile_positions = [
+        self.start_tile_positions = [
             (colnum * self.tile_size, rownum * self.tile_size)
             for rownum, row in enumerate(self.tiles)
             for colnum, tile in enumerate(row)
             if tile == 3
         ]
+        
             
-        if len(start_tile_positions) > 0:
-            self.start_position = random.choice(start_tile_positions)
-
         self.initialize_objects()
 
     def add_player(self, player):
         if player in self.player_locations:
             raise ValueError("Player already in world")
 
-        self.player_locations[player] = (100, 100)
+        if len(self.start_tile_positions) > 0:
+            self.player_locations[player] = random.choice(self.start_tile_positions) 
+        else: 
+            self.player_locations[player = (100, 100)
 
     def remove_player(self, player):
         if player in self.player_locations:
