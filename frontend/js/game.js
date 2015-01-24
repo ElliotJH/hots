@@ -13,6 +13,9 @@ var itemOneY = 400;
 var itemTwoX = 700;
 var itemTwoY = 400;
 
+var itemArrayX = [itemOneX, itemTwoX];
+var itemArrayY = [itemOneY, itemTwoY];
+
 var levelDefinitions = {
     0: "floor",
     1: "wall",
@@ -165,7 +168,7 @@ function socketMessage(msg) {
         for(var i = 0; i < 2; i++){
             if(heldIDs[i]  != parsed.player_items[i]){
                 held[i].kill();
-                held[i] = UIGroup.create(itemOneX, itemOneY, stateDefinitions[parsed.player_items[i]]);
+                held[i] = UIGroup.create(itemArrayX[i], itemArrayY[i], stateDefinitions[parsed.player_items[i]]);
             }  
         }
     }
@@ -186,12 +189,20 @@ function preload() {
     game.load.image('passport', 'resources/art/plane/folded-paper.png', item_width, item_height);
     game.load.image('breathingMask', 'resources/art/plane/gas-mask.png', item_width, item_height);
     game.load.image('parachute', 'resources/art/plane/parachute.png', item_width, item_height);
+    game.load.image('landingGear', 'resources/art/plane/parachute_alt.png', item_width, item_height);
+    game.load.image('suitcase', 'resources/art/plane/suitcase.png', item_width, item_height);
 
     game.load.image('phaser', 'resources/art/space/ray-gun.png', item_width, item_height);
     game.load.image('jetpack', 'resources/art/space/rocket.png', item_width, item_height);
     game.load.image('spacehelmet', 'resources/art/space/space-suit.png', item_width, item_height);
     game.load.image('alien', 'resources/art/space/satellite.png', item_width, item_height);
     game.load.image('oxygen', 'resources/art/space/chemical-tank.png', item_width, item_height);
+
+    game.load.image('cocktail', 'resources/art/island/cocktail.png', item_width, item_height);
+    game.load.image('palmTree', 'resources/art/island/palm-tree.png', item_width, item_height);
+    game.load.image('pineapple', 'resources/art/island/grapes.png', item_width, item_height);
+    game.load.image('trunks', 'resources/art/island/tennis-ball.png', item_width, item_height);
+    game.load.image('desertIslandDisc', 'resources/art/island/turtle.png', item_width, item_height);
 
     game.load.image('fists', 'resources/art/weapons/punch.png', item_width, item_height);
     game.load.image('gun', 'resources/art/weapons/revolver.png', item_width, item_height);
