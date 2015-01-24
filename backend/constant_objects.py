@@ -3,7 +3,7 @@ levels = {
     'spaceship': 37,
     'plane': 38,
     'tropical_island': 39,
-    'arctic': 40,
+#    'arctic': 40,
     'desert': 41,
 }
 
@@ -38,13 +38,13 @@ game_objects = {
         'desert_island_disc': 18,
         'pineapple': 19,
     },
-    levels['arctic']: {
-        'penguin': 20,
-        'snowman': 21,
-        'pole': 22,
-        'santa': 23,
-        'scarf': 24,
-    },
+#    levels['arctic']: {
+#        'penguin': 20,
+#        'snowman': 21,
+#        'pole': 22,
+#        'santa': 23,
+#        'scarf': 24,
+#    },
     levels['desert']: {
         'palm_tree': 25,
         'camel': 26,
