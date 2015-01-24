@@ -263,11 +263,19 @@ function create() {
 
 }
 
+var w = 87;
+var s = 83;
+var a = 65;
+var d = 68;
+
+var q = 81;
+var e = 69;
+
 function update() {
-    var up = keyboard.isDown(87);
-    var down = keyboard.isDown(83);
-    var left = keyboard.isDown(65);
-    var right = keyboard.isDown(68);
+    var up = keyboard.isDown(w);
+    var down = keyboard.isDown(s);
+    var left = keyboard.isDown(a);
+    var right = keyboard.isDown(d);
 
     var direction = '';
 
@@ -280,6 +288,13 @@ function update() {
     var y = game.input.mousePointer.worldY;
 
     var angle = 0;
+
+    if (keyboard.isDown(q)){
+        sendMessage({type: "throw_left"});
+    }
+    if(keyboard.isDown(e)){
+        sendMessage({type: "throw_right"});
+    }
 
     if (myPlayer && Object.keys(players).length) {
         var changeX  = x - players[myPlayer].x;
