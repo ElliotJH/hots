@@ -21,7 +21,7 @@ class World:
             (colnum * self.tile_size, rownum * self.tile_size)
             for rownum, row in enumerate(self.tiles)
             for colnum, tile in enumerate(row)
-            if tile == 1
+            if tile == 0
         ]
 
         for level_id in level_ids.values():
