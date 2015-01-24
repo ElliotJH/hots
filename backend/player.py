@@ -27,6 +27,11 @@ class Player:
         fists = game_objects[weapon_id]['start_with_fists']
         return self.item_2 is None or self.item_2 == fists
 
+    @property
+    def has_succeeded(self):
+        return self.item_1 == self.needed_item_1 and self.item_2 == self.needed_item_2
+        
+
     def decrement_timeout(self, amount):
         if self.timeout > amount:
             self.timeout -= amount
