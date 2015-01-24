@@ -51,8 +51,8 @@ var knife = 33;
 var nailBoard = 34;
 var taser = 35;
 
-var tile_height = 20;
-var tile_width = 20;
+var tile_height = 40;
+var tile_width = 40;
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
@@ -144,8 +144,8 @@ function preload() {
 
 
     game.load.image('player','resources/art/human.png', tile_width, tile_height);
-    game.load.image('wall', 'resources/art/tile-wall.png', tile_width, tile_height);
-    game.load.image('floor', 'resources/art/tile-metal.png', tile_width, tile_height);
+    game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
+    game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
 
     
 }
