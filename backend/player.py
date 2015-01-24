@@ -28,6 +28,11 @@ class Player:
         fists = game_objects[weapon_id]['start_with_fists']
         return self.item_2 is None or self.item_2.item_id == fists
 
+    def reset_item_1(self):
+        self.item_1 = game_objects[weapon_id]['start_with_fists']
+    def reset_item_2(self):
+        self.item_2 = game_objects[weapon_id]['start_with_fists']
+
     @property
     def has_succeeded(self):
         return (
