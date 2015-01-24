@@ -118,7 +118,7 @@ class World:
         return {
             'world': self.tiles,
             'items': [
-                {'id': x.id, 'location': y}
+                {'id': x.item_id, 'location': y}
                 for x, y in self.item_locations.items()
             ],
         }
@@ -130,7 +130,7 @@ class World:
                 for x, y in self.player_locations.items()
             ],
             'items': [
-                {'id': x.id, 'location': y}
+                {'id': x.item_id, 'location': y}
                 for x, y in self.item_locations.items()
             ]
         }
