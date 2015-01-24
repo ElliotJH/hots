@@ -45,7 +45,8 @@ class World:
             ((y1 + rad1) > (y2 - rad2)) and ((y1 - rad1) < (y2 + rad2))
         )
 
-        horizontal_colliding = right_horizontal_colliding or left_horizontal_colliding
+        horizontal_colliding = \
+            right_horizontal_colliding or left_horizontal_colliding
 
         return horizontal_colliding and vertical_colliding
 
