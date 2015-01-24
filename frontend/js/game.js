@@ -89,7 +89,9 @@ function socketMessage(msg) {
 
             for(var j = 0; j < row.length; j++) {
 
-                game.add.sprite(j*tile_width, i*tile_height, levelDefinitions[row[j]]);
+                var ob = game.add.sprite(j*tile_width, i*tile_height, levelDefinitions[row[j]]);
+                ob.pivot = new PIXI.Point(tile_width / 2, tile_height / 2);
+
             }
         }
 
@@ -129,6 +131,7 @@ function socketMessage(msg) {
                 item.y = itemList[i].location[1];
             } else {
                 items[itemList[i].id] = game.add.sprite(itemList[i].location[0], itemList[i].location[1], 'item-ground');
+                items[itemList[i].id].pivot = new PIXI.Point(16, 16);
             }
         }
         keys = Object.keys(items);
