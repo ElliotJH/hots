@@ -25,7 +25,7 @@ class Game:
             'id': player.id,
         }
 
-        data.update(**self.world.serialise_tiles())
+        data.update(**self.world.serialise_world())
 
         self.send(connection, data, 'world')
         print("Players connected", len(self.players))

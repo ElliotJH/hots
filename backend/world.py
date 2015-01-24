@@ -1,18 +1,41 @@
 import math
+import random
+
+import item
+from constant_objects import levels as level_ids, game_objects
 
 
 class World:
 
     def __init__(self, tile_size=40):
         super().__init__()
-        self.items = []
         self.tiles = None
         self.tile_size = tile_size
         self.player_locations = {}
+        self.item_locations = {}
+
+    def initialize_objects(self):
+        # Filter by players in the game? maybe just assign a number of worlds
+        # or something
+        free_tile_positions = [
+            (colnum * self.tile_size, rownum * self.tile_size)
+            for rownum, row in enumerate(self.tiles)
+            for colnum, tile in enumerate(row)
+            if tile == 0
+        ]
+
+        for level_id in level_ids.values():
+            for item_id in game_objects[level_id].values():
+                item_object = item.Item(item_id)
+                position = random.choice(free_tile_positions)
+                self.item_locations[item_object] = position
+
+        print(self.item_locations)
 
     def load(self, fname):
         with open(fname, 'r') as f:
             self.tiles = [[int(i) for i in line if i != '\n'] for line in f]
+        self.initialize_objects()
 
     def add_player(self, player):
         if player in self.player_locations:
@@ -91,8 +114,14 @@ class World:
 
     # Serialisation to structures that can be JSON'd
 
-    def serialise_tiles(self):
-        return {'world': self.tiles}
+    def serialise_world(self):
+        return {
+            'world': self.tiles,
+            'items': [
+                {'id': x.item_id, 'location': y}
+                for x, y in self.item_locations.items()
+            ],
+        }
 
     def serialise_state(self):
         return {
@@ -100,4 +129,8 @@ class World:
                 {'id': x.id, 'location': y}
                 for x, y in self.player_locations.items()
             ],
+            'items': [
+                {'id': x.item_id, 'location': y}
+                for x, y in self.item_locations.items()
+            ]
         }
