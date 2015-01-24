@@ -65,6 +65,14 @@ class Game:
             except ValueError:
                 pass
 
+    def start(self):
+        for connection in self.players.keys():
+            self.send(connection, {'state': 'game'}, 'state')
+
+    def end(self):
+        for connection in self.players.keys():
+            self.send(connection, {'state': 'end'}, 'state')
+
     # Utility Methods
 
     def send(self, connection, data, message_type):
