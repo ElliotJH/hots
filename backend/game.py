@@ -9,6 +9,7 @@ class Game:
     players = {}
 
     def __init__(self):
+        super().__init__()
         self.world = World()
         self.world.load('levels/example.level')
 

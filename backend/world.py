@@ -1,7 +1,7 @@
 class World:
 
     def __init__(self):
-        super(World, self).__init__()
+        super().__init__()
         self.items = []
         self.tiles = None
 
