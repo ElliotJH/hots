@@ -177,6 +177,12 @@ function socketMessage(msg){
                 items[itemList[i].id] = game.add.sprite(itemList[i].location[0], itemList[i].location[1], 'item-ground');
             }
         }
+        keys = Object.keys(items);
+        for(var i = 0; i < keys.length; i++){
+            if(itemIds.indexOf(keys[i]) == -1){
+                items[keys[i]].kill();
+            }
+        }
     }
 };
 
@@ -202,7 +208,7 @@ function preload() {
     game.load.image('jetpack', 'resources/art/space/rocket.png', item_width, item_height);
     game.load.image('spacehelmet', 'resources/art/space/space-suit.png', item_width, item_height);
     game.load.image('alien', 'resources/art/space/satellite.png', item_width, item_height);
-    game.load.image('oxygen', 'resource/art/space/chemical-tank.png', item_width, item_height);
+    game.load.image('oxygen', 'resources/art/space/chemical-tank.png', item_width, item_height);
 
     game.load.image('fists', 'resources/art/weapons/punch.png', item_width, item_height);
     game.load.image('gun', 'resources/art/weapons/revolver.png', item_width, item_height);
