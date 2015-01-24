@@ -87,14 +87,22 @@ function socketMessage(msg){
 
     } else if(parsed.type == "tick"){
         var playerList = parsed.players;
+        var ids = [];
         for(var i = 0; i < playerList.length; i++){
             var player = players[playerList[i].id];
+            ids.push(playerList[i].id);
             if(player){
                 player.x = playerList[i].location[0];
                 player.y = playerList[i].location[1];
             } else {
                 players[playerList[i].id] = game.add.sprite(playerList[i].location[0],
                     playerList[i].location[1], 'player');
+            }
+        }
+        var keys = Object.keys(players);
+        for(var i = 0;i < keys.length; i++){
+            if(ids.indexOf(keys[i]) == -1){
+                players[keys[i]].kill();
             }
         }
     }
