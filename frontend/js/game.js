@@ -65,10 +65,13 @@ var levelDefinitions={};
 var stateDefinitions = {};
 
 var socket;
+var socketReady = false;
 
 var cursors;
 
-function socketOpen(){};
+function socketOpen(){
+    socketReady = true;
+}
 
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
@@ -147,8 +150,6 @@ function preload() {
     game.load.image('player','resources/art/human.png', tile_width, tile_height);
     game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
     game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
-
-    
 }
 var keyboard;
 function create() {
@@ -161,35 +162,26 @@ function create() {
 }
 
 function update() {
-    if (keyboard.isDown(65) && keyboard.isDown(83)){
-        //  Move to the left
-        var jsonText = JSON.stringify({type: "movement", direction: "upleft"});
-        socket.send(jsonText);
-    }else if (keyboard.isDown(68) && keyboard.isDown(83)){
-        //  Move to the right
-        var jsonText = JSON.stringify({type: "movement", direction: "upright"});
-        socket.send(jsonText);
-    } else if(keyboard.isDown(83) && keyboard.isDown(65)){
-        var jsonText = JSON.stringify({type: "movement", direction: "downleft"});
-        socket.send(jsonText);
-    } else if(keyboard.isDown(83) && keyboard.isDown(68)){
-        var jsonText = JSON.stringify({type: "movement", direction: "downright"});
-        socket.send(jsonText);
-    }else if (keyboard.isDown(65) ){
-        //  Move to the left
-        var jsonText = JSON.stringify({type: "movement", direction: "left"});
-        socket.send(jsonText);
-    }else if (keyboard.isDown(68)){
-        //  Move to the right
-        var jsonText = JSON.stringify({type: "movement", direction: "right"});
-        socket.send(jsonText);
-    } else if(keyboard.isDown(87)){
-        var jsonText = JSON.stringify({type: "movement", direction: "up"});
-        socket.send(jsonText);
-    } else if(keyboard.isDown(83)){
-        var jsonText = JSON.stringify({type: "movement", direction: "down"});
-        socket.send(jsonText);
+    var up = keyboard.isDown(87);
+    var down = keyboard.isDown(83);
+    var left = keyboard.isDown(65);
+    var right = keyboard.isDown(68);
+
+    var direction = '';
+
+    if (up) { direction += 'up'; }
+    if (down) { direction += 'down'; }
+    if (left) { direction += 'left'; }
+    if (right) { direction += 'right'; }
+
+    sendMessage({type: "movement", direction: direction});
+}
+
+function sendMessage(message) {
+    if (!socketReady) {
+        return;
     }
 
-    
+    var jsonText = JSON.stringify(message);
+    socket.send(jsonText);
 }
