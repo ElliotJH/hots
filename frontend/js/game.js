@@ -182,7 +182,9 @@ function update() {
     if (left) { direction += 'left'; }
     if (right) { direction += 'right'; }
 
-    sendMessage({type: "movement", direction: direction});
+    if (direction.length) {
+        sendMessage({type: "movement", direction: direction});
+    }
 }
 
 function sendMessage(message) {
