@@ -13,6 +13,7 @@ class World:
         self.tile_size = tile_size
         self.player_locations = {}
         self.item_locations = {}
+        self.start_position = (100, 100)
 
     def initialize_objects(self):
         # Filter by players in the game? maybe just assign a number of worlds
@@ -35,6 +36,17 @@ class World:
     def load(self, fname):
         with open(fname, 'r') as f:
             self.tiles = [[int(i) for i in line if i != '\n'] for line in f]
+
+        start_tile_positions = [
+            (colnum * self.tile_size, rownum * self.tile_size)
+            for rownum, row in enumerate(self.tiles)
+            for colnum, tile in enumerate(row)
+            if tile == 3
+        ]
+            
+        if len(start_tile_positions) > 0:
+            self.start_position = random.choice(start_tile_positions)
+
         self.initialize_objects()
 
     def add_player(self, player):
