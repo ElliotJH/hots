@@ -7,7 +7,7 @@ from autobahn.twisted import websocket
 
 from game import Game
 
-TICK_RATE = 0.1
+TICK_RATE = 0.01
 
 
 class Protocol(websocket.WebSocketServerProtocol):

@@ -35,28 +35,34 @@ class World:
 
         # Right edge is over the left edge and
         # Left edge is not over the right edge
-        horizontal_colliding = (
+        right_horizontal_colliding = (
             ((x1 + rad1) > (x2 - rad2)) and ((x1 - rad1) < (x2 + rad2))
+        )
+        left_horizontal_colliding = (
+            ((x1 - rad1) < (x2 + rad2)) and ((x1 + rad1) > (x2 - rad2))
         )
         vertical_colliding = (
             ((y1 + rad1) > (y2 - rad2)) and ((y1 - rad1) < (y2 + rad2))
         )
 
+        horizontal_colliding = right_horizontal_colliding or left_horizontal_colliding
+
         return horizontal_colliding and vertical_colliding
 
-    def move_player(self, player, direction, distance=10):
+    def move_player(self, player, direction, distance=5):
         angle = {
-            'up': 0, 'down': 180, 'left': 270, 'right': 90
+            'up': 180, 'down': 0, 'left': 270, 'right': 90,
+            'upleft': 225, 'upright': 135, 'downleft': 315, 'downright': 45,
         }[direction]
 
-        old_position = self.players[player]
-        new_x = distance * math.sin(angle) + old_position[0]
-        new_y = distance * math.cos(angle) + old_position[1]
+        x, y = self.player_locations[player]
+        new_x = distance * math.sin(math.radians(angle)) + x
+        new_y = distance * math.cos(math.radians(angle)) + y
 
         new_position = (new_x, new_y)
 
-        position = self.move(old_position, new_position)
-        self.players[player] = position
+        position = self.attempt_move((x, y), new_position)
+        self.player_locations[player] = position
 
         return position
 
@@ -71,7 +77,7 @@ class World:
                     new_position,
                     player_radius,
                     (col_num, row_num),
-                    self.tile_width,
+                    self.tile_size,
                 ):
                     return old_position
         return new_position

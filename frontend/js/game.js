@@ -54,7 +54,7 @@ var taser = 35;
 var tile_height = 40;
 var tile_width = 40;
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
 var myPlayer = -1;
 var players = {};
@@ -69,7 +69,6 @@ var cursors;
 function socketOpen(){};
 
 function socketMessage(msg){
-    console.log(msg.data);
     var parsed = JSON.parse(msg.data);
     if(parsed.type == "world"){
         var world = parsed.world;
@@ -149,28 +148,43 @@ function preload() {
 
     
 }
-
+var keyboard;
 function create() {
     socket = new WebSocket("ws://10.7.3.119:9000");
     socket.onopen = socketOpen;
     socket.onmessage = socketMessage;
     cursors = game.input.keyboard.createCursorKeys();
+    keyboard = game.input.keyboard;
+    keyboard.addKeyCapture([87, 65, 83, 68]);
 }
 
 function update() {
-
-    if (cursors.left.isDown){
+    if (keyboard.isDown(65) && keyboard.isDown(83)){
+        //  Move to the left
+        var jsonText = JSON.stringify({type: "movement", direction: "upleft"});
+        socket.send(jsonText);
+    }else if (keyboard.isDown(68) && keyboard.isDown(83)){
+        //  Move to the right
+        var jsonText = JSON.stringify({type: "movement", direction: "upright"});
+        socket.send(jsonText);
+    } else if(keyboard.isDown(83) && keyboard.isDown(65)){
+        var jsonText = JSON.stringify({type: "movement", direction: "downleft"});
+        socket.send(jsonText);
+    } else if(keyboard.isDown(83) && keyboard.isDown(68)){
+        var jsonText = JSON.stringify({type: "movement", direction: "downright"});
+        socket.send(jsonText);
+    }else if (keyboard.isDown(65) ){
         //  Move to the left
         var jsonText = JSON.stringify({type: "movement", direction: "left"});
         socket.send(jsonText);
-    }else if (cursors.right.isDown){
+    }else if (keyboard.isDown(68)){
         //  Move to the right
         var jsonText = JSON.stringify({type: "movement", direction: "right"});
         socket.send(jsonText);
-    } else if(cursors.up.isDown){
+    } else if(keyboard.isDown(87)){
         var jsonText = JSON.stringify({type: "movement", direction: "up"});
         socket.send(jsonText);
-    } else if(cursors.down.isDown){
+    } else if(keyboard.isDown(83)){
         var jsonText = JSON.stringify({type: "movement", direction: "down"});
         socket.send(jsonText);
     }
