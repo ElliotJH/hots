@@ -4,11 +4,12 @@ from world import World
 from player import Player
 
 
-class Game(object):
+class Game:
 
     players = {}
 
     def __init__(self):
+        super().__init__()
         self.world = World()
         self.world.load('levels/example.level')
 

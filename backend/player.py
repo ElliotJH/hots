@@ -1,6 +1,7 @@
-class Player(object):
+class Player:
 
     def __init__(self):
+        super().__init__()
         self.item_1 = None  # Should be 'fist'
         self.item_2 = None
         self.timeout = 0

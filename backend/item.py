@@ -1,6 +1,6 @@
-class Item(object):
+class Item:
 
     def __init__(self, item_id):
-        super(Item, self).__init__()
+        super().__init__()
         self.item_id = item_id
         self.position = (None, None)
