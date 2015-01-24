@@ -260,12 +260,9 @@ function update() {
     }
 
     sendMessage({type: "movement", direction: direction, angle: angle});
-<<<<<<< HEAD
     
 
     console.log(game.time.fps);
-=======
->>>>>>> fefb312763afbb4e63a46fe1ae378b87fbbc2ee7
 }
 
 function sendMessage(message) {
