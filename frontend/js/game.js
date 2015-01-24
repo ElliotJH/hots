@@ -65,16 +65,16 @@ var players = {};
 var items = {};
 var levelDefinitions={};
 var stateDefinitions = {};
-
+var keyboard;
 var socket;
 var socketReady = false;
-
+var worldInit = false;
 var cursors;
 
 function socketOpen(){
     socketReady = true;
 }
-var worldInit = false;
+
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
 
@@ -166,7 +166,7 @@ function preload() {
     game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
     game.load.image('exit', 'resources/art/tile-exit-40.png', tile_width, tile_height);
 }
-var keyboard;
+
 function create() {
     socket = new WebSocket(wsAddress);
     socket.onopen = socketOpen;
@@ -205,9 +205,6 @@ function update() {
     }
 
     sendMessage({type: "movement", direction: direction, angle: angle});
-    
-
-
 }
 
 function sendMessage(message) {
