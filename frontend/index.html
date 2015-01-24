@@ -16,27 +16,34 @@
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
-var socket = new WebSocket("ws://10.7.3.103:9000");
+var players = {};
+var items = {};
+var definitions{};
 
-socket.onopen = function(){
-    alert("Socket Open");
-}
+//var socket = new WebSocket("ws://10.7.3.103:9000");
 
-socket.onmessage = function(msg){
-    alert("message");
-}
+//socket.onopen = function(){}
+
+//socket.onmessage = function(msg){}
 
 function preload() {
-
-   
+    definitions[0] = "floor";
+    definitions[1] = "wall";
+    game.load.image("player","../resources/images/playerTemp.png");
+       
 
 }
 
 function create() {
+    
 }
 
 function update() {
+    
 }
+
+
+
 
 </script>
 
