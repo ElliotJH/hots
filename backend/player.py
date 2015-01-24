@@ -14,8 +14,6 @@ class Player:
         self.needed_item_1 = None  # Should be a randomly chosen item
         self.needed_item_2 = None
 
-        self.position = (None, None)
-
         self.world_id = None
 
     def decrement_timeout(self, amount):
