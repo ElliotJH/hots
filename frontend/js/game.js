@@ -69,7 +69,6 @@ var cursors;
 function socketOpen(){};
 
 function socketMessage(msg){
-    console.log(msg.data);
     var parsed = JSON.parse(msg.data);
     if(parsed.type == "world"){
         var world = parsed.world;
@@ -160,8 +159,21 @@ function create() {
 }
 
 function update() {
-
-    if (keyboard.isDown(65)){
+    if (keyboard.isDown(65) && keyboard.isDown(83)){
+        //  Move to the left
+        var jsonText = JSON.stringify({type: "movement", direction: "upleft"});
+        socket.send(jsonText);
+    }else if (keyboard.isDown(68) && keyboard.isDown(83)){
+        //  Move to the right
+        var jsonText = JSON.stringify({type: "movement", direction: "upright"});
+        socket.send(jsonText);
+    } else if(keyboard.isDown(83) && keyboard.isDown(65)){
+        var jsonText = JSON.stringify({type: "movement", direction: "downleft"});
+        socket.send(jsonText);
+    } else if(keyboard.isDown(83) && keyboard.isDown(68)){
+        var jsonText = JSON.stringify({type: "movement", direction: "downright"});
+        socket.send(jsonText);
+    }else if (keyboard.isDown(65) ){
         //  Move to the left
         var jsonText = JSON.stringify({type: "movement", direction: "left"});
         socket.send(jsonText);
