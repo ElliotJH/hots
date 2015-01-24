@@ -114,8 +114,14 @@ class World:
 
     # Serialisation to structures that can be JSON'd
 
-    def serialise_tiles(self):
-        return {'world': self.tiles}
+    def serialise_world(self):
+        return {
+            'world': self.tiles,
+            'items': [
+                {'id': x.id, 'location': y}
+                for x, y in self.item_locations.items()
+            ],
+        }
 
     def serialise_state(self):
         return {
