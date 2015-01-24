@@ -63,12 +63,12 @@ class World:
 
     def set_player_desired_items(self, player):
         world_items = game_objects[player.world_id]
-        player.needed_item_1, player.needed_item_2 = \
-            random.sample(list(world_items.values()), 2)
+        item_1, item_2 = random.sample(list(world_items.values()), 2)
+        player.needed_item_1, player.needed_item_2 = Item(item_1), Item(item_2)
 
     def set_player_starting_items(self, player):
         fists = game_objects[weapon_id]['start_with_fists']
-        player.item_1 = player.item_2 = fists
+        player.item_1 = player.item_2 = Item(fists)
 
     def set_player_location(self, player):
         if len(self.start_tile_positions) > 0:
@@ -155,7 +155,7 @@ class World:
         # This is massively bugged - if the player tries to move through an
         # object then we're just fine with that.
 
-        block_exit = not player.has_succeeded()
+        block_exit = not player.has_succeeded
 
         # Massively inefficient, we don't need to check many of these at all
         for (row_num, columns) in enumerate(self.tiles):
@@ -187,7 +187,14 @@ class World:
     def serialise_state(self):
         return {
             'players': [
-                {'id': x.id, 'location': y}
+                {
+                    'id': x.id,
+                    'location': y,
+                    'items': [
+                        x.item_1.item_id if x.item_1 else None,
+                        x.item_2.item_id if x.item_2 else None,
+                    ],
+                }
                 for x, y in self.player_locations.items()
             ],
             'items': [
