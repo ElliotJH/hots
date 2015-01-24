@@ -41,6 +41,16 @@ class Game:
     def tick(self):
         self.broadcast(self.world.serialise_state(), 'tick')
 
+    def receive_message(self, connection, message):
+        command = json.loads(message)
+        if command['type'] == 'movement':
+            self.world.move_player(
+                self.players[connection],
+                command['direction'],
+            )
+
+    # Utility Methods
+
     def broadcast(self, data, message_type):
         for connection in self.players.keys():
             self.send(connection, data, message_type)
