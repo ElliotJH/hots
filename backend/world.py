@@ -77,11 +77,11 @@ class World:
         # Massively inefficient, we don't need to check many of these at all
         for (row_num, columns) in enumerate(self.tiles):
             for (col_num, cell) in enumerate(columns):
-                if self.collides(
-                    new_position,
-                    player_radius,
-                    (col_num, row_num),
-                    self.tile_size,
+                if cell == 1 and self.collides(
+                        new_position,
+                        player_radius,
+                        (col_num * self.tile_size, row_num * self.tile_size),
+                        self.tile_size,
                 ):
                     return old_position
         return new_position
