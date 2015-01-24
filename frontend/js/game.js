@@ -13,8 +13,8 @@ var itemOneY = 400;
 var itemTwoX = 600;
 var itemTwoY = 400;
 
-var wantedOne = [100, 100];
-var wantedTwo = [600, 100];
+var wantedOne = [275, 25];
+var wantedTwo = [425, 25];
 
 var itemArrayX = [itemOneX, itemTwoX];
 var itemArrayY = [itemOneY, itemTwoY];
@@ -118,7 +118,7 @@ function socketMessage(msg) {
 
             }
         }
-
+        console.log(parsed.player_wanted);
         UIGroup.create(wantedOne[0], wantedOne[1], stateDefinitions[parsed.player_wanted[0]]);
         UIGroup.create(wantedTwo[0], wantedTwo[1], stateDefinitions[parsed.player_wanted[1]]);
 
