@@ -18,6 +18,7 @@ class World:
         self.tile_size = tile_size
         self.player_locations = {}
         self.item_locations = {}
+        self.items_moving = {}#map from item to (direction, speed)
 
     def initialize_objects(self):
         # Filter by players in the game? maybe just assign a number of worlds
@@ -135,7 +136,29 @@ class World:
         return position
 
     def throw(self, player, hand):
+        player_location = self.player_locations[player]
+        if hand == 'left':
+            if player.item_1_empty:
+                raise ValueError("Hand is empty")
+            item = player.item_1
+            player.reset_item_1()
+            self.items_locations[item] = (player_location[0], player_location[1])
+            self.items_moving[item] = (player_location[2], 15.0)
+            
+        # find the object to throw
+        # find the direction to attempt to throw it in
+        # set momentum and direction
         pass
+
+    def tick(self):
+        coefficient_of_friction = 0.4
+        for item, (direction, speed) in self.items_moving.items():
+            self.items_moving[item] = (direction, coefficient_of_friction * speed)
+            x, y = self.item_locations[item]
+            new_x = speed * math.sin(math.radians(direction)) + x
+            new_y = speed * math.cos(math.radians(direction)) + y
+
+            self.item_locations[item] = (x, y)
 
     def attempt_pickup(self, new_position, player, player_radius=0):
         if not (player.item_1_empty or player.item_2_empty):

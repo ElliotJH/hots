@@ -39,6 +39,7 @@ class Game:
         print("Players connected", len(self.players))
 
     def tick(self):
+        self.world.tick()
         for connection, player in self.players.items():
             self.send(
                 connection,
