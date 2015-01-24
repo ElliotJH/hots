@@ -79,7 +79,7 @@ function socketClose() {
 function socketMessage(msg) {
     var parsed = JSON.parse(msg.data);
 
-    if(parsed.type == "world") {
+    if (parsed.type == "world") {
         var world = parsed.world;
 
         for(var i = 0; i < world.length; i++) {
@@ -95,13 +95,13 @@ function socketMessage(msg) {
         myPlayer = parsed.id;
         game.camera.bounds = null;
 
-    } else if(parsed.type == "tick" && worldInit) {
+    } else if (parsed.type == "tick" && worldInit) {
         var playerList = parsed.players;
         var ids = [];
         for(var i = 0; i < playerList.length; i++) {
             var player = players[playerList[i].id];
             ids.push(playerList[i].id.toString());
-            if(player) {
+            if (player) {
                 player.x = playerList[i].location[0];
                 player.y = playerList[i].location[1];
                 player.rotation = playerList[i].location[2];
@@ -113,7 +113,7 @@ function socketMessage(msg) {
         }
         var keys = Object.keys(players);
         for(var i = 0; i < keys.length; i++) {
-            if(ids.indexOf(keys[i]) == -1) {
+            if (ids.indexOf(keys[i]) == -1) {
                 players[keys[i]].kill();
             }
         }
@@ -122,7 +122,7 @@ function socketMessage(msg) {
         for(var i = 0; i < itemList.length; i++) {
             var item = items[itemList[i].id];
             itemIds.push(itemList[i].id.toString());
-            if(item) {
+            if (item) {
                 item.x = itemList[i].location[0];
                 item.y = itemList[i].location[1];
             } else {
@@ -131,7 +131,7 @@ function socketMessage(msg) {
         }
         keys = Object.keys(items);
         for(var i = 0; i < keys.length; i++) {
-            if(itemIds.indexOf(keys[i]) == -1) {
+            if (itemIds.indexOf(keys[i]) == -1) {
                 items[keys[i]].kill();
             }
         }
@@ -199,7 +199,7 @@ function update() {
 
     var angle = 0;
 
-    if(myPlayer && Object.keys(players).length) {
+    if (myPlayer && Object.keys(players).length) {
         var changeX  = x - players[myPlayer].x;
         var changeY = y - players[myPlayer].y;
 
