@@ -54,7 +54,7 @@ var taser = 35;
 var tile_height = 20;
 var tile_width = 20;
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
 var myPlayer = -1;
 var players = {};
