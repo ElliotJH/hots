@@ -32,7 +32,6 @@ class Server(websocket.WebSocketServerFactory):
 
     def __init__(self, url):
         super(Server, self).__init__(
-            self,
             url,
             debug=False,
             debugCodePaths=False,
