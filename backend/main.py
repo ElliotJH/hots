@@ -31,7 +31,7 @@ class Protocol(websocket.WebSocketServerProtocol):
 class Server(websocket.WebSocketServerFactory):
 
     def __init__(self, url):
-        super(self, Server).__init__(
+        super(Server, self).__init__(
             self,
             url,
             debug=False,
