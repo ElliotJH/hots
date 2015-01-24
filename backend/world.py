@@ -142,7 +142,7 @@ class World:
                 raise ValueError("Hand is empty")
             item = player.item_1
             player.reset_item_1()
-            self.items_locations[item] = (player_location[0], player_location[1])
+            self.item_locations[item] = (player_location[0], player_location[1])
             self.items_moving[item] = (player_location[2], 15.0)
             
         # find the object to throw
