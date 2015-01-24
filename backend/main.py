@@ -6,26 +6,25 @@ from twisted.internet import reactor
 from autobahn.twisted import websocket
 
 from game import Game
+from player import Player
+
+TICK_RATE = 0.1
 
 
 class Protocol(websocket.WebSocketServerProtocol):
 
-    def onConnect(self, request):
-        print("Client connecting: {0}".format(request.peer))
-
     def onOpen(self):
-        print("WebSocket connection open.")
+        self.factory.register(self)
 
     def onMessage(self, payload, isBinary):
         if isBinary:
-            print("Binary message received: {0} bytes".format(len(payload)))
-        else:
-            print("Text message received: {0}".format(payload.decode('utf8')))
+            return
 
-        self.sendMessage(payload, isBinary)
+        print(payload.decode('utf-8'))
 
-    def onClose(self, wasClean, code, reason):
-        print("WebSocket connection closed: {0}".format(reason))
+    def connectionLost(self, reason):
+        super(Protocol, self).connectionLost(reason)
+        self.factory.unregister(self)
 
 
 class Server(websocket.WebSocketServerFactory):
@@ -44,13 +43,14 @@ class Server(websocket.WebSocketServerFactory):
 
     def tick(self):
         self.ticks += 1
-        reactor.callLater(1, self.tick)
+        reactor.callLater(TICK_RATE, self.tick)
 
-    def register(self, client):
-        self.game.add_player(client)
+    def register(self, connection):
+        player = Player(connection)
+        self.game.add_player(player)
 
-    def unregister(self, client):
-        self.game.remove_player(client)
+    def unregister(self, connection):
+        self.game.remove_player(connection)
 
 
 if __name__ == '__main__':
