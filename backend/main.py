@@ -6,7 +6,6 @@ from twisted.internet import reactor
 from autobahn.twisted import websocket
 
 from game import Game
-from player import Player
 
 TICK_RATE = 0.1
 
@@ -20,7 +19,7 @@ class Protocol(websocket.WebSocketServerProtocol):
         if isBinary:
             return
 
-        print(payload.decode('utf-8'))
+        print(payload.decode('utf8'))
 
     def connectionLost(self, reason):
         super(Protocol, self).connectionLost(reason)
@@ -46,8 +45,7 @@ class Server(websocket.WebSocketServerFactory):
         reactor.callLater(TICK_RATE, self.tick)
 
     def register(self, connection):
-        player = Player(connection)
-        self.game.add_player(player)
+        self.game.add_player(connection)
 
     def unregister(self, connection):
         self.game.remove_player(connection)
