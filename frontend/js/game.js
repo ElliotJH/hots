@@ -176,16 +176,12 @@ function socketMessage(msg){
             } else {
                 items[itemList[i].id] = game.add.sprite(itemList[i].location[0], itemList[i].location[1], 'item-ground');
             }
-            
         }
     }
 };
 
 function preload() {
     game.time.advancedTiming = true;
-
-    
-
 
     game.load.image('player','resources/art/human.png', tile_width, tile_height);
     game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
@@ -213,7 +209,7 @@ function preload() {
     game.load.image('taser', 'resources/art/weapons/tesla-coil.png', item_width, item_height);
     game.load.image('knife', 'resources/art/weapons/plain-dagger.png', item_width, item_height);
     game.load.image('spoon', 'resources/art/weapons/broken-bottle.png', item_width, item_height);
-       
+
     game.load.image('item-ground', 'resources/art/item-ground.png');
 
 }
@@ -227,9 +223,6 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
     keyboard = game.input.keyboard;
     keyboard.addKeyCapture([87, 65, 83, 68]);
-
-
-
 }
 
 function update() {
@@ -267,7 +260,6 @@ function update() {
     }
 
     sendMessage({type: "movement", direction: direction, angle: angle});
-    
 
     console.log(game.time.fps);
 }
