@@ -177,6 +177,13 @@ function preload() {
 
     game.load.image('item-ground', 'resources/art/item-ground.png');
 
+    game.load.audio('background', 'resources/audio/ambient/background.mp3');
+
+    background = game.add.audio('background');
+    background.play('');
+
+    game.stage.disableVisibilityChange = true;
+
 }
 
 function create() {
