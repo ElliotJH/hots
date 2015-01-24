@@ -3,7 +3,7 @@ import math
 
 class World:
 
-    def __init__(self, tile_size=20):
+    def __init__(self, tile_size=40):
         super().__init__()
         self.items = []
         self.tiles = None
