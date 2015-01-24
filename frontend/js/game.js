@@ -75,6 +75,10 @@ function socketOpen(){
     socketReady = true;
 }
 
+function socketClose(){
+    socketReady = false;
+}
+
 function socketMessage(msg){
     var parsed = JSON.parse(msg.data);
 
@@ -170,6 +174,7 @@ function preload() {
 function create() {
     socket = new WebSocket(wsAddress);
     socket.onopen = socketOpen;
+    socket.onclose = socketClose;
     socket.onmessage = socketMessage;
     cursors = game.input.keyboard.createCursorKeys();
     keyboard = game.input.keyboard;
