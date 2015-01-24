@@ -1,6 +1,3 @@
-/*
-    Constants
-*/
 //var wsAddress = "ws://10.7.3.119:9000";
 var wsAddress = "ws://10.7.3.103:9000";
 var tile_height = 40;

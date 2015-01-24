@@ -162,6 +162,9 @@ class World:
         coefficient_of_friction = 0.4
         to_remove = []
         for item, (direction, speed) in self.items_moving.items():
+            if item not in self.item_locations.keys():#The item got picked up!
+                to_remove += [item]
+                continue
             self.items_moving[item] = (direction, coefficient_of_friction * speed)
             print("moving item", coefficient_of_friction * speed)
             if speed < 0.0001:
