@@ -21,7 +21,13 @@ class Game:
         self.players[connection] = player
         self.world.add_player(player)
 
-        self.send(connection, self.world.serialise_tiles(), 'world')
+        data = {
+            'id': player.id,
+        }
+
+        data.update(**self.world.serialise_tiles())
+
+        self.send(connection, data, 'world')
         print("Players connected", len(self.players))
 
     def remove_player(self, connection):
