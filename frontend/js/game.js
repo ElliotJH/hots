@@ -68,14 +68,59 @@ var players = {};
 var items = {};
 var levelDefinitions={};
 var stateDefinitions = {};
+
+levelDefinitions[floor] = "floor";
+levelDefinitions[wall] = "wall";
+levelDefinitions[exit] = "exit";
+levelDefinitions[start_tile] = "floor";
+
+stateDefinitions[fists] = "fists";
+stateDefinitions[spoon] = "spoon";
+stateDefinitions[gun] = "gun";
+stateDefinitions[knife] = "knife";
+stateDefinitions[nailBoard] = "nailBoard";
+
+stateDefinitions[penguin] = "penguin";
+stateDefinitions[snowman] = "snowman";
+stateDefinitions[pole] = "pole";
+stateDefinitions[santa] = "santa";
+stateDefinitions[scarf] = "scarf";
+
+stateDefinitions[palmTree] = "palmTree";
+stateDefinitions[camel] = "camel";
+stateDefinitions[waterBottle] = "waterBottle";
+stateDefinitions[bucket] = "bucket";
+stateDefinitions[duneBuggy] = "duneBuggy";
+
+stateDefinitions[cocktail] = "cocktail";
+stateDefinitions[beachball] = "beachball";
+stateDefinitions[trunks] = "trunks";
+stateDefinitions[desertIslandDisc] = "desertIslandDisc";
+stateDefinitions[pineapple] = "pineapple";
+
+stateDefinitions[taser] = "parachute";
+stateDefinitions[taser] = "landingGear";
+stateDefinitions[taser] = "breathingMask";
+stateDefinitions[taser] = "suitcase";
+stateDefinitions[taser] = "passport";
+
+stateDefinitions[spacehelmet] = "spacehelmet";
+stateDefinitions[oxygen] = "oxygen";
+stateDefinitions[jetpack] = "jetpack";
+stateDefinitions[alien] = "alien";
+stateDefinitions[phaser] = "phaser";
+
+stateDefinitions[lifeRing] = "lifeRing";
+stateDefinitions[rope] = "rope";
+stateDefinitions[raincoat] = "raincoat";
+stateDefinitions[sextant] = "sextant";
+stateDefinitions[anchor] = "anchor";
+
 var keyboard;
 var socket;
 var socketReady = false;
-<<<<<<< HEAD
 var UIGroup;
-=======
 var worldInit = false;
->>>>>>> fefb312763afbb4e63a46fe1ae378b87fbbc2ee7
 var cursors;
 
 function socketOpen(){
@@ -135,52 +180,7 @@ function socketMessage(msg){
 function preload() {
     game.time.advancedTiming = true;
 
-    levelDefinitions[floor] = "floor";
-    levelDefinitions[wall] = "wall";
-    levelDefinitions[exit] = "exit";
-    levelDefinitions[start_tile] = "floor";
-
-    stateDefinitions[fists] = "fists";
-    stateDefinitions[spoon] = "spoon";
-    stateDefinitions[gun] = "gun";
-    stateDefinitions[knife] = "knife";
-    stateDefinitions[nailBoard] = "nailBoard";
-
-    stateDefinitions[penguin] = "penguin";
-    stateDefinitions[snowman] = "snowman";
-    stateDefinitions[pole] = "pole";
-    stateDefinitions[santa] = "santa";
-    stateDefinitions[scarf] = "scarf";
-
-    stateDefinitions[palmTree] = "palmTree";
-    stateDefinitions[camel] = "camel";
-    stateDefinitions[waterBottle] = "waterBottle";
-    stateDefinitions[bucket] = "bucket";
-    stateDefinitions[duneBuggy] = "duneBuggy";
-
-    stateDefinitions[cocktail] = "cocktail";
-    stateDefinitions[beachball] = "beachball";
-    stateDefinitions[trunks] = "trunks";
-    stateDefinitions[desertIslandDisc] = "desertIslandDisc";
-    stateDefinitions[pineapple] = "pineapple";
-
-    stateDefinitions[taser] = "parachute";
-    stateDefinitions[taser] = "landingGear";
-    stateDefinitions[taser] = "breathingMask";
-    stateDefinitions[taser] = "suitcase";
-    stateDefinitions[taser] = "passport";
-
-    stateDefinitions[spacehelmet] = "spacehelmet";
-    stateDefinitions[oxygen] = "oxygen";
-    stateDefinitions[jetpack] = "jetpack";
-    stateDefinitions[alien] = "alien";
-    stateDefinitions[phaser] = "phaser";
-
-    stateDefinitions[lifeRing] = "lifeRing";
-    stateDefinitions[rope] = "rope";
-    stateDefinitions[raincoat] = "raincoat";
-    stateDefinitions[sextant] = "sextant";
-    stateDefinitions[anchor] = "anchor";
+    
 
 
     game.load.image('player','resources/art/human.png', tile_width, tile_height);
