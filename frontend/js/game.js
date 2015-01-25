@@ -1,6 +1,7 @@
 //var wsAddress = "ws://10.7.3.119:9000";
 //var wsAddress = "ws://10.7.3.103:9000";
-var wsAddress = "ws://192.168.54.51:9000";
+var wsAddress = "ws://10.7.3.101:9000";
+//var wsAddress = "ws://192.168.54.51:9000";
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
@@ -133,13 +134,15 @@ var winner;
 var backgroundStarted = false;
 var startTick = 0;
 var currentTick = 0;
-var tickRate = 0.030; //30ms between ticks
+var tickRate = 0.050; //30ms between ticks
 var timeInSeconds = 0;
 var minuteWarningPlayed = false;
 var timerText;
 var timeLimit = 120; //2 minutes
 
 var state = 'lobby'; // {lobby, game, end}
+
+var lineCanvas;
 
 /*
     Audio
@@ -339,6 +342,16 @@ function socketMessage(msg) {
     }
 };
 
+function attack(startX, startY, angle, range){
+    lineCanvas.ctx.moveTo(startX - UIGroup.x, startY - UIGroup.y);
+
+    lineCanvas.ctx.lineTo(x - UIGroup.position.x, y - UIGroup.position.y);
+    lineCanvas.ctx.lineWidth = 2;
+    lineCanvas.ctx.stroke();
+    lineCanvas.dirty = true;
+
+}
+
 function preload() {
     game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 
@@ -426,6 +439,12 @@ function create() {
     levelGroup = game.add.group();
     UIGroup = game.add.group();
 
+    lineCanvas = game.add.bitmapData(800,600);
+    UIGroup.create(0,0,lineCanvas);
+
+    lineCanvas.ctx.beginPath();
+    lineCanvas.ctx.strokeStyle = "red";
+
     var fontStyle = { fontSize: '32px', fill: '#FFFFFF' };
     var timerFontStyle = { fontSize: '28px', fill: '#FF0000' };
 
@@ -508,7 +527,7 @@ function updateLobby() {
 }
 
 var timeBetweenAttacks = 1;
-
+var line;
 
 function updateGame() {
     lobbyElement.hide();
@@ -554,7 +573,7 @@ function updateGame() {
     if(game.input.mousePointer.isDown && attackTimer.seconds > timeBetweenAttacks){
         attackTimer.stop();
         attackTimer.start();
-        console.log("attacked");
+        
     }
     if (mute && !hasPressedM) {
         game.sound.mute = !game.sound.mute;
