@@ -16,6 +16,7 @@ class Game:
         self.reset()
 
     def reset(self):
+        self.tick_count = 0
         self.start_timeout = 0
         self.starting = False
         self.world = World()
@@ -53,6 +54,7 @@ class Game:
             self.reset()
 
     def tick(self):
+        self.tick_count += 1
         self.world.tick()
         for connection, player in self.players.items():
             if player.has_succeeded:
@@ -60,11 +62,9 @@ class Game:
                 return
 
         for connection, player in self.players.items():
-            self.send(
-                connection,
-                self.world.serialise_state(player),
-                'tick',
-            )
+            data = self.world.serialise_state(player)
+            data.update(tick=self.tick_count)
+            self.send(connection, data, 'tick')
 
         self.start_if_needed()
 
