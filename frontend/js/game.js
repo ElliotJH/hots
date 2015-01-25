@@ -89,6 +89,14 @@ var winner;
 
 var state = 'lobby'; // {lobby, game, end}
 
+/*
+    Audio
+*/
+var background;
+var alert;
+var item_collect;
+var item_throw;
+
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
     preload: preload,
     create: create,
@@ -96,11 +104,11 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
 });
 
 function OnItemPickup(){
-
+    item_collect.play('');
 }
 
 function OnItemThrown(){
-
+    item_throw.play('');
 }
 
 function socketOpen() {
@@ -296,7 +304,10 @@ function create() {
     keyboard = game.input.keyboard;
     keyboard.addKeyCapture([87, 65, 83, 68]);
 
-    background = game.add.audio('background');
+    background   = game.add.audio('background');
+    alert        = game.add.audio('alert');
+    item_collect = game.add.audio('item_collect');
+    item_throw   = game.add.audio('item_throw');
     background.play('');
 
     winnerElement.hide();
