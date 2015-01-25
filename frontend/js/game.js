@@ -133,6 +133,7 @@ var lobbyElement = $('#lobby');
 var winnerElement = $('#win');
 var winner;
 var backgroundStarted = false;
+var backgroundStopped = false;
 var startTick = 0;
 var currentTick = 0;
 var tickRate = 0.030; //30ms between ticks
@@ -252,9 +253,10 @@ function socketMessage(msg) {
         if (timerText) {
             updateTimer();
         }
-        if (timeLimit - timeInSeconds == 0) {
+        if (timeLimit - timeInSeconds == 0 && !backgroundStopped) {
             background.stop();
             playEnd(scenario);
+            backgroundStopped = true;
         }
 
         var playerList = parsed.players;
