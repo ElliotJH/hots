@@ -295,7 +295,7 @@ function socketMessage(msg) {
             if (player) {
                 player.x = playerList[i].location[0];
                 player.y = playerList[i].location[1];
-                player.rotation = playerList[i].location[2];
+                player.p.rotation = playerList[i].location[2];
                 players[playerList[i].id].playerName = playerList[i].name;
 
                 if(playerList[i].timeout > 0){
@@ -311,8 +311,8 @@ function socketMessage(msg) {
                     playerList[i].location[1], 'player');
                 p.pivot = new PIXI.Point(tile_width/2, tile_height/2);
                 players[playerList[i].id].playerName = playerList[i].name;
-
-                var fontStyle = { fontSize: '16px', fill: '#FFFFFF' };
+                players[playerList[i].id].p = p;
+                var fontStyle = { fontSize: '8px', fill: '#FFFFFF' };
                 var text = new Phaser.Text(game, -20, -40, '', fontStyle);
                 text.font = 'Fira Mono';
                 text.visible = false;
@@ -714,7 +714,7 @@ function updateGame() {
         UIGroup.x = game.camera.x;
         UIGroup.y = game.camera.y;
 
-        players[myPlayer].rotation = angle;
+        players[myPlayer].p.rotation = angle;
 
     }
 
