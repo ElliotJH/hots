@@ -44,9 +44,8 @@
 
 ## Weapons
 - Start with fists
-- Spoon
+- Bottle
 - Gun
 - Knife
-- Board with a nail in it
-- Taser
+- Tesla coil
 

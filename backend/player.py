@@ -22,19 +22,19 @@ class Player:
 
     @property
     def item_1_empty(self):
-        fists = game_objects[weapon_id]['start_with_fists']
+        fists = game_objects[weapon_id]['fists']
         return self.item_1 is None or self.item_1.item_id == fists
 
     @property
     def item_2_empty(self):
-        fists = game_objects[weapon_id]['start_with_fists']
+        fists = game_objects[weapon_id]['fists']
         return self.item_2 is None or self.item_2.item_id == fists
 
     def reset_item_1(self):
-        self.item_1 = Item(game_objects[weapon_id]['start_with_fists'])
+        self.item_1 = Item(game_objects[weapon_id]['fists'])
 
     def reset_item_2(self):
-        self.item_2 = Item(game_objects[weapon_id]['start_with_fists'])
+        self.item_2 = Item(game_objects[weapon_id]['fists'])
 
     @property
     def has_succeeded(self):

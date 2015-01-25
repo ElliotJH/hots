@@ -53,11 +53,10 @@ game_objects = {
         'dune_buggy': 29,
     },
     weapons: {
-        'start_with_fists': 30,
-        'spoon': 31,
+        'fists': 30,
+        'bottle': 31,
         'gun': 32,
         'knife': 33,
-        'board_with_a_nail_in_it': 34,
-        'taser': 35,
+        'tesla': 35
     },
 }

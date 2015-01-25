@@ -72,7 +72,7 @@ class World:
         player.needed_item_1, player.needed_item_2 = Item(item_1), Item(item_2)
 
     def set_player_starting_items(self, player):
-        fists = game_objects[weapon_id]['start_with_fists']
+        fists = game_objects[weapon_id]['fists']
         player.item_1 = player.item_2 = Item(fists)
 
     def set_player_location(self, player):

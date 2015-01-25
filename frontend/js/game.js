@@ -1,5 +1,5 @@
 var wsAddress = "ws://10.7.3.119:9000";
-// var wsAddress = "ws://10.7.3.103:9000";
+//var wsAddress = "ws://10.7.3.103:9000";
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
@@ -55,11 +55,10 @@ var stateDefinitions = {
     28: "bucket",
     29: "duneBuggy",
     30: "fists",
-    31: "spoon",
+    31: "bottle",
     32: "gun",
     33: "knife",
-    34: "nailBoard",
-    35: "taser"
+    34: "tesla"
 };
 
 /*
@@ -105,6 +104,22 @@ var alert;
 var item_collect;
 var item_throw;
 
+var desert_round_start;
+var desert_round_end;
+var island_round_start;
+var island_round_end;
+var plane_round_start;
+var plane_round_end;
+var ship_sea_round_start;
+var ship_sea_round_end;
+var ship_space_round_start;
+var ship_space_round_end;
+
+var attackSound = [];
+
+/*
+    Game
+*/
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
     preload: preload,
     create: create,
@@ -121,6 +136,11 @@ function OnItemThrown(){
 
 function minuteWarning() {
     alert.play('');
+}
+
+// Call this passing stateDefinitions.<weapon>
+function onAttack(weapon) {
+    attackSound[weapon].play('');
 }
 
 function socketOpen() {
@@ -285,9 +305,9 @@ function preload() {
 
     game.load.image('fists', 'resources/art/weapons/punch.png', item_width, item_height);
     game.load.image('gun', 'resources/art/weapons/revolver.png', item_width, item_height);
-    game.load.image('taser', 'resources/art/weapons/tesla-coil.png', item_width, item_height);
+    game.load.image('tesla', 'resources/art/weapons/tesla-coil.png', item_width, item_height);
     game.load.image('knife', 'resources/art/weapons/plain-dagger.png', item_width, item_height);
-    game.load.image('spoon', 'resources/art/weapons/broken-bottle.png', item_width, item_height);
+    game.load.image('bottle', 'resources/art/weapons/broken-bottle.png', item_width, item_height);
 
     game.load.image('item-ground', 'resources/art/item-ground.png');
     game.load.image('pocket', 'resources/art/pocket.png');
@@ -354,6 +374,23 @@ function create() {
     alert        = game.add.audio('alert');
     item_collect = game.add.audio('item_collect');
     item_throw   = game.add.audio('item_throw');
+
+    desert_round_start     = game.add.audio('desert_round_start');
+    desert_round_end       = game.add.audio('desert_round_end');
+    island_round_start     = game.add.audio('island_round_start');
+    island_round_end       = game.add.audio('island_round_end');
+    plane_round_start      = game.add.audio('plane_round_start');
+    plane_round_end        = game.add.audio('plane_round_end');
+    ship_sea_round_start   = game.add.audio('ship_sea_round_start');
+    ship_sea_round_end     = game.add.audio('ship_sea_round_end');
+    ship_space_round_start = game.add.audio('ship_space_round_start');
+    ship_space_round_end   = game.add.audio('ship_space_round_end');
+    
+    attackSound[stateDefinitions.bottle] = game.add.audio('attack_bottle');
+    attackSound[stateDefinitions.dagger] = game.add.audio('attack_dagger');
+    attackSound[stateDefinitions.fists]  = game.add.audio('attack_fists');
+    attackSound[stateDefinitions.gun]    = game.add.audio('attack_gun');
+    attackSound[stateDefinitions.tesla]  = game.add.audio('attack_tesla');
 
     winnerElement.hide();
 }
