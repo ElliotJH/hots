@@ -300,8 +300,6 @@ function socketMessage(msg) {
 
                 if(playerList[i].timeout > 0){
                   timeoutTexts[playerList[i].id].visible = true;
-                  timeoutTexts[playerList[i].id].x = player.x - 20;
-                  timeoutTexts[playerList[i].id].y = player.y - 40;
                   timeoutTexts[playerList[i].id].setText(Math.round(playerList[i].timeout));
                 } else {
                   timeoutTexts[playerList[i].id].visible = false;
@@ -315,7 +313,7 @@ function socketMessage(msg) {
                 players[playerList[i].id].playerName = playerList[i].name;
 
                 var fontStyle = { fontSize: '16px', fill: '#FFFFFF' };
-                var text = new Phaser.Text(game, 0, 0, '', fontStyle);
+                var text = new Phaser.Text(game, -20, -40, '', fontStyle);
                 text.font = 'Fira Mono';
                 text.visible = false;
 
