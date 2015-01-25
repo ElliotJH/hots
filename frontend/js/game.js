@@ -240,7 +240,7 @@ function preload() {
     game.load.image('jetpack', 'resources/art/space/rocket.png', item_width, item_height);
     game.load.image('spacehelmet', 'resources/art/space/space-suit.png', item_width, item_height);
     game.load.image('alien', 'resources/art/space/satellite.png', item_width, item_height);
-    game.load.image('oxygen', 'resources/art/space/chemical-tank.png', item_width, item_height);
+    game.load.image('oxygen', 'resources/art/space/labeledcondom.png', item_width, item_height);
 
     game.load.image('cocktail', 'resources/art/island/cocktail.png', item_width, item_height);
     game.load.image('beachball', 'resources/art/island/palm-tree.png', item_width, item_height);
