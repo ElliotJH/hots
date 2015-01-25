@@ -16,6 +16,7 @@ GRID_SIZE = 40
 class WonException(Exception):
     pass
 
+
 class World:
 
     def __init__(self, tile_size=40):
@@ -136,7 +137,11 @@ class World:
         new_position = (new_x, new_y, look_angle)
 
         try:
-            position = self.attempt_player_move(player, (x, y, l), new_position)
+            position = self.attempt_player_move(
+                player,
+                (x, y, l),
+                new_position,
+            )
         except WonException:
             print("Player wins")
             player.win()
@@ -286,23 +291,31 @@ class World:
         return (left, right, top, bottom)
 
     def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2], winning=[]):
-        
+
         xIsh = round(new_position[0] / GRID_SIZE)
         yIsh = round(new_position[1] / GRID_SIZE)
-        
-        
-        testSquares = [[xIsh, yIsh], [xIsh-1, yIsh], [xIsh - 1, yIsh - 1], [xIsh, yIsh - 1],
-            [xIsh+1, yIsh -1], [xIsh+1, yIsh], [xIsh + 1, yIsh + 1], [xIsh, yIsh+1], [xIsh-1, yIsh+1]]
-        
+
+        testSquares = [
+            [xIsh, yIsh],
+            [xIsh - 1, yIsh],
+            [xIsh - 1, yIsh - 1],
+            [xIsh, yIsh - 1],
+            [xIsh + 1, yIsh - 1],
+            [xIsh + 1, yIsh],
+            [xIsh + 1, yIsh + 1],
+            [xIsh, yIsh + 1],
+            [xIsh - 1, yIsh + 1]
+        ]
+
         for square in testSquares:
             cell = self.tiles[square[1]][square[0]]
-            
+
             if cell in blocked or cell in winning:
                 cell_square = collisions.Square(*self.grid_to_centered_point(square[0], square[1]))
                 player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
 
                 col = collisions.circle_square(player_circle, cell_square)
-                
+
                 if col:
                     if cell in winning:
                         raise WonException
@@ -347,18 +360,25 @@ class World:
                      for x, y in self.item_locations.items()]
             result['items'] = items
 
-
         else:
-            items = [{'id': x.item_id, 'location': y}
-                     for x, y in self.item_locations.items()
-                     if (x not in self.last_items) or (y != self.last_items[x])]
+            items = [
+                {'id': x.item_id, 'location': y}
+                for x, y in self.item_locations.items()
+                if (
+                    (x not in self.last_items)
+                    or (y != self.last_items[x])
+                )
+            ]
 
             result['item_diff'] = items
 
-            deleted_items = [{'id': x.item_id, 'location': y}
-                     for x, y in self.last_items.items()
-                     if (x not in self.item_locations)]
+            deleted_items = [
+                {'id': x.item_id, 'location': y}
+                for x, y in self.last_items.items()
+                if (x not in self.item_locations)
+            ]
             result['deleted_items'] = deleted_items
 
-        self.last_items = dict((k,v) for k,v in self.item_locations.items())
+        self.last_items = dict((k, v) for k, v in self.item_locations.items())
+
         return result
