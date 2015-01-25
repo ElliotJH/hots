@@ -352,7 +352,6 @@ function updateGame() {
 
     if (mute && !hasPressedM) {
         game.sound.mute = !game.sound.mute;
-        console.log(game.sound.mute);
         hasPressedM = true;
     } else if (!mute) {
         hasPressedM = false;
