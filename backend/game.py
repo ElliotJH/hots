@@ -3,7 +3,7 @@ import json
 from world import World
 from player import Player
 
-MIN_PLAYERS = 2
+MIN_PLAYERS = 3
 LOBBY_TIMEOUT = 333
 MAX_PLAYERS = 10
 
