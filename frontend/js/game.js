@@ -1,5 +1,7 @@
 //var wsAddress = "ws://10.7.3.119:9000";
 var wsAddress = "ws://10.7.3.103:9000";
+//var wsAddress = "ws://10.7.3.119:9000";
+//var wsAddress = "ws://10.7.3.103:9000";
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
@@ -188,8 +190,10 @@ function socketClose() {
 
 function socketMessage(msg) {
     var parsed = JSON.parse(msg.data);
-
+    
+    
     if (parsed.type == "world") {
+        console.log(parsed);
         var world = parsed.world;
 
         scenario = parsed.world_id;
@@ -547,6 +551,7 @@ function sendMessage(message) {
     }
 
     var jsonText = JSON.stringify(message);
+    //console.log(jsonText);
     socket.send(jsonText);
 }
 

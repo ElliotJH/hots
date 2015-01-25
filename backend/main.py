@@ -5,7 +5,7 @@ from twisted.internet import reactor
 
 from autobahn.twisted import websocket
 
-from game import Game
+from game import Game, Lobby
 
 TICK_RATE = 0.03
 
@@ -51,20 +51,20 @@ class Server(websocket.WebSocketServerFactory):
         )
 
         self.protocol = Protocol
-        self.game = Game()
+        self.lobby = Lobby()
         self.ticks = 0
         self.tick()
 
     def tick(self):
         self.ticks += 1
-        self.game.tick()
+        self.lobby.tick()
         reactor.callLater(TICK_RATE, self.tick)
 
     def register(self, connection):
-        self.game.add_player(connection)
+        self.lobby.add_player(connection)
 
     def unregister(self, connection):
-        self.game.remove_player(connection)
+        self.lobby.remove_player(connection)
 
 
 if __name__ == '__main__':

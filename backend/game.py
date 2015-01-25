@@ -5,20 +5,65 @@ from player import Player
 
 MIN_PLAYERS = 1
 LOBBY_TIMEOUT = 10
+MAX_PLAYERS = 10
 
+def send(connection, data, message_type):
+    data.update(type=message_type)
+    connection.sendMessage(json.dumps(data).encode('utf8'))
+
+
+class Lobby:
+    def __init__(self):
+        self.games = []
+        self.connection_game = {}
+        
+    def add_player(self, connection):
+        added = False
+        for game in self.games:
+            if not game.started and len(game.players) < MAX_PLAYERS:
+                added = True
+                game.add_player(connection)
+                self.connection_game[connection] = game
+        if not added:
+            game = Game()
+            game.add_player(connection)
+            self.games += game
+
+    def receive_message(self, connection, message):
+        game = self.connection_game[connection]
+        return game.receive_message(connection, message)
+
+    def remove_player(self, connection):
+        game = self.connection_game[connection]
+        game.remove_player(connection)
+        del self.connection_game[connection]
+
+    def tick(self):
+        for game in self.games:
+            if game.over:
+                for player in game.players:
+                    self.remove_player(player)
+                    self.add_player(player)
+                self.games.remove(game)
+            else:
+                game.tick()
+            
+        
 
 class Game:
 
     def __init__(self):
         super().__init__()
         self.players = {}
-
+        
         self.reset()
 
     def reset(self):
         self.tick_count = 0
         self.start_timeout = 0
         self.starting = False
+        self.started = False
+        self.over = False
         self.world = World()
         self.world.load('levels/example.level')
 
@@ -35,8 +80,7 @@ class Game:
         }
 
         data.update(**self.world.serialise_world(player))
-
-        self.send(connection, data, 'world')
+        send(connection, data, 'world')
         print("Players connected", len(self.players))
 
         if len(self.players) >= MIN_PLAYERS:
@@ -64,7 +108,7 @@ class Game:
         for connection, player in self.players.items():
             data = self.world.serialise_state(player)
             data.update(tick=self.tick_count)
-            self.send(connection, data, 'tick')
+            send(connection, data, 'tick')
 
         self.start_if_needed()
 
@@ -98,6 +142,7 @@ class Game:
         if self.start_timeout == 0:
             self.send_start()
             self.starting = False
+            self.started = True
         else:
             self.start_timeout -= 1
 
@@ -105,25 +150,24 @@ class Game:
         self.starting = True
         self.start_timeout = LOBBY_TIMEOUT
         for connection in self.players.keys():
-            self.send(connection, {}, 'starting')
+            send(connection, {}, 'starting')
 
     def send_start(self):
         for connection in self.players.keys():
-            self.send(connection, {
+            send(connection, {
                 'state': 'game',
                 'tick': self.tick_count,
             }, 'state')
 
     def end(self, winner):
+        self.over = True
         for connection in self.players.keys():
-            self.send(connection, {
+            send(connection, {
                 'state': 'end',
                 'tick': self.tick_count,
             }, 'state')
-            self.send(connection, {'winner': winner.id}, 'winner')
+            send(connection, {'winner': winner.id}, 'winner')
 
     # Utility Methods
 
-    def send(self, connection, data, message_type):
-        data.update(type=message_type)
-        connection.sendMessage(json.dumps(data).encode('utf8'))
+
