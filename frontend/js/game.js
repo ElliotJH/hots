@@ -1,8 +1,7 @@
 //var wsAddress = "ws://10.7.3.119:9000";
-//var wsAddress = "ws://10.7.3.103:9000";
+var wsAddress = "ws://10.7.3.103:9000";
 //var wsAddress = "ws://10.7.3.101:9000";
 //var wsAddress = "ws://192.168.54.51:9000";
-var wsAddress = "ws://127.0.0.1:9000";
 
 var tile_height = 40;
 var tile_width = 40;
@@ -136,6 +135,7 @@ var audio = [
 */
 var myPlayer;
 var players = {};
+var timeoutTexts = {};
 var items = {};
 var held = [];
 var heldIDs = [30,30];
@@ -280,6 +280,11 @@ function socketMessage(msg) {
             background.stop();
             playEnd(scenario);
             backgroundStopped = true;
+
+            for(var p in players){
+              p.tint = 0X222222;
+            }
+
         }
 
         var playerList = parsed.players;
@@ -292,11 +297,29 @@ function socketMessage(msg) {
                 player.y = playerList[i].location[1];
                 player.rotation = playerList[i].location[2];
                 players[playerList[i].id].playerName = playerList[i].name;
+
+                if(playerList[i].timeout > 0){
+                  timeoutTexts[playerList[i].id].visible = true;
+                  timeoutTexts[playerList[i].id].x = player.x - 20;
+                  timeoutTexts[playerList[i].id].y = player.y - 40;
+                  timeoutTexts[playerList[i].id].setText(Math.round(playerList[i].timeout));
+                } else {
+                  timeoutTexts[playerList[i].id].visible = false;
+                }
+
             } else {
                 players[playerList[i].id] = levelGroup.create(playerList[i].location[0],
                     playerList[i].location[1], 'player');
                 players[playerList[i].id].pivot = new PIXI.Point(tile_width/2, tile_height/2);
                 players[playerList[i].id].playerName = playerList[i].name;
+
+                var fontStyle = { fontSize: '16px', fill: '#FFFFFF' };
+                var text = new Phaser.Text(game, 0, 0, '', fontStyle);
+                text.font = 'Fira Mono';
+                text.visible = false;
+
+                timeoutTexts[playerList[i].id] = text;
+
             }
         }
         var keys = Object.keys(players);
@@ -374,29 +397,26 @@ function socketMessage(msg) {
             levelGroup.removeAll(true);
             players = [];
             items = [];
-
-            var fontStyle = { fontSize: '32px', fill: '#FFFFFF' };
-            var timerFontStyle = { fontSize: '28px', fill: '#FF0000' };
-
-            var itemText = new Phaser.Text(game, 325, 2, 'OBJECTIVES', fontStyle);
-            timerText = new Phaser.Text(game, 640, 2, '00:00:00', timerFontStyle);
-
-            itemText.font = 'Fira Mono';
-            timerText.font = 'Fira Mono';
-
-            UIGroup.add(itemText);
-            UIGroup.add(timerText);
-            UIGroup.create(itemOneX - 10, itemOneY - 5, 'pocket');
-            UIGroup.create(itemTwoX - 10, itemTwoY - 5, 'pocket');
-            state = 'lobby'
-            lobbyElement.show();
+            backToLobby();
         }
     } else if (parsed.type == 'starting') {
         lobbyElement.find('#title').text("Starting...");
     } else if (parsed.type == 'winner') {
         winner = parsed.winner;
+        console.log(winner);
     }
 };
+
+function backToLobby(){
+    game.destroy();
+    $('#status').fadeIn();
+    game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
+        preload: preload,
+        create: create,
+        update: update
+    });
+}
+
 
 function attack(startX, startY, angle, range){
 
@@ -610,7 +630,7 @@ function updateLobby() {
 
 var timeBetweenAttacks = 1;
 var line;
-
+var clickedLastFrame = false;
 function updateGame() {
     lobbyElement.hide();
 
@@ -653,11 +673,14 @@ function updateGame() {
         hasPressedE = false
     }
 
-    if(game.input.mousePointer.isDown){
+    if(game.input.mousePointer.isDown && !clickedLastFrame){
 
         sendMessage({type: 'attack'});
 
     }
+
+    clickedLastFrame = game.input.mousePointer.isDown;
+
     if (mute && !hasPressedM) {
         game.sound.mute = !game.sound.mute;
         hasPressedM = true;

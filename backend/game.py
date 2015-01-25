@@ -4,8 +4,9 @@ from world import World
 from player import Player
 
 MIN_PLAYERS = 2
-LOBBY_TIMEOUT = 100
+LOBBY_TIMEOUT = 333
 MAX_PLAYERS = 10
+
 
 def send(connection, data, message_type):
     data.update(type=message_type)
@@ -13,10 +14,11 @@ def send(connection, data, message_type):
 
 
 class Lobby:
+
     def __init__(self):
         self.games = []
         self.connection_game = {}
-        
+
     def add_player(self, connection):
         added = False
         for game in self.games:
@@ -48,15 +50,14 @@ class Lobby:
                 self.games.remove(game)
             else:
                 game.tick()
-            
-        
+
 
 class Game:
 
     def __init__(self):
         super().__init__()
         self.players = {}
-        
+
         self.reset()
 
     def reset(self):
@@ -171,7 +172,3 @@ class Game:
                 'state': 'end',
                 'tick': self.tick_count,
             }, 'state')
-
-    # Utility Methods
-
-
