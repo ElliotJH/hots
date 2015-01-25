@@ -4,7 +4,7 @@ from world import World
 from player import Player
 
 MIN_PLAYERS = 1
-LOBBY_TIMEOUT = 333
+LOBBY_TIMEOUT = 10
 
 
 class Game:

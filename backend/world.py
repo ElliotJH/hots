@@ -268,9 +268,9 @@ class World:
             for (col_num, cell) in enumerate(columns):
                 if cell in blocked:
                     cell_square = collisions.Square(*self.grid_to_centered_point(col_num, row_num))
-                    player_circle = collisions.Circle(new_position[0], new_position[y], GRID_SIZE/2)
+                    player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
                     
-                    if collisions.circle_square(player_circle_square):
+                    if collisions.circle_square(player_circle, cell_square):
                         return old_position
         return new_position
 

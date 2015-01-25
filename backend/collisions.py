@@ -1,10 +1,10 @@
-def Circle():
+class Circle:
     def __init__(self, x, y, r):
         self.x = x
         self.y = y
         self.r = r
 
-def Square():
+class Square:
     def __init__(self, x1, x2, y1, y2):
         self.x1 = x1
         self.x2 = x2
@@ -26,12 +26,12 @@ def circle_square(c, s):
     center_inside_rect = (s.x1 <= c.x <= s.x2) and (s.y1 <= c.y <= s.y2)
 
     # left crosses circle
-    left = ((s.x1 > (c.x - r)) and (s.x1 < (c.x + r)))
-    right = ((s.x2 > (c.x - r)) and (s.x2 < (c.x + r)))
-    top = ((s.y1 > (c.y - r)) and (s.y1 < (c.y + r)))
-    bottom = ((s.y1 > (c.y - r)) and (s.y1 < (c.y + r)))
+    left = ((s.x1 > (c.x - c.r)) and (s.x1 < (c.x + c.r)))
+    right = ((s.x2 > (c.x - c.r)) and (s.x2 < (c.x + c.r)))
+    top = ((s.y1 > (c.y - c.r)) and (s.y1 < (c.y + c.r)))
+    bottom = ((s.y1 > (c.y - c.r)) and (s.y1 < (c.y + c.r)))
 
-    matches = (left and top) or (left and bottom) or (right and top) or (right and bottom) or circle_inside_rect
+    matches = (left and top) or (left and bottom) or (right and top) or (right and bottom) or center_inside_rect
     
 
     return matches
