@@ -80,7 +80,6 @@ class Game:
         }
 
         data.update(**self.world.serialise_world(player))
-
         send(connection, data, 'world')
         print("Players connected", len(self.players))
 
