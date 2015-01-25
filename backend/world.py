@@ -149,12 +149,16 @@ class World:
             new_x = 1000 * math.sin(math.radians(direction)) + proposed_x
             new_y = 1000 * math.cos(math.radians(direction)) + proposed_y
 
-            actual_x, actual_y = self.attempt_move((proposed_x, proposed_y), (new_x, new_y), object_radius=0, blocked=[1, 2])
+            actual_x, actual_y = self.attempt_move(
+                (proposed_x, proposed_y),
+                (new_x, new_y),
+                object_radius=0,
+                blocked=[1, 2],
+            )
 
             print(new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
             self.item_locations[item] = (proposed_x, proposed_y)
             self.items_moving[item] = (player_location[2], ITEM_SPEED)
-
 
         if hand == 'right':
             if player.item_2_empty:
@@ -167,27 +171,43 @@ class World:
 
             new_x = ITEM_SPEED * math.sin(math.radians(direction)) + proposed_x
             new_y = ITEM_SPEED * math.cos(math.radians(direction)) + proposed_y
-            
-            actual_x, actual_y = self.attempt_move((proposed_x, proposed_y), (new_x, new_y), object_radius=0, blocked=[1, 2])
+
+            actual_x, actual_y = self.attempt_move(
+                (proposed_x, proposed_y),
+                (new_x, new_y),
+                object_radius=0,
+                blocked=[1, 2],
+            )
             self.item_locations[item] = (proposed_x, proposed_y)
             self.items_moving[item] = (player_location[2], ITEM_SPEED)
-
 
     def tick(self):
         coefficient_of_friction = 0.75
         to_remove = []
         for item, (direction, speed) in self.items_moving.items():
-            if item not in self.item_locations.keys():#The item got picked up!
+            if item not in self.item_locations.keys():  # Item picked up
                 to_remove += [item]
                 continue
-            self.items_moving[item] = (direction, coefficient_of_friction * speed)
+
+            self.items_moving[item] = (
+                direction,
+                coefficient_of_friction * speed,
+            )
+
             if speed < 0.0001:
                 to_remove += [item]
+
             x, y = self.item_locations[item]
             new_x = speed * math.sin(math.radians(direction)) + x
             new_y = speed * math.cos(math.radians(direction)) + y
-            
-            new_x, new_y = self.attempt_move((x, y), (new_x, new_y), object_radius=0, blocked=[1, 2])
+
+            new_x, new_y = self.attempt_move(
+                (x, y),
+                (new_x, new_y),
+                object_radius=0,
+                blocked=[1, 2],
+            )
+
             if (new_x, new_y) == (x, y):
                 to_remove += [item]
 
@@ -195,6 +215,7 @@ class World:
 
         for item in to_remove:
             del self.items_moving[item]
+
     def attempt_pickup(self, new_position, player, player_radius=0):
         if not (player.item_1_empty or player.item_2_empty):
             return
@@ -222,7 +243,13 @@ class World:
         else:
             block = [1, 2]
 
-        new_pos = self.attempt_move(old_position, new_position, player_radius, block)
+        new_pos = self.attempt_move(
+            old_position,
+            new_position,
+            player_radius,
+            block,
+        )
+
         return new_pos
 
     def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2]):
