@@ -70,6 +70,7 @@ var players = {};
 var items = {};
 var held = [];
 var heldIDs = [30,30];
+var attackTimer;
 
 /*
     State
@@ -90,6 +91,14 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
     create: create,
     update: update
 });
+
+function OnItemPickup(){
+
+}
+
+function OnItemThrown(){
+
+}
 
 function socketOpen() {
     $('#status').fadeOut();
@@ -180,6 +189,11 @@ function socketMessage(msg) {
                 held[i].kill();
                 held[i] = UIGroup.create(itemArrayX[i], itemArrayY[i], stateDefinitions[parsed.player_items[i]]);
                 heldIDs[i] = parsed.player_items[i];
+                if(heldIDs[i] == 30){
+                    OnItemThrown();
+                } else {
+                    OnItemPickup();
+                }
             }
         }
     } else if (parsed.type == 'state') {
@@ -262,6 +276,8 @@ function preload() {
 }
 
 function create() {
+    attackTimer = game.time.create(false);
+    attackTimer.start();
     levelGroup = game.add.group();
     UIGroup = game.add.group();
     socket = new WebSocket(wsAddress);
@@ -310,6 +326,9 @@ function updateLobby() {
     }
 }
 
+var timeBetweenAttacks = 1;
+
+
 function updateGame() {
     lobbyElement.hide();
 
@@ -342,6 +361,12 @@ function updateGame() {
         hasPressedE = true;
     } else if(!keyboard.isDown(e)){
         hasPressedE = false
+    }
+
+    if(game.input.mousePointer.isDown && attackTimer.seconds > timeBetweenAttacks){
+        attackTimer.stop();
+        attackTimer.start();
+        console.log("attacked");
     }
 
     if (myPlayer && Object.keys(players).length) {
