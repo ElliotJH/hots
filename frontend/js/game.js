@@ -288,8 +288,11 @@ var d = 68;
 var q = 81;
 var e = 69;
 
+var m = 77;
+
 var hasPressedQ = false;
 var hasPressedE = false;
+var hasPressedM = false;
 
 function update() {
     if (state == 'lobby') {
@@ -313,6 +316,8 @@ function updateLobby() {
 
 function updateGame() {
     lobbyElement.hide();
+
+    var mute = keyboard.isDown(m);
 
     var up = keyboard.isDown(w);
     var down = keyboard.isDown(s);
@@ -343,6 +348,14 @@ function updateGame() {
         hasPressedE = true;
     } else if(!keyboard.isDown(e)){
         hasPressedE = false
+    }
+
+    if (mute && !hasPressedM) {
+        game.sound.mute = !game.sound.mute;
+        console.log(game.sound.mute);
+        hasPressedM = true;
+    } else if (!mute) {
+        hasPressedM = false;
     }
 
     if (myPlayer && Object.keys(players).length) {
@@ -384,3 +397,4 @@ function sendMessage(message) {
     var jsonText = JSON.stringify(message);
     socket.send(jsonText);
 }
+
