@@ -134,7 +134,7 @@ class World:
         new_y = distance * math.cos(math.radians(angle)) + y
 
         new_position = (new_x, new_y, look_angle)
-
+        
         try:
             position = self.attempt_player_move(player, (x, y, l), new_position)
         except WonException:
@@ -276,6 +276,7 @@ class World:
         return (left, right, top, bottom)
 
     def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2], winning=[]):
+<<<<<<< HEAD
 
         xIsh = math.round(new_position[0] / GRID_SIZE)
         yIsh = math.round(new_position[1] / GRID_SIZE)
@@ -294,6 +295,22 @@ class World:
                     if cell in winning:
                         raise WonException
                     return old_position
+=======
+        for (row_num, columns) in enumerate(self.tiles):
+            for (col_num, cell) in enumerate(columns):
+                if cell in blocked or cell in winning:
+
+                    cell_square = collisions.Square(*self.grid_to_centered_point(col_num, row_num))
+                    player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
+
+                    col = collisions.circle_square(player_circle, cell_square)
+                    if col:
+                        if cell in winning:
+                            raise WonException
+                        print("returning old position", col)
+                        return old_position
+
+>>>>>>> 922452a758b29db915f673c2003bfa8d93a55c8c
         return new_position
 
         # for (row_num, columns) in enumerate(self.tiles):
