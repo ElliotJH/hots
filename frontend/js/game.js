@@ -309,6 +309,28 @@ function socketMessage(msg) {
         state = parsed.state;
         if (state == 'game' && parsed.tick && startTick == 0) {
             startTick = parsed.tick;
+        } else if (state == 'end'){
+            levelGroup.removeAll(true);
+            held[0].kill();
+            held[1].kill();
+            UIGroup.removeAll(true);
+            levelGroup.removeAll(true);
+            players = [];
+            items = [];
+
+            var fontStyle = { fontSize: '32px', fill: '#FFFFFF' };
+            var timerFontStyle = { fontSize: '28px', fill: '#FF0000' };
+
+            var itemText = new Phaser.Text(game, 325, 2, 'OBJECTIVES', fontStyle);
+            timerText = new Phaser.Text(game, 640, 2, '00:00:00', timerFontStyle);
+
+            itemText.font = 'Fira Mono';
+            timerText.font = 'Fira Mono';
+
+            UIGroup.add(itemText);
+            UIGroup.add(timerText);
+            UIGroup.create(itemOneX - 10, itemOneY - 5, 'pocket');
+            UIGroup.create(itemTwoX - 10, itemTwoY - 5, 'pocket');
         }
     } else if (parsed.type == 'starting') {
         lobbyElement.find('#title').text("Starting...");
