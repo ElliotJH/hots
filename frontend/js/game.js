@@ -307,8 +307,9 @@ function socketMessage(msg) {
 
             } else {
                 players[playerList[i].id] = game.add.group();
-                var p = players[playerList[i].id].create(playerList[i].location[0],
-                    playerList[i].location[1], 'player');
+                players[playerList[i].id].x = playerList[i].location[0];
+                players[playerList[i].id].y = playerList[i].location[1];
+                var p = players[playerList[i].id].create(0, 0, 'player');
                 p.pivot = new PIXI.Point(tile_width/2, tile_height/2);
                 players[playerList[i].id].playerName = playerList[i].name;
                 players[playerList[i].id].p = p;
