@@ -86,6 +86,7 @@ var playerName = window.prompt("Player name");
 var lobbyElement = $('#lobby');
 var winnerElement = $('#win');
 var winner;
+var backgroundStarted = false;
 
 var state = 'lobby'; // {lobby, game, end}
 
@@ -308,7 +309,6 @@ function create() {
     alert        = game.add.audio('alert');
     item_collect = game.add.audio('item_collect');
     item_throw   = game.add.audio('item_throw');
-    background.play('');
 
     winnerElement.hide();
 }
@@ -352,6 +352,11 @@ var timeBetweenAttacks = 1;
 
 function updateGame() {
     lobbyElement.hide();
+
+    if (!backgroundStarted) {
+        background.play('');
+        backgroundStarted = true;
+    }
 
     var mute = keyboard.isDown(m);
 
