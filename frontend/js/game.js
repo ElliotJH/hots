@@ -655,8 +655,7 @@ function updateGame() {
 
     if(game.input.mousePointer.isDown){
 
-        lines.push({player: players[myPlayer],
-            angle: players[myPlayer].rotation, range: 20, ttl: 500});
+        sendMessage({type: 'attack'});
 
     }
     if (mute && !hasPressedM) {
