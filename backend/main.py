@@ -24,7 +24,7 @@ class Protocol(websocket.WebSocketServerProtocol):
             return
 
         try:
-            self.factory.game.receive_message(
+            self.factory.lobby.receive_message(
                 self,
                 payload.decode('utf8'),
             )
