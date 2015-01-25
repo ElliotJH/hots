@@ -283,6 +283,7 @@ function create() {
     background = game.add.audio('background');
     background.play('');
 
+    winnerElement.hide();
 }
 
 var w = 87;
