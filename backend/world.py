@@ -150,7 +150,6 @@ class World:
 
         return position
 
-<<<<<<< HEAD
     def attack_from(self, player_1):
         if player_1.timeout > 0:
             return
