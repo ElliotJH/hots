@@ -172,7 +172,7 @@ class World:
             c = collisions.Circle(loc[0], loc[1], GRID_SIZE*2/3)
 
             if collisions.line_circle(l, c):
-                player.add_timeout(10)
+                player.add_timeout(4)
                 hand = random.choice(['left', 'right'])
                 self.throw(player, hand)
                 fists = game_objects[weapon_id]['fists']
@@ -384,7 +384,7 @@ class World:
             ],
         }
 
-        if self.last_items is None:
+        if self.last_items is None or True:
             items = [{'id': x.item_id, 'location': y}
                      for x, y in self.item_locations.items()]
             result['items'] = items

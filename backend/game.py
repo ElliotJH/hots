@@ -44,7 +44,7 @@ class Lobby:
     def tick(self):
         for game in self.games:
             if game.over:
-                for player in game.players:
+                for player in [player for player in game.players]:
                     self.remove_player(player)
                     self.add_player(player)
                 self.games.remove(game)
