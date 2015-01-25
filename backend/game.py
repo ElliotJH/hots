@@ -7,16 +7,18 @@ MIN_PLAYERS = 1
 LOBBY_TIMEOUT = 10
 MAX_PLAYERS = 10
 
+
 def send(connection, data, message_type):
     data.update(type=message_type)
     connection.sendMessage(json.dumps(data).encode('utf8'))
 
 
 class Lobby:
+
     def __init__(self):
         self.games = []
         self.connection_game = {}
-        
+
     def add_player(self, connection):
         added = False
         for game in self.games:
@@ -48,15 +50,14 @@ class Lobby:
                 self.games.remove(game)
             else:
                 game.tick()
-            
-        
+
 
 class Game:
 
     def __init__(self):
         super().__init__()
         self.players = {}
-        
+
         self.reset()
 
     def reset(self):
@@ -168,7 +169,3 @@ class Game:
                 'state': 'end',
                 'tick': self.tick_count,
             }, 'state')
-
-    # Utility Methods
-
-
