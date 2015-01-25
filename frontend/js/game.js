@@ -17,6 +17,56 @@ var wantedTwo = [425, 25];
 var itemArrayX = [itemOneX, itemTwoX];
 var itemArrayY = [itemOneY, itemTwoY];
 
+var scenarioTypes = {
+    'ship': 36,
+    'spaceship': 37,
+    'plane': 38,
+    'tropical_island': 39,
+    'desert': 41
+}
+
+var scenarioToIndex = {
+    36: 0,
+    37: 1,
+    38: 2,
+    39: 3,
+    41: 4
+}
+
+levelDefinitions = [{
+        0: "floorShip",
+        1: "wall",
+        2: "exit",
+        3: "floorShip"
+    },
+    {
+        0: "floorSpace",
+        1: "wall",
+        2: "exit",
+        3: "floorSpace"
+    },
+    {
+        0: "floor",
+        1: "wall",
+        2: "exit",
+        3: "floor"
+    },
+    {
+        0: "floorTropical",
+        1: "wall",
+        2: "exit",
+        3: "floorTropical"
+    },
+    {
+        0: "floorDesert",
+        1: "wall",
+        2: "exit",
+        3: "floorDesert"
+    }
+    ];
+
+var scenario;
+
 var levelDefinitions = {
     0: "floor",
     1: "wall",
@@ -142,12 +192,16 @@ function socketMessage(msg) {
     if (parsed.type == "world") {
         var world = parsed.world;
 
+        scenario = parsed.world_id;
+
+        var defs = levelDefinitions[scenarioToIndex[scenario]];
+
         for(var i = 0; i < world.length; i++) {
             var row = world[i];
 
             for(var j = 0; j < row.length; j++) {
 
-                var ob = levelGroup.create(j*tile_width, i*tile_height, levelDefinitions[row[j]]);
+                var ob = levelGroup.create(j*tile_width, i*tile_height, defs[row[j]]);
                 ob.pivot = new PIXI.Point(tile_width / 2, tile_height / 2);
 
             }
@@ -161,6 +215,7 @@ function socketMessage(msg) {
 
         held[0] = UIGroup.create(itemOneX, itemOneY, 'fists');
         held[1] = UIGroup.create(itemTwoX, itemTwoY, 'fists');
+
 
     } else if (parsed.type == "tick" && worldInit) {
         currentTick = parsed.tick;
@@ -253,8 +308,12 @@ function preload() {
 
     game.load.image('player','resources/art/human-2.png', tile_width, tile_height);
     game.load.image('wall', 'resources/art/floor_tiles/tile-wall-40.png', tile_width, tile_height);
-    game.load.image('floor', 'resources/art/floor_tiles/wood_light.png', tile_width, tile_height);
+    game.load.image('floor', 'resources/art/floor_tiles/tile-floor-40.png', tile_width, tile_height);
     game.load.image('exit', 'resources/art/floor_tiles/tile-exit-40.png', tile_width, tile_height);
+    game.load.image('floorShip', 'resources/art/floor_tiles/wood_light.png', tile_width, tile_height);
+    game.load.image('floorDesert', 'resources/art/floor_tiles/sand2.png', tile_width, tile_height);
+    game.load.image('floorSpace', 'resources/art/floor_tiles/space.png', tile_width, tile_height);
+    game.load.image('floorTropical', 'resources/art/floor_tiles/grass1.png', tile_width, tile_height);
 
     game.load.image('anchor', 'resources/art/ship/anchor.png', item_width, item_height);
     game.load.image('raincoat', 'resources/art/ship/raincoat.png', item_width, item_height);
