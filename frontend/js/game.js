@@ -108,6 +108,28 @@ var stateDefinitions = {
     34: "tesla"
 };
 
+var audio = [
+    'background',
+    'alert',
+    'item_collect',
+    'item_throw',
+    'desert_round_start',
+    'desert_round_end',
+    'island_round_start',
+    'island_round_end',
+    'plane_round_start',
+    'plane_round_end',
+    'ship_sea_round_start',
+    'ship_sea_round_end',
+    'ship_space_round_start',
+    'ship_space_round_end',
+    'attack_bottle',
+    'attack_dagger',
+    'attack_fists',
+    'attack_gun',
+    'attack_tesla'
+];
+
 /*
     Game
 */
@@ -140,6 +162,7 @@ var timeInSeconds = 0;
 var minuteWarningPlayed = false;
 var timerText;
 var timeLimit = 120; //2 minutes
+var audioDecoded = false;
 
 var state = 'lobby'; // {lobby, game, end}
 
@@ -471,10 +494,29 @@ function preload() {
     game.load.audio('attack_tesla',           'resources/audio/weapons/attack_tesla.mp3');
 
     game.stage.disableVisibilityChange = true;
-    while(!game.load.hasLoaded){}
+    checkLoaded();
+}
+
+function checkLoaded() {
+    audioDecoded = true;
+    for (var i = audio.length - 1; i >= 0; i--) {
+        if (!game.cache.isSoundDecoded(audio[i])) {
+            audioDecoded = false;
+        }
+    };
+    if (!audioDecoded) {
+        setTimeout(checkLoaded, 1000);
+    } else {
+        console.log("Audio loaded");
+    }
 }
 
 function create() {
+    if (!audioDecoded) {
+        setTimeout(create, 1000);
+        return;
+    }
+
     levelGroup = game.add.group();
     UIGroup = game.add.group();
 

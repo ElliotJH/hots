@@ -20,6 +20,8 @@ class Player:
 
         self.world_id = None
 
+        self.has_won = False
+
     @property
     def item_1_empty(self):
         fists = game_objects[weapon_id]['fists']
@@ -45,6 +47,9 @@ class Player:
             (self.item_1 == self.needed_item_2
             and self.item_2 == self.needed_item_1)   
         )
+
+    def win(self):
+        self.has_won = True
 
     def decrement_timeout(self, amount):
         if self.timeout > amount:

@@ -102,7 +102,7 @@ class Game:
         self.tick_count += 1
         self.world.tick()
         for connection, player in self.players.items():
-            if player.has_succeeded:
+            if player.has_won:
                 self.end(player)
                 return
 
