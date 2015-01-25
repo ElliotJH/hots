@@ -145,6 +145,16 @@ class World:
 
         return position
 
+    def attack(self, player1, player_2):
+        pos_1 = self.player_locations[player_1]
+        pos_2 = self.player_locations[player_2]
+
+        l = collisions.Line(pos_1[0], pos_1[1], pos_2[0], pos_2[1])
+        c = collisions.Circle(pos_2[0], pos_2[1], GRID_SIZE*2/3)
+
+        if collisions.line_circle(l, c):
+            player_2.add_timeout(10)
+        
     def throw(self, player, hand):
         player_location = self.player_locations[player]
         direction = player_location[2]
