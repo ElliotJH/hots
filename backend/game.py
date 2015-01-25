@@ -109,11 +109,17 @@ class Game:
 
     def send_start(self):
         for connection in self.players.keys():
-            self.send(connection, {'state': 'game'}, 'state')
+            self.send(connection, {
+                'state': 'game',
+                'tick': self.tick_count,
+            }, 'state')
 
     def end(self, winner):
         for connection in self.players.keys():
-            self.send(connection, {'state': 'end'}, 'state')
+            self.send(connection, {
+                'state': 'end',
+                'tick': self.tick_count,
+            }, 'state')
             self.send(connection, {'winner': winner.id}, 'winner')
 
     # Utility Methods
