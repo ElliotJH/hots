@@ -13,6 +13,9 @@ DEFAULT_LOOK_ANGLE = 0
 GRID_SIZE = 40
 
 
+class WonException(Exception):
+    pass
+
 class World:
 
     def __init__(self, tile_size=40):
@@ -131,8 +134,11 @@ class World:
         new_y = distance * math.cos(math.radians(angle)) + y
 
         new_position = (new_x, new_y, look_angle)
-
-        position = self.attempt_player_move(player, (x, y, l), new_position)
+        
+        try:
+            position = self.attempt_player_move(player, (x, y, l), new_position)
+        except WonException:
+            player.win()
         self.attempt_pickup(position, player)
         self.player_locations[player] = position
 
@@ -243,8 +249,10 @@ class World:
 
 
     def attempt_player_move(self, player, old_position, new_position, player_radius=0):
+        winning = []
         if player.has_succeeded:
             block = [1]
+            winning = [2]
         else:
             block = [1, 2]
 
@@ -253,6 +261,7 @@ class World:
             new_position,
             player_radius,
             block,
+            winning
         )
 
         return new_pos
@@ -265,17 +274,21 @@ class World:
 
         return (left, right, top, bottom)
 
-    def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2]):
+    def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2], winning=[]):
         for (row_num, columns) in enumerate(self.tiles):
             for (col_num, cell) in enumerate(columns):
-                if cell in blocked:
+                if cell in blocked or cell in winning:
+                    
                     cell_square = collisions.Square(*self.grid_to_centered_point(col_num, row_num))
                     player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
                     
-                    if collisions.circle_square(player_circle, cell_square):
-                        #print(row_num, col_num)
-                        #print(*self.grid_to_centered_point(col_num, row_num))
+                    col = collisions.circle_square(player_circle, cell_square)
+                    if col:
+                        if cell in winning:
+                            raise WonException
+                        print("returning old position", col)
                         return old_position
+
         return new_position
 
     # Serialisation to structures that can be JSON'd
