@@ -1,5 +1,5 @@
-//var wsAddress = "ws://10.7.3.119:9000";
-var wsAddress = "ws://10.7.3.103:9000";
+var wsAddress = "ws://10.7.3.119:9000";
+// var wsAddress = "ws://10.7.3.103:9000";
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
