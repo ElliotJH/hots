@@ -4,12 +4,32 @@ body {
     font-family: 'Helvetica', sans-serif;
 }
 
+#gameframe{
+    width: 800px;
+    margin: 0 auto;
+    margin-top: 20px;
+    text-align: center;
+    color: white;
+}
+
+#gameframe h1{
+    text-align: center;
+    color: white;
+    margin: 0;
+}
+
+#gameframe h4{
+    margin: 0;  
+    margin-bottom: 10px;
+}
+
 #container {
     width: 800px;
     height: 600px;
-    margin: 20px auto;
+    margin: 0 auto;
     border: 1px solid #eee;
     position: relative;
+    color: black;
 }
 #game, #status, #lobby {
     width: 100%;

@@ -136,37 +136,47 @@ class World:
         return position
 
     def throw(self, player, hand):
-        print("throw")
         player_location = self.player_locations[player]
         if hand == 'left':
             if player.item_1_empty:
                 raise ValueError("Hand is empty")
+            print("throwing left")
             item = player.item_1
+            print(item)
             player.reset_item_1()
-            self.item_locations[item] = (player_location[0], player_location[1])
+            self.item_locations[item] = (player_location[0] + 100, player_location[1] + 100)
             self.items_moving[item] = (player_location[2], 15.0)
 
         if hand == 'right':
             if player.item_2_empty:
                 raise ValueError("Hand is empty")
+            print("throwing right")
             item = player.item_2
+            print(item)
             player.reset_item_2()
-            self.item_locations[item] = (player_location[0], player_location[1])
+            self.item_locations[item] = (player_location[0] + 100, player_location[1] + 100)
             self.items_moving[item] = (player_location[2], 15.0)
 
 
     def tick(self):
-        return
         coefficient_of_friction = 0.4
+        to_remove = []
         for item, (direction, speed) in self.items_moving.items():
-            print(item)
+            if item not in self.item_locations.keys():#The item got picked up!
+                to_remove += [item]
+                continue
             self.items_moving[item] = (direction, coefficient_of_friction * speed)
+            print("moving item", coefficient_of_friction * speed)
+            if speed < 0.0001:
+                to_remove += [item]
             x, y = self.item_locations[item]
             new_x = speed * math.sin(math.radians(direction)) + x
             new_y = speed * math.cos(math.radians(direction)) + y
 
             self.item_locations[item] = (x, y)
 
+        for item in to_remove:
+            del self.items_moving[item]
     def attempt_pickup(self, new_position, player, player_radius=0):
         if not (player.item_1_empty or player.item_2_empty):
             return

@@ -1,7 +1,5 @@
-/*
-    Constants
-*/
-var wsAddress = "ws://10.7.3.119:9000";
+//var wsAddress = "ws://10.7.3.119:9000";
+var wsAddress = "ws://10.7.3.103:9000";
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
@@ -123,7 +121,6 @@ function socketMessage(msg) {
 
             }
         }
-        console.log(parsed.player_wanted);
         UIGroup.create(wantedOne[0], wantedOne[1], stateDefinitions[parsed.player_wanted[0]]);
         UIGroup.create(wantedTwo[0], wantedTwo[1], stateDefinitions[parsed.player_wanted[1]]);
 
@@ -155,6 +152,7 @@ function socketMessage(msg) {
         for(var i = 0; i < keys.length; i++) {
             if (ids.indexOf(keys[i]) == -1) {
                 players[keys[i]].kill();
+                delete players[keys[i]];
             }
         }
         var itemList = parsed.items;
@@ -174,6 +172,7 @@ function socketMessage(msg) {
         for(var i = 0; i < keys.length; i++) {
             if (itemIds.indexOf(keys[i]) == -1) {
                 items[keys[i]].kill();
+                delete items[keys[i]];
             }
         }
 
@@ -181,6 +180,7 @@ function socketMessage(msg) {
             if(heldIDs[i]  != parsed.player_items[i]){
                 held[i].kill();
                 held[i] = UIGroup.create(itemArrayX[i], itemArrayY[i], stateDefinitions[parsed.player_items[i]]);
+                heldIDs[i] = parsed.player_items[i];
             }
         }
     } else if (parsed.type == 'state') {

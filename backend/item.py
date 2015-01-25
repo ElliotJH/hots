@@ -4,7 +4,7 @@ class Item:
         self.item_id = item_id
 
     def __hash__(self):
-        return hash(self.item_id)
+        return self.item_id
 
     def __eq__(self, other):
         if not isinstance(other, Item):
