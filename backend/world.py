@@ -159,7 +159,7 @@ class World:
                 blocked=[1, 2],
             )
 
-            print("throw_l", direction, new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
+            #print("throw_l", direction, new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
             self.item_locations[item] = (actual_x, actual_y)
             self.items_moving[item] = (player_location[2], ITEM_SPEED)
 
@@ -181,7 +181,7 @@ class World:
                 object_radius=0,
                 blocked=[1, 2],
             )
-            print("throw_r", new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
+            #print("throw_r", new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
             self.item_locations[item] = (actual_x, actual_y)
             self.items_moving[item] = (player_location[2], ITEM_SPEED)
 
@@ -202,7 +202,7 @@ class World:
                 to_remove += [item]
 
             x, y = self.item_locations[item]
-            new_x = speed * math.sin(direction + math.pi) + x
+            new_x = speed * math.sin(direction) + x
             new_y = speed * math.cos(direction + math.pi) + y
 
             new_x, new_y = self.attempt_move(
