@@ -1,6 +1,6 @@
 //var wsAddress = "ws://10.7.3.119:9000";
-var wsAddress = "ws://10.7.3.103:9000";
-//var wsAddress = "ws://10.7.3.101:9000";
+//var wsAddress = "ws://10.7.3.103:9000";
+var wsAddress = "ws://10.7.3.101:9000";
 //var wsAddress = "ws://192.168.54.51:9000";
 
 var tile_height = 40;
@@ -164,6 +164,7 @@ var minuteWarningPlayed = false;
 var timerText;
 var timeLimit = 120; //2 minutes
 var audioDecoded = false;
+var stunned = [];
 
 var state = 'lobby'; // {lobby, game, end}
 
@@ -180,6 +181,7 @@ var item_throw;
 var startSound = [];
 var endSound = [];
 var attackSound = [];
+var painSound = [];
 
 /*
     Game
@@ -204,6 +206,9 @@ function minuteWarning() {
 
 // Call this passing stateDefinitions[weaponID]
 function onAttack(weapon) {
+    if (!(weapon >= 30 && weapon <= 34)) {
+        return;
+    }
     attackSound[weapon].play('');
 }
 
@@ -215,6 +220,10 @@ function playStart(scenario) {
 // Call this passing scenarioTypes.<scenarioName>
 function playEnd(scenario) {
     endSound[scenario].play('');
+}
+
+function playPain() {
+    painSound[Math.floor((Math.random() * 12) + 1)].play('');
 }
 
 function socketOpen() {
@@ -303,8 +312,13 @@ function socketMessage(msg) {
                   timeoutTexts[playerList[i].id].x = player.x - 20;
                   timeoutTexts[playerList[i].id].y = player.y - 40;
                   timeoutTexts[playerList[i].id].setText(Math.round(playerList[i].timeout));
+                  if (!stunned[i]) {
+                    playPain();
+                    stunned[i] = true;
+                  }
                 } else {
                   timeoutTexts[playerList[i].id].visible = false;
+                  stunned[i] = false;
                 }
 
             } else {
@@ -515,6 +529,19 @@ function preload() {
     game.load.audio('attack_gun',             'resources/audio/weapons/attack_gun.mp3');
     game.load.audio('attack_tesla',           'resources/audio/weapons/attack_tesla.mp3');
 
+    game.load.audio('pain1',                   'resources/audio/player/pain1.mp3');
+    game.load.audio('pain2',                   'resources/audio/player/pain2.mp3');
+    game.load.audio('pain3',                   'resources/audio/player/pain3.mp3');
+    game.load.audio('pain4',                   'resources/audio/player/pain4.mp3');
+    game.load.audio('pain5',                   'resources/audio/player/pain5.mp3');
+    game.load.audio('pain6',                   'resources/audio/player/pain6.mp3');
+    game.load.audio('pain7',                   'resources/audio/player/pain7.mp3');
+    game.load.audio('pain8',                   'resources/audio/player/pain8.mp3');
+    game.load.audio('pain9',                   'resources/audio/player/pain9.mp3');
+    game.load.audio('pain10',                  'resources/audio/player/pain10.mp3');
+    game.load.audio('pain11',                  'resources/audio/player/pain11.mp3');
+    game.load.audio('pain12',                  'resources/audio/player/pain12.mp3');
+
     game.stage.disableVisibilityChange = true;
     checkLoaded();
 }
@@ -585,11 +612,25 @@ function create() {
     endSound[scenarioTypes.ship]            = game.add.audio('ship_sea_round_end');
     endSound[scenarioTypes.spaceship]       = game.add.audio('ship_space_round_end');
 
-    attackSound[stateDefinitions[30]] = game.add.audio('attack_fists');
-    attackSound[stateDefinitions[31]] = game.add.audio('attack_bottle');
-    attackSound[stateDefinitions[32]] = game.add.audio('attack_gun');
-    attackSound[stateDefinitions[33]] = game.add.audio('attack_dagger');
-    attackSound[stateDefinitions[34]] = game.add.audio('attack_tesla');
+    attackSound[30] = game.add.audio('attack_fists');
+    attackSound[31] = game.add.audio('attack_bottle');
+    attackSound[32] = game.add.audio('attack_gun');
+    attackSound[33] = game.add.audio('attack_dagger');
+    attackSound[34] = game.add.audio('attack_tesla');
+
+    painSound.push(game.add.audio('pain1'));
+    painSound.push(game.add.audio('pain2'));
+    painSound.push(game.add.audio('pain3'));
+    painSound.push(game.add.audio('pain4'));
+    painSound.push(game.add.audio('pain5'));
+    painSound.push(game.add.audio('pain6'));
+    painSound.push(game.add.audio('pain7'));
+    painSound.push(game.add.audio('pain8'));
+    painSound.push(game.add.audio('pain9'));
+    painSound.push(game.add.audio('pain10'));
+    painSound.push(game.add.audio('pain11'));
+    painSound.push(game.add.audio('pain12'));
+
 
     winnerElement.hide();
 }
@@ -676,6 +717,8 @@ function updateGame() {
     if(game.input.mousePointer.isDown && !clickedLastFrame){
 
         sendMessage({type: 'attack'});
+        var weapon = Math.max(heldIDs[0],heldIDs[1]);
+        onAttack(weapon);
 
     }
 
