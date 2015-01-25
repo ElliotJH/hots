@@ -288,6 +288,11 @@ function create() {
     attackTimer.start();
     levelGroup = game.add.group();
     UIGroup = game.add.group();
+
+    var itemText = new Phaser.Text(game, 325, 2, 'OBJECTIVES', { fontSize: '32px', fill: '#FFFFFF' });
+
+    UIGroup.add(itemText);
+
     socket = new WebSocket(wsAddress);
     socket.onopen = socketOpen;
     socket.onclose = socketClose;
