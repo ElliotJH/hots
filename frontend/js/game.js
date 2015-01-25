@@ -470,7 +470,7 @@ function preload() {
     game.load.audio('attack_tesla',           'resources/audio/weapons/attack_tesla.mp3');
 
     game.stage.disableVisibilityChange = true;
-
+    while(!game.load.hasLoaded){}
 }
 
 function create() {
