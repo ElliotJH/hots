@@ -55,6 +55,11 @@ class Game:
     def tick(self):
         self.world.tick()
         for connection, player in self.players.items():
+            if player.has_succeeded:
+                self.end(player)
+                return
+
+        for connection, player in self.players.items():
             self.send(
                 connection,
                 self.world.serialise_state(player),
@@ -106,9 +111,10 @@ class Game:
         for connection in self.players.keys():
             self.send(connection, {'state': 'game'}, 'state')
 
-    def end(self):
+    def end(self, winner):
         for connection in self.players.keys():
             self.send(connection, {'state': 'end'}, 'state')
+            self.send(connection, {'winner': winner.id}, 'winner')
 
     # Utility Methods
 

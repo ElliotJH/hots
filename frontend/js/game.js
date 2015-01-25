@@ -83,6 +83,8 @@ var worldInit = false;
 var socketReady = false;
 var playerName = window.prompt("Player name");
 var lobbyElement = $('#lobby');
+var winnerElement = $('#winner');
+var winner;
 
 var state = 'lobby'; // {lobby, game, end}
 
@@ -187,6 +189,8 @@ function socketMessage(msg) {
         state = parsed.state;
     } else if (parsed.type == 'starting') {
         lobbyElement.find('#title').text("Starting...");
+    } else if (parsed.type == 'winner') {
+        winner = parsed.winner;
     }
 };
 
@@ -219,7 +223,7 @@ function preload() {
     game.load.image('pineapple', 'resources/art/island/grapes.png', item_width, item_height);
     game.load.image('trunks', 'resources/art/island/tennis-ball.png', item_width, item_height);
     game.load.image('desertIslandDisc', 'resources/art/island/turtle.png', item_width, item_height);
-        
+
     game.load.image('camel', 'resources/art/desert/camel.png', item_width, item_height);
     game.load.image('palmTree', 'resources/art/desert/cactus.png', item_width, item_height);
     game.load.image('bucket', 'resources/art/desert/bucket.png', item_width, item_height);
@@ -385,7 +389,7 @@ function updateGame() {
 }
 
 function updateEnd() {
-
+    winnerElement.text(self.players[winner].playerName);
 }
 
 function sendMessage(message) {
