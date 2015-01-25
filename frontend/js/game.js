@@ -38,13 +38,13 @@ var scenarioToIndex = {
 
 var levelDefinitions = [{
         0: "floorShip",
-        1: "wall",
+        1: "wallShip",
         2: "exit",
         3: "floorShip"
     },
     {
         0: "floorSpace",
-        1: "wall",
+        1: "wallSpace",
         2: "exit",
         3: "floorSpace"
     },
@@ -56,13 +56,13 @@ var levelDefinitions = [{
     },
     {
         0: "floorTropical",
-        1: "wall",
+        1: "wallTropical",
         2: "exit",
         3: "floorTropical"
     },
     {
         0: "floorDesert",
-        1: "wall",
+        1: "wallDesert",
         2: "exit",
         3: "floorDesert"
     }
@@ -208,8 +208,8 @@ function socketClose() {
 
 function socketMessage(msg) {
     var parsed = JSON.parse(msg.data);
-    
-    
+
+
     if (parsed.type == "world") {
         console.log(parsed);
         var world = parsed.world;
@@ -318,7 +318,7 @@ function socketMessage(msg) {
                     items[itemList[i].id].pivot = new PIXI.Point(16, 16);
                 }
             }
-            
+
             var deleted_items = parsed.deleted_items
             for(var i = 0; i < deleted_items.length; i++) {
                 items[deleted_items[i].id].kill();
@@ -382,7 +382,7 @@ function attack(startX, startY, angle, range){
     lineCanvas.ctx.moveTo( x, y);
 
     lineCanvas.ctx.lineTo(x + (range * Math.cos(angle)), y + (range * Math.sin(angle)));
-    
+
 
     console.log("drawing attack");
 
@@ -392,13 +392,17 @@ function preload() {
     game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 
     game.load.image('player','resources/art/human-2.png', tile_width, tile_height);
-    game.load.image('wall', 'resources/art/floor_tiles/tile-wall-40.png', tile_width, tile_height);
+    game.load.image('wall', 'resources/art/wall_tiles/tile-wall-40.png', tile_width, tile_height);
     game.load.image('floor', 'resources/art/floor_tiles/tile-floor-40.png', tile_width, tile_height);
     game.load.image('exit', 'resources/art/floor_tiles/tile-exit-40.png', tile_width, tile_height);
     game.load.image('floorShip', 'resources/art/floor_tiles/wood_light.png', tile_width, tile_height);
     game.load.image('floorDesert', 'resources/art/floor_tiles/sand2.png', tile_width, tile_height);
     game.load.image('floorSpace', 'resources/art/floor_tiles/space.png', tile_width, tile_height);
     game.load.image('floorTropical', 'resources/art/floor_tiles/grass1.png', tile_width, tile_height);
+    game.load.image('wallDesert', 'resources/art/wall_tiles/desert_wall.png');
+    game.load.image('wallTropical', 'resources/art/floor_tiles/water.png');
+    game.load.image('wallShip', 'resources/art/wall_tiles/ship_wall.png');
+    game.load.image('wallSpace', 'resources/art/wall_tiles/space_wall.png');
 
     game.load.image('anchor', 'resources/art/ship/anchor.png', item_width, item_height);
     game.load.image('raincoat', 'resources/art/ship/raincoat.png', item_width, item_height);
@@ -605,7 +609,7 @@ function updateGame() {
     }
 
     if(game.input.mousePointer.isDown){
-                
+
         lines.push({player: players[myPlayer],
             angle: players[myPlayer].rotation, range: 20, ttl: 2000});
 
@@ -647,13 +651,13 @@ function updateGame() {
 
     lineCanvas.ctx.beginPath();
     lineCanvas.ctx.strokeStyle = "red";
-    
+
     var toKeep = [];
     for(var i = 0; i < lines.length; i++){
-        
+
         lines[i].ttl -= game.time.elapsed;
 
-        if(lines[i].ttl > 0){            
+        if(lines[i].ttl > 0){
             attack(lines[i].player.x, lines[i].player.y, lines[i].angle, lines[i].range);
             toKeep.push(lines[i]);
         }
@@ -696,7 +700,7 @@ function updateTimer() {
 
 WebFontConfig = {
 
-    //  The Google Fonts we want to load 
+    //  The Google Fonts we want to load
     google: {
       families: ['Fira Mono']
     }
