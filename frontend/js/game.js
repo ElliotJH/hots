@@ -632,7 +632,7 @@ function updateLobby() {
 
 var timeBetweenAttacks = 1;
 var line;
-
+var clickedLastFrame = false;
 function updateGame() {
     lobbyElement.hide();
 
@@ -675,11 +675,14 @@ function updateGame() {
         hasPressedE = false
     }
 
-    if(game.input.mousePointer.isDown){
+    if(game.input.mousePointer.isDown && !clickedLastFrame){
 
         sendMessage({type: 'attack'});
 
     }
+
+    clickedLastFrame = game.input.mousePointer.isDown;
+
     if (mute && !hasPressedM) {
         game.sound.mute = !game.sound.mute;
         hasPressedM = true;
