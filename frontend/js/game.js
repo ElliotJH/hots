@@ -1,5 +1,5 @@
-//var wsAddress = "ws://10.7.3.119:9000";
-var wsAddress = "ws://10.7.3.103:9000";
+var wsAddress = "ws://10.7.3.119:9000";
+// var wsAddress = "ws://10.7.3.103:9000";
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
@@ -83,6 +83,9 @@ var keyboard;
 var worldInit = false;
 var socketReady = false;
 var playerName = window.prompt("Player name");
+var lobbyElement = $('#lobby');
+var winnerElement = $('#win');
+var winner;
 
 var state = 'lobby'; // {lobby, game, end}
 
@@ -149,6 +152,7 @@ function socketMessage(msg) {
                 player.x = playerList[i].location[0];
                 player.y = playerList[i].location[1];
                 player.rotation = playerList[i].location[2];
+                players[playerList[i].id].playerName = playerList[i].name;
             } else {
                 players[playerList[i].id] = levelGroup.create(playerList[i].location[0],
                     playerList[i].location[1], 'player');
@@ -198,6 +202,10 @@ function socketMessage(msg) {
         }
     } else if (parsed.type == 'state') {
         state = parsed.state;
+    } else if (parsed.type == 'starting') {
+        lobbyElement.find('#title').text("Starting...");
+    } else if (parsed.type == 'winner') {
+        winner = parsed.winner;
     }
 };
 
@@ -230,7 +238,7 @@ function preload() {
     game.load.image('pineapple', 'resources/art/island/grapes.png', item_width, item_height);
     game.load.image('trunks', 'resources/art/island/tennis-ball.png', item_width, item_height);
     game.load.image('desertIslandDisc', 'resources/art/island/turtle.png', item_width, item_height);
-        
+
     game.load.image('camel', 'resources/art/desert/camel.png', item_width, item_height);
     game.load.image('palmTree', 'resources/art/desert/cactus.png', item_width, item_height);
     game.load.image('bucket', 'resources/art/desert/bucket.png', item_width, item_height);
@@ -291,6 +299,7 @@ function create() {
     background = game.add.audio('background');
     background.play('');
 
+    winnerElement.hide();
 }
 
 var w = 87;
@@ -301,8 +310,11 @@ var d = 68;
 var q = 81;
 var e = 69;
 
+var m = 77;
+
 var hasPressedQ = false;
 var hasPressedE = false;
+var hasPressedM = false;
 
 function update() {
     if (state == 'lobby') {
@@ -313,8 +325,6 @@ function update() {
         updateEnd();
     }
 }
-
-var lobbyElement = $('#lobby');
 
 function updateLobby() {
     var playersElement = lobbyElement.find('#players');
@@ -331,6 +341,8 @@ var timeBetweenAttacks = 1;
 
 function updateGame() {
     lobbyElement.hide();
+
+    var mute = keyboard.isDown(m);
 
     var up = keyboard.isDown(w);
     var down = keyboard.isDown(s);
@@ -368,6 +380,12 @@ function updateGame() {
         attackTimer.start();
         console.log("attacked");
     }
+    if (mute && !hasPressedM) {
+        game.sound.mute = !game.sound.mute;
+        hasPressedM = true;
+    } else if (!mute) {
+        hasPressedM = false;
+    }
 
     if (myPlayer && Object.keys(players).length) {
         var changeX  = x - players[myPlayer].x;
@@ -397,7 +415,7 @@ function updateGame() {
 }
 
 function updateEnd() {
-
+    winnerElement.text(self.players[winner].playerName);
 }
 
 function sendMessage(message) {
@@ -408,3 +426,4 @@ function sendMessage(message) {
     var jsonText = JSON.stringify(message);
     socket.send(jsonText);
 }
+

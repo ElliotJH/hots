@@ -4,14 +4,34 @@ body {
     font-family: 'Helvetica', sans-serif;
 }
 
+#gameframe{
+    width: 800px;
+    margin: 0 auto;
+    margin-top: 20px;
+    text-align: center;
+    color: white;
+}
+
+#gameframe h1{
+    text-align: center;
+    color: white;
+    margin: 0;
+}
+
+#gameframe h4{
+    margin: 0;
+    margin-bottom: 10px;
+}
+
 #container {
     width: 800px;
     height: 600px;
-    margin: 20px auto;
+    margin: 0 auto;
     border: 1px solid #eee;
     position: relative;
+    color: black;
 }
-#game, #status, #lobby {
+#game, #status, #lobby, #win {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -51,4 +71,11 @@ body {
     list-style: none;
     margin-left: 0;
     padding-left: 0;
+}
+
+#win {
+    text-align: center;
+    color: white;
+    background-color: black;
+    z-index:1;
 }
