@@ -5,11 +5,11 @@ var tile_width = 40;
 var item_height = 100;
 var item_width = 100;
 
-var itemOneX = 100;
-var itemOneY = 400;
+var itemOneX = 50;
+var itemOneY = 450;
 
-var itemTwoX = 600;
-var itemTwoY = 400;
+var itemTwoX = 650;
+var itemTwoY = 450;
 
 var wantedOne = [275, 25];
 var wantedTwo = [425, 25];
@@ -86,6 +86,7 @@ var playerName = window.prompt("Player name");
 var lobbyElement = $('#lobby');
 var winnerElement = $('#win');
 var winner;
+var backgroundStarted = false;
 
 var state = 'lobby'; // {lobby, game, end}
 
@@ -239,7 +240,7 @@ function preload() {
     game.load.image('jetpack', 'resources/art/space/rocket.png', item_width, item_height);
     game.load.image('spacehelmet', 'resources/art/space/space-suit.png', item_width, item_height);
     game.load.image('alien', 'resources/art/space/satellite.png', item_width, item_height);
-    game.load.image('oxygen', 'resources/art/space/chemical-tank.png', item_width, item_height);
+    game.load.image('oxygen', 'resources/art/space/labeledcondom.png', item_width, item_height);
 
     game.load.image('cocktail', 'resources/art/island/cocktail.png', item_width, item_height);
     game.load.image('beachball', 'resources/art/island/palm-tree.png', item_width, item_height);
@@ -260,6 +261,7 @@ function preload() {
     game.load.image('spoon', 'resources/art/weapons/broken-bottle.png', item_width, item_height);
 
     game.load.image('item-ground', 'resources/art/item-ground.png');
+    game.load.image('pocket', 'resources/art/pocket.png');
 
     game.load.audio('background',             'resources/audio/ambient/background.mp3');
     game.load.audio('alert',                  'resources/audio/ambient/alert.mp3');
@@ -296,6 +298,13 @@ function create() {
     attackTimer.start();
     levelGroup = game.add.group();
     UIGroup = game.add.group();
+
+    var itemText = new Phaser.Text(game, 325, 2, 'OBJECTIVES', { fontSize: '32px', fill: '#FFFFFF' });
+
+    UIGroup.add(itemText);
+    UIGroup.create(itemOneX - 10, itemOneY - 5, 'pocket');
+    UIGroup.create(itemTwoX - 10, itemTwoY - 5, 'pocket');
+
     socket = new WebSocket(wsAddress);
     socket.onopen = socketOpen;
     socket.onclose = socketClose;
@@ -308,7 +317,6 @@ function create() {
     alert        = game.add.audio('alert');
     item_collect = game.add.audio('item_collect');
     item_throw   = game.add.audio('item_throw');
-    background.play('');
 
     winnerElement.hide();
 }
@@ -352,6 +360,11 @@ var timeBetweenAttacks = 1;
 
 function updateGame() {
     lobbyElement.hide();
+
+    if (!backgroundStarted) {
+        background.play('');
+        backgroundStarted = true;
+    }
 
     var mute = keyboard.isDown(m);
 

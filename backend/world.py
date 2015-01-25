@@ -1,6 +1,8 @@
 import math
 import random
 
+import collisions
+
 from item import Item
 from constant_objects import levels as level_ids, weapons as weapon_id, \
     game_objects
@@ -8,6 +10,7 @@ from constant_objects import levels as level_ids, weapons as weapon_id, \
 ITEM_SPEED = 15
 SPEED = 5
 DEFAULT_LOOK_ANGLE = 0
+GRID_SIZE = 40
 
 
 class World:
@@ -253,19 +256,22 @@ class World:
 
         return new_pos
 
+    def grid_to_centered_point(self, x, y):
+        left = x * GRID_SIZE
+        top = y * GRID_SIZE
+        bottom = y + GRID_SIZE/2
+        right = x + GRID_SIZE/2
+
+        return (left, right, top, bottom)
+
     def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2]):
         for (row_num, columns) in enumerate(self.tiles):
             for (col_num, cell) in enumerate(columns):
                 if cell in blocked:
-                    if self.collides(
-                            new_position,
-                            object_radius,
-                            (
-                                col_num * self.tile_size,
-                                row_num * self.tile_size,
-                            ),
-                            self.tile_size,
-                    ):
+                    cell_square = collisions.Square(*self.grid_to_centered_point(col_num, row_num))
+                    player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
+                    
+                    if collisions.circle_square(player_circle, cell_square):
                         return old_position
         return new_position
 

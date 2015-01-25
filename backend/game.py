@@ -4,7 +4,7 @@ from world import World
 from player import Player
 
 MIN_PLAYERS = 1
-LOBBY_TIMEOUT = 333
+LOBBY_TIMEOUT = 10
 
 
 class Game:
@@ -16,6 +16,7 @@ class Game:
         self.reset()
 
     def reset(self):
+        self.tick_count = 0
         self.start_timeout = 0
         self.starting = False
         self.world = World()
@@ -53,6 +54,7 @@ class Game:
             self.reset()
 
     def tick(self):
+        self.tick_count += 1
         self.world.tick()
         for connection, player in self.players.items():
             if player.has_succeeded:
@@ -60,11 +62,9 @@ class Game:
                 return
 
         for connection, player in self.players.items():
-            self.send(
-                connection,
-                self.world.serialise_state(player),
-                'tick',
-            )
+            data = self.world.serialise_state(player)
+            data.update(tick=self.tick_count)
+            self.send(connection, data, 'tick')
 
         self.start_if_needed()
 
@@ -109,11 +109,17 @@ class Game:
 
     def send_start(self):
         for connection in self.players.keys():
-            self.send(connection, {'state': 'game'}, 'state')
+            self.send(connection, {
+                'state': 'game',
+                'tick': self.tick_count,
+            }, 'state')
 
     def end(self, winner):
         for connection in self.players.keys():
-            self.send(connection, {'state': 'end'}, 'state')
+            self.send(connection, {
+                'state': 'end',
+                'tick': self.tick_count,
+            }, 'state')
             self.send(connection, {'winner': winner.id}, 'winner')
 
     # Utility Methods
