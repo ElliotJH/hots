@@ -116,7 +116,6 @@ var players = {};
 var items = {};
 var held = [];
 var heldIDs = [30,30];
-var attackTimer;
 
 /*
     State
@@ -145,7 +144,7 @@ var timeLimit = 120; //2 minutes
 var state = 'lobby'; // {lobby, game, end}
 
 var lineCanvas;
-
+var lines= [];
 /*
     Audio
 */
@@ -374,12 +373,18 @@ function socketMessage(msg) {
 };
 
 function attack(startX, startY, angle, range){
-    lineCanvas.ctx.moveTo(startX - UIGroup.x, startY - UIGroup.y);
 
-    lineCanvas.ctx.lineTo(x - UIGroup.position.x, y - UIGroup.position.y);
-    lineCanvas.ctx.lineWidth = 2;
-    lineCanvas.ctx.stroke();
-    lineCanvas.dirty = true;
+    var x = startX - UIGroup.x;
+    var y = startY - UIGroup.y;
+
+
+
+    lineCanvas.ctx.moveTo( x, y);
+
+    lineCanvas.ctx.lineTo(x + (range * Math.cos(angle)), y + (range * Math.sin(angle)));
+    
+
+    console.log("drawing attack");
 
 }
 
@@ -465,16 +470,12 @@ function preload() {
 }
 
 function create() {
-    attackTimer = game.time.create(false);
-    attackTimer.start();
     levelGroup = game.add.group();
     UIGroup = game.add.group();
 
     lineCanvas = game.add.bitmapData(800,600);
     UIGroup.create(0,0,lineCanvas);
 
-    lineCanvas.ctx.beginPath();
-    lineCanvas.ctx.strokeStyle = "red";
 
     var fontStyle = { fontSize: '32px', fill: '#FFFFFF' };
     var timerFontStyle = { fontSize: '28px', fill: '#FF0000' };
@@ -603,10 +604,11 @@ function updateGame() {
         hasPressedE = false
     }
 
-    if(game.input.mousePointer.isDown && attackTimer.seconds > timeBetweenAttacks){
-        attackTimer.stop();
-        attackTimer.start();
-        
+    if(game.input.mousePointer.isDown){
+                
+        lines.push({player: players[myPlayer],
+            angle: players[myPlayer].rotation, range: 20, ttl: 2000});
+
     }
     if (mute && !hasPressedM) {
         game.sound.mute = !game.sound.mute;
@@ -637,6 +639,30 @@ function updateGame() {
         players[myPlayer].rotation = angle;
 
     }
+
+    lineCanvas.ctx.beginPath();
+    lineCanvas.ctx.strokeStyle = "red";
+    lineCanvas.ctx.clearRect(0,0,800,600);
+    lineCanvas.ctx.stroke();
+
+    lineCanvas.ctx.beginPath();
+    lineCanvas.ctx.strokeStyle = "red";
+    
+    var toKeep = [];
+    for(var i = 0; i < lines.length; i++){
+        
+        lines[i].ttl -= game.time.elapsed;
+
+        if(lines[i].ttl > 0){            
+            attack(lines[i].player.x, lines[i].player.y, lines[i].angle, lines[i].range);
+            toKeep.push(lines[i]);
+        }
+
+    }
+    lineCanvas.ctx.lineWidth = 2;
+    lineCanvas.ctx.stroke();
+    lineCanvas.dirty = true;
+    lines = toKeep;
 
     sendMessage({type: "movement", direction: direction, angle: angle});
 
