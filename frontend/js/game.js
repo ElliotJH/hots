@@ -397,20 +397,7 @@ function socketMessage(msg) {
             levelGroup.removeAll(true);
             players = [];
             items = [];
-
-            var fontStyle = { fontSize: '32px', fill: '#FFFFFF' };
-            var timerFontStyle = { fontSize: '28px', fill: '#FF0000' };
-
-            var itemText = new Phaser.Text(game, 325, 2, 'OBJECTIVES', fontStyle);
-            timerText = new Phaser.Text(game, 640, 2, '00:00:00', timerFontStyle);
-
-            itemText.font = 'Fira Mono';
-            timerText.font = 'Fira Mono';
-
-            UIGroup.add(itemText);
-            UIGroup.add(timerText);
-            UIGroup.create(itemOneX - 10, itemOneY - 5, 'pocket');
-            UIGroup.create(itemTwoX - 10, itemTwoY - 5, 'pocket');
+            backToLobby();
         }
     } else if (parsed.type == 'starting') {
         lobbyElement.find('#title').text("Starting...");
@@ -419,6 +406,17 @@ function socketMessage(msg) {
         console.log(winner);
     }
 };
+
+function backToLobby(){
+    game.destroy();
+    $('#status').fadeIn();
+    game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', {
+        preload: preload,
+        create: create,
+        update: update
+    });
+}
+
 
 function attack(startX, startY, angle, range){
 
