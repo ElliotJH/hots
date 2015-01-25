@@ -1,8 +1,7 @@
 //var wsAddress = "ws://10.7.3.119:9000";
 //var wsAddress = "ws://10.7.3.103:9000";
-//var wsAddress = "ws://10.7.3.101:9000";
+var wsAddress = "ws://10.7.3.101:9000";
 //var wsAddress = "ws://192.168.54.51:9000";
-var wsAddress = "ws://127.0.0.1:9000";
 
 var tile_height = 40;
 var tile_width = 40;
@@ -280,6 +279,11 @@ function socketMessage(msg) {
             background.stop();
             playEnd(scenario);
             backgroundStopped = true;
+
+            for(var p in players){
+              p.tint = 0X222222;
+            }
+
         }
 
         var playerList = parsed.players;
