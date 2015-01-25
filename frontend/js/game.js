@@ -1,6 +1,6 @@
 //var wsAddress = "ws://10.7.3.119:9000";
-var wsAddress = "ws://10.7.3.103:9000";
-//var wsAddress = "ws://10.7.3.101:9000";
+//var wsAddress = "ws://10.7.3.103:9000";
+var wsAddress = "ws://10.7.3.101:9000";
 //var wsAddress = "ws://192.168.54.51:9000";
 
 var tile_height = 40;
@@ -417,6 +417,8 @@ function socketMessage(msg) {
     } else if (parsed.type == 'winner') {
         winner = parsed.winner;
         console.log(winner);
+    } else if(parsed.type == 'attack'){
+        lines.push({player: players[parsed.player], angle: parsed.angle, range: parsed.range});
     }
 };
 
