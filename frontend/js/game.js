@@ -369,6 +369,7 @@ function socketMessage(msg) {
         lobbyElement.find('#title').text("Starting...");
     } else if (parsed.type == 'winner') {
         winner = parsed.winner;
+        console.log(winner);
     }
 };
 
@@ -377,12 +378,12 @@ function attack(startX, startY, angle, range){
     var x = startX - UIGroup.x;
     var y = startY - UIGroup.y;
 
+    var anglePolar = angle - (Math.PI / 2);
 
 
-    lineCanvas.ctx.moveTo( x, y);
+    lineCanvas.ctx.moveTo(x, y);
 
-    lineCanvas.ctx.lineTo(x + (range * Math.cos(angle)), y + (range * Math.sin(angle)));
-
+    lineCanvas.ctx.lineTo(x + (range * Math.cos(anglePolar)), y + (range * Math.sin(anglePolar)));
 
     console.log("drawing attack");
 
@@ -611,7 +612,7 @@ function updateGame() {
     if(game.input.mousePointer.isDown){
 
         lines.push({player: players[myPlayer],
-            angle: players[myPlayer].rotation, range: 20, ttl: 2000});
+            angle: players[myPlayer].rotation, range: 20, ttl: 500});
 
     }
     if (mute && !hasPressedM) {
@@ -673,7 +674,7 @@ function updateGame() {
 }
 
 function updateEnd() {
-    winnerElement.text(self.players[winner].playerName);
+    winnerElement.text(winner);
 }
 
 function sendMessage(message) {
