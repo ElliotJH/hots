@@ -33,9 +33,13 @@ class World:
             for colnum, tile in enumerate(row)
             if tile == 0
         ]
-
+        max_objects = 2
         for level_id in level_ids.values():
             for item_id in game_objects[level_id].values():
+                if max_objects > 0:
+                    max_objects -= 1
+                else: 
+                    return
                 item_object = Item(item_id)
                 position = random.choice(free_tile_positions)
                 self.item_locations[item_object] = position
@@ -129,7 +133,7 @@ class World:
 
         new_position = (new_x, new_y, look_angle)
 
-        position = self.attempt_move(player, (x, y, l), new_position)
+        position = self.attempt_player_move(player, (x, y, l), new_position)
         self.attempt_pickup(position, player)
         self.player_locations[player] = position
 
@@ -139,8 +143,7 @@ class World:
         player_location = self.player_locations[player]
         if hand == 'left':
             if player.item_1_empty:
-                raise ValueError("Hand is empty")
-            print("throwing left")
+                return
             item = player.item_1
             print(item)
             player.reset_item_1()
@@ -149,8 +152,7 @@ class World:
 
         if hand == 'right':
             if player.item_2_empty:
-                raise ValueError("Hand is empty")
-            print("throwing right")
+                return
             item = player.item_2
             print(item)
             player.reset_item_2()
@@ -159,21 +161,25 @@ class World:
 
 
     def tick(self):
-        coefficient_of_friction = 0.4
+        coefficient_of_friction = 0.75
         to_remove = []
         for item, (direction, speed) in self.items_moving.items():
             if item not in self.item_locations.keys():#The item got picked up!
                 to_remove += [item]
                 continue
             self.items_moving[item] = (direction, coefficient_of_friction * speed)
-            print("moving item", coefficient_of_friction * speed)
             if speed < 0.0001:
                 to_remove += [item]
             x, y = self.item_locations[item]
             new_x = speed * math.sin(math.radians(direction)) + x
             new_y = speed * math.cos(math.radians(direction)) + y
+            
+            new_x, new_y = self.attempt_move((x, y), (new_x, new_y), object_radius=0, blocked=[1, 2])
+            if (new_x, new_y) == (x, y):
+                to_remove += [item]
 
-            self.item_locations[item] = (x, y)
+            print("moving item", new_x, new_y, x, y)
+            self.item_locations[item] = (new_x, new_y)
 
         for item in to_remove:
             del self.items_moving[item]
@@ -197,19 +203,23 @@ class World:
         for item in to_delete:
             del self.item_locations[item]
 
-    def attempt_move(self, player, old_position, new_position, player_radius=0):
-        # This is massively bugged - if the player tries to move through an
-        # object then we're just fine with that.
 
-        block_exit = not player.has_succeeded
+    def attempt_player_move(self, player, old_position, new_position, player_radius=0):
+        if player.has_succeeded:
+            block = [1]
+        else:
+            block = [1, 2]
 
-        # Massively inefficient, we don't need to check many of these at all
+        new_pos = self.attempt_move(old_position, new_position, player_radius, block)
+        return new_pos
+
+    def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2]):
         for (row_num, columns) in enumerate(self.tiles):
             for (col_num, cell) in enumerate(columns):
-                if ((cell == 1) or (cell == 2 and block_exit)):
+                if cell in blocked:
                     if self.collides(
                             new_position,
-                            player_radius,
+                            object_radius,
                             (
                                 col_num * self.tile_size,
                                 row_num * self.tile_size,
