@@ -143,6 +143,7 @@ function socketMessage(msg) {
                 player.x = playerList[i].location[0];
                 player.y = playerList[i].location[1];
                 player.rotation = playerList[i].location[2];
+                players[playerList[i].id].playerName = playerList[i].name;
             } else {
                 players[playerList[i].id] = levelGroup.create(playerList[i].location[0],
                     playerList[i].location[1], 'player');
