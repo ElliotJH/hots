@@ -313,7 +313,7 @@ function socketMessage(msg) {
                 p.pivot = new PIXI.Point(tile_width/2, tile_height/2);
                 players[playerList[i].id].playerName = playerList[i].name;
                 players[playerList[i].id].p = p;
-                var fontStyle = { fontSize: '8px', fill: '#FFFFFF' };
+                var fontStyle = { fontSize: '4px', fill: '#FFFFFF' };
                 var text = new Phaser.Text(game, -20, -40, '', fontStyle);
                 text.font = 'Fira Mono';
                 text.visible = false;
