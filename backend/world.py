@@ -134,7 +134,7 @@ class World:
         new_y = distance * math.cos(math.radians(angle)) + y
 
         new_position = (new_x, new_y, look_angle)
-        
+
         try:
             position = self.attempt_player_move(player, (x, y, l), new_position)
         except WonException:
@@ -154,7 +154,7 @@ class World:
 
         if collisions.line_circle(l, c):
             player_2.add_timeout(10)
-        
+
     def throw(self, player, hand):
         player_location = self.player_locations[player]
         direction = player_location[2]
@@ -328,7 +328,12 @@ class World:
     def serialise_state(self, player):
         result = {
             'players': [
-                {'id': x.id, 'location': y, 'name': x.name}
+                {
+                    'id': x.id,
+                    'location': y,
+                    'name': x.name,
+                    'timeout': x.timeout,
+                }
                 for x, y in self.player_locations.items()
             ],
             'player_items': [
