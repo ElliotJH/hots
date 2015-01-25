@@ -87,6 +87,13 @@ var lobbyElement = $('#lobby');
 var winnerElement = $('#win');
 var winner;
 var backgroundStarted = false;
+var startTick = 0;
+var currentTick = 0;
+var tickRate = 0.030; //30ms between ticks
+var timeInSeconds = 0;
+var minuteWarningPlayed = false;
+var timerText;
+var timeLimit = 120; //2 minutes
 
 var state = 'lobby'; // {lobby, game, end}
 
@@ -110,6 +117,10 @@ function OnItemPickup(){
 
 function OnItemThrown(){
     item_throw.play('');
+}
+
+function minuteWarning() {
+    alert.play('');
 }
 
 function socketOpen() {
@@ -152,6 +163,19 @@ function socketMessage(msg) {
         held[1] = UIGroup.create(itemTwoX, itemTwoY, 'fists');
 
     } else if (parsed.type == "tick" && worldInit) {
+        currentTick = parsed.tick;
+        var tickDiff = currentTick - startTick;
+        timeInSeconds = Math.floor(tickDiff * tickRate);
+        if (timeInSeconds % 60 == 0 && timeInSeconds > 0 && !minuteWarningPlayed && state == 'game') {
+            minuteWarning();
+            minuteWarningPlayed = true;
+        } else if (timeInSeconds % 60 != 0) {
+            minuteWarningPlayed = false;
+        }
+        if (timerText) {
+            updateTimer();
+        }
+
         var playerList = parsed.players;
         var ids = [];
         for(var i = 0; i < playerList.length; i++) {
@@ -211,6 +235,9 @@ function socketMessage(msg) {
         }
     } else if (parsed.type == 'state') {
         state = parsed.state;
+        if (state == 'game' && parsed.tick && startTick == 0) {
+            startTick = parsed.tick;
+        }
     } else if (parsed.type == 'starting') {
         lobbyElement.find('#title').text("Starting...");
     } else if (parsed.type == 'winner') {
@@ -222,6 +249,8 @@ function socketMessage(msg) {
 //wood_light
 //space
 function preload() {
+    game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
     game.load.image('player','resources/art/human-2.png', tile_width, tile_height);
     game.load.image('wall', 'resources/art/floor_tiles/tile-wall-40.png', tile_width, tile_height);
     game.load.image('floor', 'resources/art/floor_tiles/wood_light.png', tile_width, tile_height);
@@ -302,9 +331,17 @@ function create() {
     levelGroup = game.add.group();
     UIGroup = game.add.group();
 
-    var itemText = new Phaser.Text(game, 325, 2, 'OBJECTIVES', { fontSize: '32px', fill: '#FFFFFF' });
+    var fontStyle = { fontSize: '32px', fill: '#FFFFFF' };
+    var timerFontStyle = { fontSize: '28px', fill: '#FF0000' };
+
+    var itemText = new Phaser.Text(game, 325, 2, 'OBJECTIVES', fontStyle);
+    timerText = new Phaser.Text(game, 640, 2, '00:00:00', timerFontStyle);
+
+    itemText.font = 'Fira Mono';
+    timerText.font = 'Fira Mono';
 
     UIGroup.add(itemText);
+    UIGroup.add(timerText);
     UIGroup.create(itemOneX - 10, itemOneY - 5, 'pocket');
     UIGroup.create(itemTwoX - 10, itemTwoY - 5, 'pocket');
 
@@ -454,3 +491,23 @@ function sendMessage(message) {
     socket.send(jsonText);
 }
 
+function updateTimer() {
+    var minutes = Math.max(Math.floor((timeLimit - timeInSeconds) / 60) % 60, 0);
+    if (minutes < 10) {
+        minutes = '0' + minutes;
+    }
+    var seconds = Math.max((timeLimit - timeInSeconds) % 60, 0);
+    if (seconds < 10) {
+        seconds = '0' + seconds;
+    }
+    timerText.setText("00:"+minutes+":"+seconds);
+}
+
+WebFontConfig = {
+
+    //  The Google Fonts we want to load 
+    google: {
+      families: ['Fira Mono']
+    }
+
+};
