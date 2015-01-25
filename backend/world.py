@@ -145,6 +145,16 @@ class World:
 
         return position
 
+    def attack(self, player1, player_2):
+        pos_1 = self.player_locations[player_1]
+        pos_2 = self.player_locations[player_2]
+
+        l = collisions.Line(pos_1[0], pos_1[1], pos_2[0], pos_2[1])
+        c = collisions.Circle(pos_2[0], pos_2[1], GRID_SIZE*2/3)
+
+        if collisions.line_circle(l, c):
+            player_2.add_timeout(10)
+        
     def throw(self, player, hand):
         player_location = self.player_locations[player]
         direction = player_location[2]
@@ -276,41 +286,23 @@ class World:
         return (left, right, top, bottom)
 
     def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2], winning=[]):
-<<<<<<< HEAD
-
-        xIsh = math.round(new_position[0] / GRID_SIZE)
-        yIsh = math.round(new_position[1] / GRID_SIZE)
+        xIsh = round(new_position[0] / GRID_SIZE)
+        yIsh = round(new_position[1] / GRID_SIZE)
 
         testSquares = [[xIsh, yIsh], [xIsh-1, yIsh], [xIsh - 1, yIsh - 1], [xIsh, yIsh - 1],
             [xIsh+1, yIsh -1], [xIsh+1, yIsh], [xIsh + 1, yIsh + 1], [xIsh, yIsh+1], [xIsh-1, yIsh+1]]
 
         for square in testSquares:
-            cell = self.tiles[square[0]][square[1]]
+            cell = self.tiles[square[1]][square[0]]
             if cell in blocked or cell in winning:
                 cell_square = collisions.Square(*self.grid_to_centered_point(square[1], square[0]))
                 player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
 
-                col = collisions.circle_square(player_circle, cell_square):
+                col = collisions.circle_square(player_circle, cell_square)
                 if col:
                     if cell in winning:
                         raise WonException
                     return old_position
-=======
-        for (row_num, columns) in enumerate(self.tiles):
-            for (col_num, cell) in enumerate(columns):
-                if cell in blocked or cell in winning:
-
-                    cell_square = collisions.Square(*self.grid_to_centered_point(col_num, row_num))
-                    player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
-
-                    col = collisions.circle_square(player_circle, cell_square)
-                    if col:
-                        if cell in winning:
-                            raise WonException
-                        print("returning old position", col)
-                        return old_position
-
->>>>>>> 922452a758b29db915f673c2003bfa8d93a55c8c
         return new_position
 
         # for (row_num, columns) in enumerate(self.tiles):
