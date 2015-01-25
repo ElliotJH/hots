@@ -18,7 +18,7 @@ class World:
         self.tile_size = tile_size
         self.player_locations = {}
         self.item_locations = {}
-        self.items_moving = {}#map from item to (direction, speed)
+        self.items_moving = {}  # map from item to (direction, speed)
 
     def initialize_objects(self):
         # Filter by players in the game? maybe just assign a number of worlds
@@ -148,7 +148,7 @@ class World:
 
             new_x = 1000 * math.sin(math.radians(direction)) + proposed_x
             new_y = 1000 * math.cos(math.radians(direction)) + proposed_y
-            
+
             actual_x, actual_y = self.attempt_move((proposed_x, proposed_y), (new_x, new_y), object_radius=0, blocked=[1, 2])
 
             print(new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
