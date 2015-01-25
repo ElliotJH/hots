@@ -49,7 +49,7 @@ def line_circle(l, c):
     direct_collision = ((l.x1 == c.x and l.y1 == c.y) or (l.x2 == c.x and l.y2 == c.y)) #Does the line directly touch the centre of the circle?
 
     if (direct_collision):
-        return true
+        return True
 
     distance = math.sqrt((c.x - l.x1)**2 + (c.y - l.y1)**2) #Distance between two points
 

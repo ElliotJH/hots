@@ -3,8 +3,8 @@ import json
 from world import World
 from player import Player
 
-MIN_PLAYERS = 1
-LOBBY_TIMEOUT = 10
+MIN_PLAYERS = 2
+LOBBY_TIMEOUT = 333
 MAX_PLAYERS = 10
 
 
@@ -135,6 +135,9 @@ class Game:
         elif command['type'] == 'join':
             self.players[connection].name = command['name']
             print(command['name'], 'joined')
+        elif command['type'] == 'attack':
+            self.world.attack_from(self.players[connection])
+            print("attack", command)
 
     def start_if_needed(self):
         if not self.starting:

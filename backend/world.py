@@ -150,15 +150,29 @@ class World:
 
         return position
 
-    def attack(self, player_1, player_2):
-        pos_1 = self.player_locations[player_1]
-        pos_2 = self.player_locations[player_2]
+    def attack_from(self, player_1):
+        if player_1.timeout > 0:
+            return
+        distance = 20 # vary on weapon
+        pos = self.player_locations[player_1]
+        
+        x1 = pos[0]
+        y1 = pos[1]
+        direction = pos[2]
 
-        l = collisions.Line(pos_1[0], pos_1[1], pos_2[0], pos_2[1])
-        c = collisions.Circle(pos_2[0], pos_2[1], GRID_SIZE*2/3)
+        x2 = x1 + distance * math.cos(direction) 
+        y2 = y1 + distance * math.sin(direction)
 
-        if collisions.line_circle(l, c):
-            player_2.add_timeout(10)
+        l = collisions.Line(x1, y1, x2, y2)
+        
+        for player, loc in self.player_locations.items():
+            if player == player_1:
+                continue
+            
+            c = collisions.Circle(loc[0], loc[1], GRID_SIZE*2/3)
+
+            if collisions.line_circle(l, c):
+                player.add_timeout(10)
 
     def throw(self, player, hand):
         player_location = self.player_locations[player]
@@ -211,6 +225,9 @@ class World:
     def tick(self):
         coefficient_of_friction = 0.75
         to_remove = []
+
+        for player in self.player_locations.keys():
+            player.decrement_timeout(0.03)
         for item, (direction, speed) in self.items_moving.items():
             if item not in self.item_locations.keys():  # Item picked up
                 to_remove += [item]
@@ -265,6 +282,9 @@ class World:
 
 
     def attempt_player_move(self, player, old_position, new_position, player_radius=0):
+        if player.timeout > 0:
+            return old_position
+
         winning = []
         if player.has_succeeded:
             block = [1]
