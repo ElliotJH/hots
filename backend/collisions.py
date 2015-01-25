@@ -1,3 +1,5 @@
+import math
+
 class Circle:
     def __init__(self, x, y, r):
         self.x = x
@@ -6,6 +8,13 @@ class Circle:
 
 class Square:
     def __init__(self, x1, x2, y1, y2):
+        self.x1 = x1
+        self.x2 = x2
+        self.y1 = y1
+        self.y2 = y2
+
+class Line:
+    def __init__(self, x1, y1, x2, y2):
         self.x1 = x1
         self.x2 = x2
         self.y1 = y1
@@ -35,5 +44,21 @@ def circle_square(c, s):
     
 
     return matches
-    
-    
+
+def line_circle(l, c):
+    direct_collision = ((l.x1 == c.x and l.y1 == c.y) or (l.x2 == c.x and l.y2 == c.y)) #Does the line directly touch the centre of the circle?
+
+    if (direct_collision):
+        return true
+
+    distance = math.sqrt((c.x - l.x1)**2 + (c.y - l.y1)**2) #Distance between two points
+
+    maxAngle = math.atan2(c.r,distance) # Take distance as opposite, radius of circle as adjacent
+
+    angle1 = math.atan2((l.y2-l.y1),(l.x2-l.x1))
+
+    angle2 = math.atan2((c.y-l.y1),(c.x-l.x1))
+
+    collision = (math.fabs(angle1-angle2) <= maxAngle)
+
+    return collision
