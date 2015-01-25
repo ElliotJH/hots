@@ -1,6 +1,6 @@
 //var wsAddress = "ws://10.7.3.119:9000";
-var wsAddress = "ws://10.7.3.103:9000";
-
+//var wsAddress = "ws://10.7.3.103:9000";
+var wsAddress = "ws://10.7.3.101:9000";
 //var wsAddress = "ws://192.168.54.51:9000";
 
 var tile_height = 40;
@@ -135,7 +135,7 @@ var winner;
 var backgroundStarted = false;
 var startTick = 0;
 var currentTick = 0;
-var tickRate = 0.050; //30ms between ticks
+var tickRate = 0.030; //30ms between ticks
 var timeInSeconds = 0;
 var minuteWarningPlayed = false;
 var timerText;
@@ -243,7 +243,7 @@ function socketMessage(msg) {
         currentTick = parsed.tick;
         var tickDiff = currentTick - startTick;
         timeInSeconds = Math.floor(tickDiff * tickRate);
-        if (timeInSeconds % 60 == 0 && timeInSeconds > 0 && !minuteWarningPlayed && state == 'game') {
+        if (timeInSeconds % 60 == 0 && timeInSeconds > 0 && !minuteWarningPlayed && state == 'game' && timeLimit - timeInSeconds >= 0) {
             minuteWarning();
             minuteWarningPlayed = true;
         } else if (timeInSeconds % 60 != 0) {
@@ -251,6 +251,10 @@ function socketMessage(msg) {
         }
         if (timerText) {
             updateTimer();
+        }
+        if (timeLimit - timeInSeconds == 0) {
+            background.stop();
+            playEnd(scenario);
         }
 
         var playerList = parsed.players;
@@ -559,6 +563,7 @@ function updateGame() {
     lobbyElement.hide();
 
     if (!backgroundStarted) {
+        playStart(scenario);
         background.play('');
         backgroundStarted = true;
     }
