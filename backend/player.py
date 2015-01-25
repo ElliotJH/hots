@@ -48,7 +48,7 @@ class Player:
             and self.item_2 == self.needed_item_1)   
         )
 
-    def win():
+    def win(self):
         self.has_won = True
 
     def decrement_timeout(self, amount):

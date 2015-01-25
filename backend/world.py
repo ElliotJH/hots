@@ -138,6 +138,7 @@ class World:
         try:
             position = self.attempt_player_move(player, (x, y, l), new_position)
         except WonException:
+            print("Player wins")
             player.win()
         self.attempt_pickup(position, player)
         self.player_locations[player] = position
