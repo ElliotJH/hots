@@ -150,7 +150,7 @@ class World:
 
         return position
 
-    def attack(self, player1, player_2):
+    def attack(self, player_1, player_2):
         pos_1 = self.player_locations[player_1]
         pos_2 = self.player_locations[player_2]
 
