@@ -1,5 +1,6 @@
-var wsAddress = "ws://10.7.3.103:9000";
 //var wsAddress = "ws://10.7.3.119:9000";
+//var wsAddress = "ws://10.7.3.103:9000";
+var wsAddress = "ws://192.168.54.51:9000";
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
@@ -33,7 +34,7 @@ var scenarioToIndex = {
     41: 4
 }
 
-levelDefinitions = [{
+var levelDefinitions = [{
         0: "floorShip",
         1: "wall",
         2: "exit",
@@ -63,16 +64,10 @@ levelDefinitions = [{
         2: "exit",
         3: "floorDesert"
     }
-    ];
+];
 
 var scenario;
 
-var levelDefinitions = {
-    0: "floor",
-    1: "wall",
-    2: "exit",
-    3: "floor"
-};
 var stateDefinitions = {
     0: "lifeRing",
     1: "rope",
@@ -188,7 +183,7 @@ function minuteWarning() {
     alert.play('');
 }
 
-// Call this passing stateDefinitions.<weapon>
+// Call this passing stateDefinitions[wea]
 function onAttack(weapon) {
     attackSound[weapon].play('');
 }
@@ -446,12 +441,12 @@ function create() {
     ship_sea_round_end     = game.add.audio('ship_sea_round_end');
     ship_space_round_start = game.add.audio('ship_space_round_start');
     ship_space_round_end   = game.add.audio('ship_space_round_end');
-    
-    attackSound[stateDefinitions.bottle] = game.add.audio('attack_bottle');
-    attackSound[stateDefinitions.dagger] = game.add.audio('attack_dagger');
-    attackSound[stateDefinitions.fists]  = game.add.audio('attack_fists');
-    attackSound[stateDefinitions.gun]    = game.add.audio('attack_gun');
-    attackSound[stateDefinitions.tesla]  = game.add.audio('attack_tesla');
+
+    attackSound[stateDefinitions[30]] = game.add.audio('attack_fists');
+    attackSound[stateDefinitions[31]] = game.add.audio('attack_bottle');
+    attackSound[stateDefinitions[32]] = game.add.audio('attack_gun');
+    attackSound[stateDefinitions[33]] = game.add.audio('attack_dagger');
+    attackSound[stateDefinitions[34]] = game.add.audio('attack_tesla');
 
     winnerElement.hide();
 }
