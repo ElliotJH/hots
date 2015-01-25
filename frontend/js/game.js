@@ -135,6 +135,7 @@ var audio = [
 */
 var myPlayer;
 var players = {};
+var timeoutTexts = {};
 var items = {};
 var held = [];
 var heldIDs = [30,30];
@@ -296,11 +297,29 @@ function socketMessage(msg) {
                 player.y = playerList[i].location[1];
                 player.rotation = playerList[i].location[2];
                 players[playerList[i].id].playerName = playerList[i].name;
+
+                if(playerList[i].timeout > 0){
+                  timeoutTexts[playerList[i].id].visible = true;
+                  timeoutTexts[playerList[i].id].x = player.x - 20;
+                  timeoutTexts[playerList[i].id].y = player.y - 40;
+                  timeoutTexts[playerList[i].id].setText(Math.round(playerList[i].timeout));
+                } else {
+                  timeoutTexts[playerList[i].id].visible = false;
+                }
+
             } else {
                 players[playerList[i].id] = levelGroup.create(playerList[i].location[0],
                     playerList[i].location[1], 'player');
                 players[playerList[i].id].pivot = new PIXI.Point(tile_width/2, tile_height/2);
                 players[playerList[i].id].playerName = playerList[i].name;
+
+                var fontStyle = { fontSize: '16px', fill: '#FFFFFF' };
+                var text = new Phaser.Text(game, 0, 0, '', fontStyle);
+                text.font = 'Fira Mono';
+                text.visible = false;
+
+                timeoutTexts[playerList[i].id] = text;
+
             }
         }
         var keys = Object.keys(players);
@@ -392,13 +411,12 @@ function socketMessage(msg) {
             UIGroup.add(timerText);
             UIGroup.create(itemOneX - 10, itemOneY - 5, 'pocket');
             UIGroup.create(itemTwoX - 10, itemTwoY - 5, 'pocket');
-            state = 'lobby'
-            lobbyElement.show();
         }
     } else if (parsed.type == 'starting') {
         lobbyElement.find('#title').text("Starting...");
     } else if (parsed.type == 'winner') {
         winner = parsed.winner;
+        console.log(winner);
     }
 };
 
