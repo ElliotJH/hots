@@ -33,13 +33,8 @@ class World:
             for colnum, tile in enumerate(row)
             if tile == 0
         ]
-        max_objects = 2
         for level_id in level_ids.values():
             for item_id in game_objects[level_id].values():
-                if max_objects > 0:
-                    max_objects -= 1
-                else: 
-                    return
                 item_object = Item(item_id)
                 position = random.choice(free_tile_positions)
                 self.item_locations[item_object] = position
@@ -141,23 +136,41 @@ class World:
 
     def throw(self, player, hand):
         player_location = self.player_locations[player]
+        direction = player_location[2]
         if hand == 'left':
             if player.item_1_empty:
                 return
             item = player.item_1
-            print(item)
             player.reset_item_1()
-            self.item_locations[item] = (player_location[0] + 100, player_location[1] + 100)
-            self.items_moving[item] = (player_location[2], 15.0)
+
+            proposed_x = player_location[0]
+            proposed_y = player_location[1]
+
+            new_x = 1000 * math.sin(math.radians(direction)) + proposed_x
+            new_y = 1000 * math.cos(math.radians(direction)) + proposed_y
+            
+            actual_x, actual_y = self.attempt_move((proposed_x, proposed_y), (new_x, new_y), object_radius=0, blocked=[1, 2])
+
+            print(new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
+            self.item_locations[item] = (proposed_x, proposed_y)
+            self.items_moving[item] = (player_location[2], ITEM_SPEED)
+
 
         if hand == 'right':
             if player.item_2_empty:
                 return
             item = player.item_2
-            print(item)
             player.reset_item_2()
-            self.item_locations[item] = (player_location[0] + 100, player_location[1] + 100)
-            self.items_moving[item] = (player_location[2], 15.0)
+
+            proposed_x = player_location[0]
+            proposed_y = player_location[1]
+
+            new_x = ITEM_SPEED * math.sin(math.radians(direction)) + proposed_x
+            new_y = ITEM_SPEED * math.cos(math.radians(direction)) + proposed_y
+            
+            actual_x, actual_y = self.attempt_move((proposed_x, proposed_y), (new_x, new_y), object_radius=0, blocked=[1, 2])
+            self.item_locations[item] = (proposed_x, proposed_y)
+            self.items_moving[item] = (player_location[2], ITEM_SPEED)
 
 
     def tick(self):
@@ -178,7 +191,6 @@ class World:
             if (new_x, new_y) == (x, y):
                 to_remove += [item]
 
-            print("moving item", new_x, new_y, x, y)
             self.item_locations[item] = (new_x, new_y)
 
         for item in to_remove:
