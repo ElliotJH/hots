@@ -1,5 +1,5 @@
-var wsAddress = "ws://10.7.3.119:9000";
-// var wsAddress = "ws://10.7.3.103:9000";
+//var wsAddress = "ws://10.7.3.119:9000";
+var wsAddress = "ws://10.7.3.103:9000";
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
@@ -217,12 +217,15 @@ function socketMessage(msg) {
         winner = parsed.winner;
     }
 };
-
+//sand2
+//tile-floor-40
+//wood_light
+//space
 function preload() {
     game.load.image('player','resources/art/human-2.png', tile_width, tile_height);
-    game.load.image('wall', 'resources/art/tile-wall-40.png', tile_width, tile_height);
-    game.load.image('floor', 'resources/art/tile-floor-40.png', tile_width, tile_height);
-    game.load.image('exit', 'resources/art/tile-exit-40.png', tile_width, tile_height);
+    game.load.image('wall', 'resources/art/floor_tiles/tile-wall-40.png', tile_width, tile_height);
+    game.load.image('floor', 'resources/art/floor_tiles/wood_light.png', tile_width, tile_height);
+    game.load.image('exit', 'resources/art/floor_tiles/tile-exit-40.png', tile_width, tile_height);
 
     game.load.image('anchor', 'resources/art/ship/anchor.png', item_width, item_height);
     game.load.image('raincoat', 'resources/art/ship/raincoat.png', item_width, item_height);
