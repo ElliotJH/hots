@@ -83,7 +83,7 @@ var worldInit = false;
 var socketReady = false;
 var playerName = window.prompt("Player name");
 var lobbyElement = $('#lobby');
-var winnerElement = $('#winner');
+var winnerElement = $('#win');
 var winner;
 
 var state = 'lobby'; // {lobby, game, end}
