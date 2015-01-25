@@ -173,6 +173,15 @@ class World:
 
             if collisions.line_circle(l, c):
                 player.add_timeout(10)
+                hand = random.choice(['left', 'right'])
+                self.throw(player, hand)
+                fists = game_objects[weapon_id]['fists']
+                if hand == 'left':
+                    if not player.item_2_empty:
+                        player.item_2 = Item(fists)
+                if hand == 'right':
+                    if not player.item_1_empty:
+                        player.item_1 = Item(fists)
 
     def throw(self, player, hand):
         player_location = self.player_locations[player]
