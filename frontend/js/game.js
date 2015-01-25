@@ -273,27 +273,50 @@ function socketMessage(msg) {
                 delete players[keys[i]];
             }
         }
-        var itemList = parsed.items;
-        var itemIds = [];
-        for(var i = 0; i < itemList.length; i++) {
-            var item = items[itemList[i].id];
-            itemIds.push(itemList[i].id.toString());
-            if (item) {
-                item.x = itemList[i].location[0];
-                item.y = itemList[i].location[1];
-            } else {
-                items[itemList[i].id] = levelGroup.create(itemList[i].location[0], itemList[i].location[1], 'item-ground');
-                items[itemList[i].id].pivot = new PIXI.Point(16, 16);
-            }
-        }
-        keys = Object.keys(items);
-        for(var i = 0; i < keys.length; i++) {
-            if (itemIds.indexOf(keys[i]) == -1) {
-                items[keys[i]].kill();
-                delete items[keys[i]];
-            }
-        }
 
+        if(typeof parsed.items != 'undefined') {
+            var itemList = parsed.items;
+            var itemIds = [];
+            for(var i = 0; i < itemList.length; i++) {
+                var item = items[itemList[i].id];
+                itemIds.push(itemList[i].id.toString());
+                if (item) {
+                    item.x = itemList[i].location[0];
+                    item.y = itemList[i].location[1];
+                } else {
+                    items[itemList[i].id] = levelGroup.create(itemList[i].location[0], itemList[i].location[1], 'item-ground');
+                    items[itemList[i].id].pivot = new PIXI.Point(16, 16);
+                }
+            }
+            keys = Object.keys(items);
+            for(var i = 0; i < keys.length; i++) {
+                if (itemIds.indexOf(keys[i]) == -1) {
+                    items[keys[i]].kill();
+                    delete items[keys[i]];
+                }
+            }
+        } else if (typeof parsed.item_diff != 'undefined') {
+            var itemList = parsed.item_diff;
+            var itemIds = [];
+            for(var i = 0; i < itemList.length; i++) {
+                var item = items[itemList[i].id];
+                itemIds.push(itemList[i].id.toString());
+                if (item) {
+                    item.x = itemList[i].location[0];
+                    item.y = itemList[i].location[1];
+                } else {
+                    items[itemList[i].id] = levelGroup.create(itemList[i].location[0], itemList[i].location[1], 'item-ground');
+                    items[itemList[i].id].pivot = new PIXI.Point(16, 16);
+                }
+            }
+            
+            var deleted_items = parsed.deleted_items
+            for(var i = 0; i < deleted_items.length; i++) {
+                items[deleted_items[i].id].kill();
+                delete items[deleted_items[i].id];
+            }
+
+        }
         for(var i = 0; i < 2; i++){
             if(heldIDs[i]  != parsed.player_items[i]){
                 held[i].kill();
