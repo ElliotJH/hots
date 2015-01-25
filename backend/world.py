@@ -146,8 +146,8 @@ class World:
             proposed_x = player_location[0]
             proposed_y = player_location[1]
 
-            new_x = 1000 * math.sin(math.radians(direction)) + proposed_x
-            new_y = 1000 * math.cos(math.radians(direction)) + proposed_y
+            new_x = 100 * math.sin(direction) + proposed_x
+            new_y = 100 * math.cos(direction + math.pi) + proposed_y
 
             actual_x, actual_y = self.attempt_move(
                 (proposed_x, proposed_y),
@@ -156,8 +156,8 @@ class World:
                 blocked=[1, 2],
             )
 
-            print(new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
-            self.item_locations[item] = (proposed_x, proposed_y)
+            print("throw_l", direction, new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
+            self.item_locations[item] = (actual_x, actual_y)
             self.items_moving[item] = (player_location[2], ITEM_SPEED)
 
         if hand == 'right':
@@ -169,8 +169,8 @@ class World:
             proposed_x = player_location[0]
             proposed_y = player_location[1]
 
-            new_x = ITEM_SPEED * math.sin(math.radians(direction)) + proposed_x
-            new_y = ITEM_SPEED * math.cos(math.radians(direction)) + proposed_y
+            new_x = 100 * math.sin(direction) + proposed_x
+            new_y = 100 * math.cos(direction + math.pi) + proposed_y
 
             actual_x, actual_y = self.attempt_move(
                 (proposed_x, proposed_y),
@@ -178,7 +178,8 @@ class World:
                 object_radius=0,
                 blocked=[1, 2],
             )
-            self.item_locations[item] = (proposed_x, proposed_y)
+            print("throw_r", new_x, new_y, proposed_x, proposed_y, actual_x, actual_y)
+            self.item_locations[item] = (actual_x, actual_y)
             self.items_moving[item] = (player_location[2], ITEM_SPEED)
 
     def tick(self):
@@ -198,8 +199,8 @@ class World:
                 to_remove += [item]
 
             x, y = self.item_locations[item]
-            new_x = speed * math.sin(math.radians(direction)) + x
-            new_y = speed * math.cos(math.radians(direction)) + y
+            new_x = speed * math.sin(direction + math.pi) + x
+            new_y = speed * math.cos(direction + math.pi) + y
 
             new_x, new_y = self.attempt_move(
                 (x, y),
