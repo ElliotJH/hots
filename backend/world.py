@@ -257,10 +257,10 @@ class World:
         return new_pos
 
     def grid_to_centered_point(self, x, y):
-        left = x * GRID_SIZE
-        top = y * GRID_SIZE
-        bottom = y + GRID_SIZE/2
-        right = x + GRID_SIZE/2
+        left = (x * GRID_SIZE)
+        top = (y * GRID_SIZE)
+        bottom = top + 10
+        right = left + 10
 
         return (left, right, top, bottom)
 
@@ -272,6 +272,8 @@ class World:
                     player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
                     
                     if collisions.circle_square(player_circle, cell_square):
+                        print(row_num, col_num)
+                        print(*self.grid_to_centered_point(col_num, row_num))
                         return old_position
         return new_position
 
