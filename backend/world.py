@@ -286,36 +286,28 @@ class World:
         return (left, right, top, bottom)
 
     def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2], winning=[]):
+        
         xIsh = round(new_position[0] / GRID_SIZE)
         yIsh = round(new_position[1] / GRID_SIZE)
-
+        
+        
         testSquares = [[xIsh, yIsh], [xIsh-1, yIsh], [xIsh - 1, yIsh - 1], [xIsh, yIsh - 1],
             [xIsh+1, yIsh -1], [xIsh+1, yIsh], [xIsh + 1, yIsh + 1], [xIsh, yIsh+1], [xIsh-1, yIsh+1]]
-
+        
         for square in testSquares:
             cell = self.tiles[square[1]][square[0]]
+            
             if cell in blocked or cell in winning:
-                cell_square = collisions.Square(*self.grid_to_centered_point(square[1], square[0]))
+                cell_square = collisions.Square(*self.grid_to_centered_point(square[0], square[1]))
                 player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
 
                 col = collisions.circle_square(player_circle, cell_square)
+                
                 if col:
                     if cell in winning:
                         raise WonException
                     return old_position
         return new_position
-
-        # for (row_num, columns) in enumerate(self.tiles):
-        #     for (col_num, cell) in enumerate(columns):
-        #         if cell in blocked:
-        #             cell_square = collisions.Square(*self.grid_to_centered_point(col_num, row_num))
-        #             player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
-        #
-        #             if collisions.circle_square(player_circle, cell_square):
-        #                 #print(row_num, col_num)
-        #                 #print(*self.grid_to_centered_point(col_num, row_num))
-        #                 return old_position
-        # return new_position
 
     # Serialisation to structures that can be JSON'd
 

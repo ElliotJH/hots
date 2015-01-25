@@ -388,12 +388,13 @@ function socketMessage(msg) {
             UIGroup.add(timerText);
             UIGroup.create(itemOneX - 10, itemOneY - 5, 'pocket');
             UIGroup.create(itemTwoX - 10, itemTwoY - 5, 'pocket');
+            state = 'lobby'
+            lobbyElement.show();
         }
     } else if (parsed.type == 'starting') {
         lobbyElement.find('#title').text("Starting...");
     } else if (parsed.type == 'winner') {
         winner = parsed.winner;
-        console.log(winner);
     }
 };
 
