@@ -27,7 +27,8 @@ class Lobby:
         if not added:
             game = Game()
             game.add_player(connection)
-            self.games += game
+            self.connection_game[connection] = game
+            self.games.append(game)
 
     def receive_message(self, connection, message):
         game = self.connection_game[connection]
