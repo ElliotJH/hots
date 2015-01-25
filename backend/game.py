@@ -163,11 +163,11 @@ class Game:
     def end(self, winner):
         self.over = True
         for connection in self.players.keys():
+            send(connection, {'winner': winner.name}, 'winner')
             send(connection, {
                 'state': 'end',
                 'tick': self.tick_count,
             }, 'state')
-            send(connection, {'winner': winner.id}, 'winner')
 
     # Utility Methods
 
