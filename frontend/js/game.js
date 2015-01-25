@@ -223,7 +223,9 @@ function playEnd(scenario) {
 }
 
 function playPain() {
-    painSound[Math.floor((Math.random() * 12) + 1)].play('');
+    var chosenPain = Math.min(Math.floor(Math.random() * 12), 11);
+    console.log(chosenPain);
+    painSound[chosenPain].play('');
 }
 
 function socketOpen() {
