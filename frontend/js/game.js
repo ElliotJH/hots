@@ -1,7 +1,8 @@
 //var wsAddress = "ws://10.7.3.119:9000";
-//var wsAddress = "ws://10.7.3.103:9000";
-var wsAddress = "ws://10.7.3.101:9000";
+var wsAddress = "ws://10.7.3.103:9000";
+
 //var wsAddress = "ws://192.168.54.51:9000";
+
 var tile_height = 40;
 var tile_width = 40;
 var item_height = 100;
@@ -152,17 +153,8 @@ var alert;
 var item_collect;
 var item_throw;
 
-var desert_round_start;
-var desert_round_end;
-var island_round_start;
-var island_round_end;
-var plane_round_start;
-var plane_round_end;
-var ship_sea_round_start;
-var ship_sea_round_end;
-var ship_space_round_start;
-var ship_space_round_end;
-
+var startSound = [];
+var endSound = [];
 var attackSound = [];
 
 /*
@@ -186,9 +178,19 @@ function minuteWarning() {
     alert.play('');
 }
 
-// Call this passing stateDefinitions[wea]
+// Call this passing stateDefinitions[weaponID]
 function onAttack(weapon) {
     attackSound[weapon].play('');
+}
+
+// Call this passing scenarioTypes.<scenarioName>
+function playStart(scenario) {
+    startSound[scenario].play('');
+}
+
+// Call this passing scenarioTypes.<scenarioName>
+function playEnd(scenario) {
+    endSound[scenario].play('');
 }
 
 function socketOpen() {
@@ -275,27 +277,50 @@ function socketMessage(msg) {
                 delete players[keys[i]];
             }
         }
-        var itemList = parsed.items;
-        var itemIds = [];
-        for(var i = 0; i < itemList.length; i++) {
-            var item = items[itemList[i].id];
-            itemIds.push(itemList[i].id.toString());
-            if (item) {
-                item.x = itemList[i].location[0];
-                item.y = itemList[i].location[1];
-            } else {
-                items[itemList[i].id] = levelGroup.create(itemList[i].location[0], itemList[i].location[1], 'item-ground');
-                items[itemList[i].id].pivot = new PIXI.Point(16, 16);
-            }
-        }
-        keys = Object.keys(items);
-        for(var i = 0; i < keys.length; i++) {
-            if (itemIds.indexOf(keys[i]) == -1) {
-                items[keys[i]].kill();
-                delete items[keys[i]];
-            }
-        }
 
+        if(typeof parsed.items != 'undefined') {
+            var itemList = parsed.items;
+            var itemIds = [];
+            for(var i = 0; i < itemList.length; i++) {
+                var item = items[itemList[i].id];
+                itemIds.push(itemList[i].id.toString());
+                if (item) {
+                    item.x = itemList[i].location[0];
+                    item.y = itemList[i].location[1];
+                } else {
+                    items[itemList[i].id] = levelGroup.create(itemList[i].location[0], itemList[i].location[1], 'item-ground');
+                    items[itemList[i].id].pivot = new PIXI.Point(16, 16);
+                }
+            }
+            keys = Object.keys(items);
+            for(var i = 0; i < keys.length; i++) {
+                if (itemIds.indexOf(keys[i]) == -1) {
+                    items[keys[i]].kill();
+                    delete items[keys[i]];
+                }
+            }
+        } else if (typeof parsed.item_diff != 'undefined') {
+            var itemList = parsed.item_diff;
+            var itemIds = [];
+            for(var i = 0; i < itemList.length; i++) {
+                var item = items[itemList[i].id];
+                itemIds.push(itemList[i].id.toString());
+                if (item) {
+                    item.x = itemList[i].location[0];
+                    item.y = itemList[i].location[1];
+                } else {
+                    items[itemList[i].id] = levelGroup.create(itemList[i].location[0], itemList[i].location[1], 'item-ground');
+                    items[itemList[i].id].pivot = new PIXI.Point(16, 16);
+                }
+            }
+            
+            var deleted_items = parsed.deleted_items
+            for(var i = 0; i < deleted_items.length; i++) {
+                items[deleted_items[i].id].kill();
+                delete items[deleted_items[i].id];
+            }
+
+        }
         for(var i = 0; i < 2; i++){
             if(heldIDs[i]  != parsed.player_items[i]){
                 held[i].kill();
@@ -472,16 +497,17 @@ function create() {
     item_collect = game.add.audio('item_collect');
     item_throw   = game.add.audio('item_throw');
 
-    desert_round_start     = game.add.audio('desert_round_start');
-    desert_round_end       = game.add.audio('desert_round_end');
-    island_round_start     = game.add.audio('island_round_start');
-    island_round_end       = game.add.audio('island_round_end');
-    plane_round_start      = game.add.audio('plane_round_start');
-    plane_round_end        = game.add.audio('plane_round_end');
-    ship_sea_round_start   = game.add.audio('ship_sea_round_start');
-    ship_sea_round_end     = game.add.audio('ship_sea_round_end');
-    ship_space_round_start = game.add.audio('ship_space_round_start');
-    ship_space_round_end   = game.add.audio('ship_space_round_end');
+    startSound[scenarioTypes.desert]          = game.add.audio('desert_round_start');
+    startSound[scenarioTypes.tropical_island] = game.add.audio('island_round_start');
+    startSound[scenarioTypes.plane]           = game.add.audio('plane_round_start');
+    startSound[scenarioTypes.ship]            = game.add.audio('ship_sea_round_start');
+    startSound[scenarioTypes.spaceship]       = game.add.audio('ship_space_round_start');
+
+    endSound[scenarioTypes.desert]          = game.add.audio('desert_round_end');
+    endSound[scenarioTypes.tropical_island] = game.add.audio('island_round_end');
+    endSound[scenarioTypes.plane]           = game.add.audio('plane_round_end');
+    endSound[scenarioTypes.ship]            = game.add.audio('ship_sea_round_end');
+    endSound[scenarioTypes.spaceship]       = game.add.audio('ship_space_round_end');
 
     attackSound[stateDefinitions[30]] = game.add.audio('attack_fists');
     attackSound[stateDefinitions[31]] = game.add.audio('attack_bottle');

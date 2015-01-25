@@ -22,6 +22,7 @@ class World:
         self.player_locations = {}
         self.item_locations = {}
         self.items_moving = {}  # map from item to (direction, speed)
+        self.last_items = None
 
     def initialize_objects(self):
         # Filter by players in the game? maybe just assign a number of worlds
@@ -294,17 +295,34 @@ class World:
         }
 
     def serialise_state(self, player):
-        return {
+        result = {
             'players': [
                 {'id': x.id, 'location': y, 'name': x.name}
                 for x, y in self.player_locations.items()
-            ],
-            'items': [
-                {'id': x.item_id, 'location': y}
-                for x, y in self.item_locations.items()
             ],
             'player_items': [
                 player.item_1.item_id if player.item_1 else None,
                 player.item_2.item_id if player.item_2 else None,
             ],
         }
+
+        if self.last_items is None:
+            items = [{'id': x.item_id, 'location': y}
+                     for x, y in self.item_locations.items()]
+            result['items'] = items
+
+
+        else:
+            items = [{'id': x.item_id, 'location': y}
+                     for x, y in self.item_locations.items()
+                     if (x not in self.last_items) or (y != self.last_items[x])]
+            
+            result['item_diff'] = items
+
+            deleted_items = [{'id': x.item_id, 'location': y}
+                     for x, y in self.last_items.items()
+                     if (x not in self.item_locations)]
+            result['deleted_items'] = deleted_items
+
+        self.last_items = dict((k,v) for k,v in self.item_locations.items())
+        return result
