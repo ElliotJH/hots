@@ -3,16 +3,23 @@ import json
 from world import World
 from player import Player
 
-MIN_PLAYERS = 2
+MIN_PLAYERS = 1
+LOBBY_TIMEOUT = 333
 
 
 class Game:
 
     def __init__(self):
         super().__init__()
+        self.players = {}
+
+        self.reset()
+
+    def reset(self):
+        self.start_timeout = 0
+        self.starting = False
         self.world = World()
         self.world.load('levels/example.level')
-        self.players = {}
 
     def add_player(self, connection):
         if connection in self.players:
@@ -31,7 +38,7 @@ class Game:
         self.send(connection, data, 'world')
         print("Players connected", len(self.players))
 
-        if len(self.players) == MIN_PLAYERS:
+        if len(self.players) >= MIN_PLAYERS:
             self.start()
 
     def remove_player(self, connection):
@@ -42,6 +49,9 @@ class Game:
 
         print("Players connected", len(self.players))
 
+        if not len(self.players):
+            self.reset()
+
     def tick(self):
         self.world.tick()
         for connection, player in self.players.items():
@@ -50,6 +60,8 @@ class Game:
                 self.world.serialise_state(player),
                 'tick',
             )
+
+        self.start_if_needed()
 
     def receive_message(self, connection, message):
         command = json.loads(message)
@@ -73,7 +85,24 @@ class Game:
             self.players[connection].name = command['name']
             print(command['name'], 'joined')
 
+    def start_if_needed(self):
+        if not self.starting:
+            return
+
+        print(self.start_timeout)
+        if self.start_timeout == 0:
+            self.send_start()
+            self.starting = False
+        else:
+            self.start_timeout -= 1
+
     def start(self):
+        self.starting = True
+        self.start_timeout = LOBBY_TIMEOUT
+        for connection in self.players.keys():
+            self.send(connection, {}, 'starting')
+
+    def send_start(self):
         for connection in self.players.keys():
             self.send(connection, {'state': 'game'}, 'state')
 

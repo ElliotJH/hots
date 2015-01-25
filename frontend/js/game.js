@@ -84,6 +84,7 @@ var keyboard;
 var worldInit = false;
 var socketReady = false;
 var playerName = window.prompt("Player name");
+var lobbyElement = $('#lobby');
 
 var state = 'lobby'; // {lobby, game, end}
 
@@ -184,6 +185,8 @@ function socketMessage(msg) {
         }
     } else if (parsed.type == 'state') {
         state = parsed.state;
+    } else if (parsed.type == 'starting') {
+        lobbyElement.find('#title').text("Starting...");
     }
 };
 
@@ -297,8 +300,6 @@ function update() {
         updateEnd();
     }
 }
-
-var lobbyElement = $('#lobby');
 
 function updateLobby() {
     var playersElement = lobbyElement.find('#players');
