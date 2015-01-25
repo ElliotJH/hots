@@ -145,8 +145,10 @@ class World:
 
         return position
 
-    def attack_from(player1):
-        distance = 5 # vary on weapon
+    def attack_from(self, player_1):
+        if player_1.timeout > 0:
+            return
+        distance = 20 # vary on weapon
         pos = self.player_locations[player_1]
         
         x1 = pos[0]
@@ -158,7 +160,9 @@ class World:
 
         l = collisions.Line(x1, y1, x2, y2)
         
-        for player, loc in player_locations.items():
+        for player, loc in self.player_locations.items():
+            if player == player_1:
+                continue
             
             c = collisions.Circle(loc[0], loc[1], GRID_SIZE*2/3)
 
@@ -216,6 +220,9 @@ class World:
     def tick(self):
         coefficient_of_friction = 0.75
         to_remove = []
+
+        for player in self.player_locations.keys():
+            player.decrement_timeout(0.03)
         for item, (direction, speed) in self.items_moving.items():
             if item not in self.item_locations.keys():  # Item picked up
                 to_remove += [item]

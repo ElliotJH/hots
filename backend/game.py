@@ -3,8 +3,8 @@ import json
 from world import World
 from player import Player
 
-MIN_PLAYERS = 1
-LOBBY_TIMEOUT = 10
+MIN_PLAYERS = 2
+LOBBY_TIMEOUT = 100
 MAX_PLAYERS = 10
 
 def send(connection, data, message_type):
