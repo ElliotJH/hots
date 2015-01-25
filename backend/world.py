@@ -281,6 +281,7 @@ class World:
 
     def serialise_world(self, player):
         return {
+            'world_id': player.world_id,
             'world': self.tiles,
             'items': [
                 {'id': x.item_id, 'location': y}

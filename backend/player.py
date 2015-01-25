@@ -39,8 +39,11 @@ class Player:
     @property
     def has_succeeded(self):
         return (
-            self.item_1 == self.needed_item_1
-            and self.item_2 == self.needed_item_2
+            (self.item_1 == self.needed_item_1
+            and self.item_2 == self.needed_item_2)
+            or
+            (self.item_1 == self.needed_item_2
+            and self.item_2 == self.needed_item_1)   
         )
 
     def decrement_timeout(self, amount):
