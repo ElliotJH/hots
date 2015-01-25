@@ -266,17 +266,34 @@ class World:
         return (left, right, top, bottom)
 
     def attempt_move(self, old_position, new_position, object_radius=0, blocked=[1, 2]):
-        for (row_num, columns) in enumerate(self.tiles):
-            for (col_num, cell) in enumerate(columns):
-                if cell in blocked:
-                    cell_square = collisions.Square(*self.grid_to_centered_point(col_num, row_num))
-                    player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
-                    
-                    if collisions.circle_square(player_circle, cell_square):
-                        #print(row_num, col_num)
-                        #print(*self.grid_to_centered_point(col_num, row_num))
-                        return old_position
+
+        xIsh = math.round(new_position[0] / GRID_SIZE)
+        yIsh = math.round(new_position[1] / GRID_SIZE)
+
+        testSquares = [[xIsh, yIsh], [xIsh-1, yIsh], [xIsh - 1, yIsh - 1], [xIsh, yIsh - 1],
+            [xIsh+1, yIsh -1], [xIsh+1, yIsh], [xIsh + 1, yIsh + 1], [xIsh, yIsh+1], [xIsh-1, yIsh+1]]
+
+        for square in testSquares:
+            cell = self.tiles[square[0]][square[1]]
+            if cell in blocked:
+                cell_square = collisions.Square(*self.grid_to_centered_point(square[1], square[0]))
+                player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
+
+                if collisions.circle_square(player_circle, cell_square):
+                    return old_position
         return new_position
+                
+        # for (row_num, columns) in enumerate(self.tiles):
+        #     for (col_num, cell) in enumerate(columns):
+        #         if cell in blocked:
+        #             cell_square = collisions.Square(*self.grid_to_centered_point(col_num, row_num))
+        #             player_circle = collisions.Circle(new_position[0], new_position[1], GRID_SIZE*2/3)
+        #
+        #             if collisions.circle_square(player_circle, cell_square):
+        #                 #print(row_num, col_num)
+        #                 #print(*self.grid_to_centered_point(col_num, row_num))
+        #                 return old_position
+        # return new_position
 
     # Serialisation to structures that can be JSON'd
 
@@ -316,7 +333,7 @@ class World:
             items = [{'id': x.item_id, 'location': y}
                      for x, y in self.item_locations.items()
                      if (x not in self.last_items) or (y != self.last_items[x])]
-            
+
             result['item_diff'] = items
 
             deleted_items = [{'id': x.item_id, 'location': y}
