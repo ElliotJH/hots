@@ -134,6 +134,9 @@ class Game:
         elif command['type'] == 'join':
             self.players[connection].name = command['name']
             print(command['name'], 'joined')
+        elif command['type'] == 'attack':
+            self.world.attack_from(self.players[connection])
+            print("attack", command)
 
     def start_if_needed(self):
         if not self.starting:
